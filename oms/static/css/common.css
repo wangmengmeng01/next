@@ -1,0 +1,3 @@
+@CHARSET "UTF-8";
+.span_btn_ico{width:80px; height:26px; margin:0 25px; }
+.span_btn_ico input[type="button"],.span_btn_ico button {width:80px; height:26px; border:0px; line-height:26px; background:url(../image/ico.png);

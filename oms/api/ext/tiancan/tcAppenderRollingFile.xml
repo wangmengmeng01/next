@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <appender name="default" class="LoggerAppenderRollingFile">
+        <layout class="LoggerLayoutPattern" >
+            <param name="ConversionPattern" value="[oms] [%logger] [%date{Y-m-d H:i:s,u}] [%-5p] %l - %message^^%newline"/>
+        </layout>
+        <param name="file" value="/u02/logs/txm_elec_logs/tc_system_log_info.log" />
+        <param name="maxFileSize" value="100MB" />
+        <param name="maxBackupIndex" value="10" />
+    </appender>
+    <root>
+        <appender_ref ref="default" />
+    </root>
+</configuration>

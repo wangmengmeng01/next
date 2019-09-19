@@ -1,0 +1,91 @@
+@charset "utf-8";
+/* CSS Document */
+
+body  {margin:0px; padding:0px; font-size:12px; font-family:"微软雅黑",Arial, Helvetica, sans-serif; background:#F2F2F2; overflow-x:hidden}
+/* 
+a {outline:none; text-decoration: none; color: #333333;}
+a:focus {outline: none;}
+a:hover {text-decoration:none; color: #FF0000;}
+
+a.a1:link, a.a1:visited {text-decoration:none; color:#D08826;}
+a.a1:hover, a.a1:active {text-decoration:none; color:#FF0000; font-weight:bold;}
+
+#wrapper {width:100%;height:296px; background:#FFCB07; padding-top:152px;}
+.main    {width:100%;height:150px;
+background-image: -moz-linear-gradient(top, #FFF8EA, #FFD277);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFF8EA), color-stop(1, #FFD277));
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF8EA', endColorstr='#FFD277', GradientType='0');}
+.centent {width:1000px; height:150px; margin:0 auto;}
+.logo  {float:left; width:394px; height:76px; margin-top:32px; margin-left:50px;}
+.login_bg {float:left; width:304px; height:208px; margin-left:40px; background:url(../image/bg.png); position:relative; top:-30px;}
+.list   {width:280px; height:30px; margin:0 auto; margin-top:20px; }
+.list_wz{float:left; width:60px; height:30px; line-height:30px; text-align:right;}
+.list_cont{float:left; width:113px; height:30px; margin-left:5px;}
+.list_cont input {width:180px; height:18px; margin-top:5px; border:1px solid #FFCB07;}
+.list_ico  {float:left; width:90px; height:30px; margin-left:5px; background:url(../image/ico.png); text-align:center; line-height:30px; color:#FFFFFF;cursor: pointer;}
+.top_line   {width:100%; height:3px; background:#FFCB07;}
+.head   {width:1200px; height:72px; margin:0 auto;}
+.logos  {float:left; width:460px; height:72px;}
+.head_right {float:right; width:200px; height:30px; margin-right:30px; line-height:30px; margin-top:30px; text-align:right; color:#AB5B03;}
+.content  { clear:both; width:1200px; margin:0 auto; margin-top:10px; overflow:hidden;}
+.left     {float:left; width:220px; border:0px solid #F2D6AA; height:550px; padding-bottom:0px; color:#333333;}
+.left  ul {margin:0px; padding:0px;}
+.left > ul > li {width:220px; margin:0 auto; background:url(../image/list_bg.jpg) repeat-x; border-bottom:1px solid #D7AF39; text-align:center; font-weight:bold; list-style:none; line-height:31px;cursor: pointer;}
+.nav_list {width:220px; margin:0 auto; background:#FFF9E8; overflow:hidden; padding-bottom:5px;}
+.nav_wz   {width: 170px; margin: 2px; height:32px; line-height:32px; text-align:center; font-family:"宋体";font-weight:normal; color:#D08826;}
+.nav_on {
+background: #FFC939;
+font-weight: bold;
+color: #FF0000;
+}
+.line     {width:174px; height:1px; margin:0 auto; background:url(../image/line.png);}
+.right    {float:left; width:975px; margin-left:10px; height:700px; border:1px solid #F2D6AA; background:#FFFFFF; padding-bottom:5px; }
+.search   {height:140px; margin:0 0; border:1px dashed #F5E2C5;}
+.search_cont {width:920px; height:30px; margin-left:20px;} 
+.search_top  {width:920px; height:30px; margin-top:10px;} 
+.search_ws {float:left; width:120px; height:30px; line-height:30px; text-align:right;}
+.search_wss {float:left; width:10px; height:30px; line-height:30px; text-align:center;}
+.search_w  {float:left; width:150px; height:30px; line-height:30px; text-align:center;}
+.search_w input {width:120px; height:20px; margin-top:5px; border:1px solid #DED1BE;}
+.search_s {float:left; width:150px; text-align:center; margin-top:5px;}
+.search_ico  {width:400px; height:30px; margin:0 auto; margin-top:15px;}
+.search_inp  {float:left; width:70px; height:24px; margin-left:40px; margin-top:5px; background:url(../image/ico_b.png); text-align:center; line-height:24px;}
+.tab   {width:940px; height:380px; border:1px solid #F5E2C5; margin:0 auto; margin-top:15px;}
+.tab table {width:938px; margin:0 auto; margin-top:1px;}
+.tab td {height:30px; text-align:center; padding-left:3px; line-height:30px;}
+.yellow {background:#F2EEE3;}
+.yellow td {height:35px;}
+.tab_bot  {width:940px; height:35px; margin:0 auto; position:relative; border:1px solid #F5E2C5; border-top:0px; z-index:10; font-family:"宋体";}
+.tab_ico  {float:left; width:45px; height:20px; margin-top:8px; margin-left:20px; text-align:center; line-height:20px; color:#D08826; 
+           background:url(../image/ico_s.png);cursor:pointer;}
+.tab_page {float:right; width:320px; height:24px; line-height:24px; margin-top:4px; margin-right:20px;}
+.tab_page select {margin-top:5px;}
+.editor    {width:940px; margin:0 auto; border:1px solid #F2D6AA; background:#FFE3B9; padding-bottom:5px; font-family:Arial, Helvetica, sans-serif; }
+.editors   {width:760px; height:60px; margin:0 auto; border:1px dashed #F5E2C5; margin-top:20px; }
+.editor_top  {width:750px; padding:0px 5px; height:60px; margin:0 auto; line-height:30px;} 
+.red  {color:#FF0000;}
+.big  {font-size:14px; font-weight:bold;}
+.title {width:740px; height:30px; margin:0 auto; margin-top:20px; line-height:30px; padding-left:5px; background:#FFCC80;}
+.footer  { margin:0 auto; margin-top:0px; padding-top:0px; text-align:center; background:url(../image/head_bg.jpg) repeat-x;}
+
+input.radius[type="text"] {background-color: #FFFFFF;border: 1px solid #DED1BE; height:20px;border-radius: 3px 3px 3px 3px;box-shadow: 0 1px 1px 0 #EAEAEA inset;outline: medium none;}
+input.radius[type="text"]:focus {border: 1px solid #00C2FF#DADADA; height:20px;}
+
+.ftitle {font-size: 14px;font-weight: bold;padding: 5px 0;margin-bottom: 10px;border-bottom: 1px solid #ccc;}
+#myform {margin: 0;padding: 10px 30px;}
+#dlg {width:471px;height:470px;padding:10px 20px; background:#FFCB06;}
+.tabs td input {width:200px; height:20px;} */
+
+/*------头部内容样式-------*/
+/* #header ,.tpaic_logo a ,ul#menu li a ,.login_c form h3 em ,.login_c form label input ,.login_btn{background-image: url(../image/ds_background.gif);}
+ */#header{ min-width:1000px; background:#E0ECFF;}
+/* .tpaic_logo a{display:block; text-indent:-9999px; background-position:0 190px; width:225px; height:53px; float:left; margin:0 20px;}
+.login_info{ float:right; line-height:53px; padding-right:20px; color:#c15c2e;}
+------底部内容样式------- #95B8E7 E0ECFF*/
+#footer{ background:#E0ECFF; text-align:center; line-height:43px;}
+
+/*修改easyui的他tabs-tool默认的边框样式*/
+.tabs-tool{border-left:none;} 
+
+.icon-closeAll{ width:14px; height:14px; background:url(../js/plugins/easyui/icons/images/tools-sprites-trans.gif) no-repeat 1px 0;}
+#add-waybill-fm table, #edit-waybill-fm table{font-size:12px;}
