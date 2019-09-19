@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+		xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include::header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<input id="provinceid" name="provinceid" type="hidden" th:value="${province.provinceid}">
+							<input id="cityIds" name="cityIds" type="hidden" th:value="${province.cityIds}" >
+							<div class="form-group">
+								<label class="col-sm-3 control-label">省名称：</label>
+								<div class="col-sm-8">
+									<input id="provincename" name="provincename" class="form-control"
+										type="text" th:value="${province.provincename}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">简称：</label>
+								<div class="col-sm-8">
+									<input id="mininame" name="mininame" class="form-control"
+										type="text" th:value="${province.mininame}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">市份权限：</label>
+								<div class="col-sm-8">
+									<div id="cityTree"></div>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+			<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_editProvince_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="system:province:provinceTree">
+			<script type="text/javascript">
+				s_editProvince_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/js/appjs/sys/province/editMaintainProvince.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<style>
+
+</style>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12 container-sm">
+			<div class="ibox">
+				<div class="ibox-body">
+					<form id="searchLog">
+						<input id="sessionId" name="sessionId" th:value="${sessionId}"  type="hidden">
+						<div class="row"
+							 style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+							<div class="col-md-4">
+								<label>访问菜单：</label> <input type="text" name="operation"
+														  id="operation" class="form-control">
+							</div>
+							<div class="col-md-4" style="width:200px;">
+								<label>操作时间：</label>
+								<input type="text" name="startTime" id="startTime" class="form-control">
+							</div>
+							<div class="col-md-4" style="width:200px;">
+								<label>至：</label>
+								<input type="text" name="endTime" id="endTime" class="form-control">
+							</div>
+						</div>
+					</form>
+					<div class="fixed-table-toolbar">
+						<!--<div class="columns pull-left">
+							<button type="button" class="btn  btn-danger"
+									onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+						</div>-->
+						<div class="col-md-9">
+							<input type="button" value="查询"
+								   onclick="search()" class="btn  btn-warning">
+							<input type="button"
+								   value="重置" onclick="resetForm()"
+								   class="btn  btn-success">
+							<button shiro:hasPermission="system:loginLog:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" style="margin-right:50px;">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+						</div>
+					</div>
+					<table id="detailTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/operateLog/detail.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

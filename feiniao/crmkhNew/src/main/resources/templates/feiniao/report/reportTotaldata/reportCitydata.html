@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">		
+			<div class="ibox">
+				<div class="ibox-body">
+				<form id="searchTotalData" >
+							<div class="row">
+ 									<input th:value="${reportTotaldata.start_date}"  type="hidden"  name="startDate" id="startDate" class="form-control" >
+									<input th:value="${reportTotaldata.end_date}"  type="hidden"  name="endDate" id="endDate" class="form-control" >
+									
+									<input th:value="${reportTotaldata.big_area}"  type="hidden"  name="bigarea" id="bigarea" class="form-control" >
+ 									<input th:value="${reportTotaldata.province_id}"  type="hidden"  name="provinceid" id="provinceid" class="form-control" >
+								
+							</div>
+							 <div style="color:red; margin:20px 30px; text-align:left;">备注：
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>
+					</form> 
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="report:reportCitydata:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="report:reportCitydata:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="report:reportCitydata:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="report:reportCitydata:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<button shiro:hasPermission="report:reportCitydata:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							<button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_cityData_h = 'hidden';
+				var s_branchData_h = 'hidden';
+
+			</script>
+		<div shiro:hasPermission="report:reportTotaldata:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotaldata:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotaldata:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotal:reportTotalCity">
+			<script type="text/javascript">
+				var s_cityData_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotal:reportTotalBranch">
+			<script type="text/javascript">
+				var s_branchData_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportTotaldata/reportCitydata.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>	
+</body>
+</html>

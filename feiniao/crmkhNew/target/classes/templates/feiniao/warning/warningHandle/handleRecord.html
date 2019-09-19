@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${warningHandle.id}"  type="hidden">
+							<div class="form-group">
+								<label class="label-text">网点处理情况</label>
+								<div class="form-item">
+					                <label class="label-text">反馈人：</label>
+					                <span th:text="${warningHandle.barnchDealUser}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈时间：</label>
+					                <span th:text="${warningHandle.showBranchFeedbackDate}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">品类：</label>
+					                <span th:text="${warningHandle.branchCategory}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">均重：</label>
+					                <span th:text="${warningHandle.branchAveWeight}"></span>
+					            </div>
+								<div class="form-item">
+					                <label class="label-text">反馈类型：</label>
+					                <span th:text="${warningHandle.showBranchDealType}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈内容：</label>
+					                <span th:text="${warningHandle.branchDealDesc}"></span>
+					            </div>
+				            </div>
+				            
+				            <div class="form-group">
+								<label class="label-text">省总处理情况</label>
+								<div class="form-item">
+					                <label class="label-text">反馈人：</label>
+					                <span th:text="${warningHandle.provinceDealUser}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈时间：</label>
+					                <span th:text="${warningHandle.showProvinceFeedbackDate}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈内容：</label>
+					                <span th:text="${warningHandle.provinceDealDesc}"></span>
+					            </div>
+				            </div>
+				            
+				            
+				            <div class="form-group">
+								<label class="label-text">总部处理情况</label>
+								<div class="form-item">
+					                <label class="label-text">反馈人：</label>
+					                <span th:text="${warningHandle.zbDealUser}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈时间：</label>
+					                <span th:text="${warningHandle.showZbFeedbackDate}"></span>
+					            </div>
+					            <div class="form-item">
+					                <label class="label-text">反馈内容：</label>
+					                <span th:text="${warningHandle.zbDealDesc}"></span>
+					            </div>
+				            </div>
+				            
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	</script>
+</body>
+</html>

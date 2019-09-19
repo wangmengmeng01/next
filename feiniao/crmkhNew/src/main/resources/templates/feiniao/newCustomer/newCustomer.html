@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新增大客户</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../../../static/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="../../../static/js/lay/laydate/theme/default/laydate.css">
+	<link rel="stylesheet" type="text/css" href="../../../static/css/element.css">
+	<script type="text/javascript" src="../../../static/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../static/js/vue.min.js"></script>
+	<script type="text/javascript" src="../../../static/js/element.js"></script>
+	<script type="text/javascript" src="../../../static/js/jquery314.min.js"></script>
+	<script type="text/javascript" src="../../../static/js/plugins/distpicker/distpicker.data.min.js"></script>
+
+	<style type="text/css">
+		#app {
+			padding: 10px;
+		}
+		.el-input {
+			width: 220px;
+		}
+		.address {
+			position: absolute;
+			left: 0;
+			top: 100%;
+			background: #fff;
+			padding: 5px;
+			z-index: 5;
+		}
+	</style>
+</head>
+<body>
+<div id="app">
+	<el-card class="box-card">
+	  <div slot="header" class="clearfix">
+	    <span>查询条件</span>
+	  </div>
+	  <div>
+	  	客户名称
+	  	<el-autocomplete
+	      class="inline-input"
+	      v-model="search.text"
+	      :fetch-suggestions="querySearch"
+	      :trigger-on-focus="false"
+	      placeholder="请输入内容"
+	      @select="searchSelect"
+	    ></el-autocomplete>
+	    <el-button type="primary">查询</el-button>
+	  </div>
+	</el-card>
+	<el-card style="margin-top: 20px;">
+	  <div style="">
+			<el-button @click.native="addFlag = true" type="primary">新增</el-button>
+			<el-button type="primary" style="position: relative;">导入 <input style="width: 100%;height: 100%;opacity: 0;position: absolute;left: 0;top: 0" type="file" multiple="multiple" id="file" @change="changeFile" name=""></el-button>
+			<el-button @click.native="edit" type="primary">编辑</el-button>
+			<el-button @click.native="del" type="primary">删除</el-button>
+		</div>
+	  <div style="margin-top: 10px;">
+			<el-table
+				:data="tableData"
+				border
+				style="width: 100%">
+				<el-table-column
+			    type="selection"
+			    width="55">
+			  </el-table-column>
+				<el-table-column
+					prop="id"
+					label="序号"
+					align="center"
+					>
+					<template slot-scope="scope">
+						<span>{{scope.$index}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="role_name"
+					label="所属网点"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="remark"
+					label="客户编码"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="updatetime"
+					label="客户名称"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="始发地"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="起始日期"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="结束日期"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="重量选择"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					fixed='right'
+					label="操作"
+					align="center"
+					width="200px"
+					>
+					<template slot-scope="scope">
+						<el-button @click="edit(scope.row)" type="text" size="small">查看详情    </el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</div>
+		<div style="text-align: right;margin-top: 10px;">
+			<el-pagination
+				background
+	      @size-change="sizeChange"
+	      @current-change="currentChange"
+	      :current-page="1"
+	      :page-sizes="[10, 20, 50]"
+	      :page-size="100"
+	      layout="total, sizes, prev, pager, next, jumper"
+	      :total="400">
+	    </el-pagination>
+		</div>
+	</el-card>
+	<div>
+	<el-dialog
+		title="编辑报价"
+		:visible.sync="editFlag"
+		width="800px"
+		:close-on-click-modal="false"
+		:show-close="false"
+		:modal-append-to-body="false"
+		:append-to-body="true"
+		center>
+		<el-form :model="editForm" :inline="true" :rules="rules" ref="editRoleForm" label-width="80px">
+			<el-form-item label="客户名称" prop="role_name">
+				<el-input v-model.trim="editForm.role_name" placeholder="请输入"></el-input>
+			</el-form-item>
+			<el-form-item label="起始日期" prop="role_name">
+				<el-date-picker
+		      v-model="editForm.role_name"
+		      type="date"
+		      placeholder="选择日期">
+		    </el-date-picker>
+			</el-form-item>
+			<el-form-item label="结束日期" prop="role_name">
+				<el-date-picker
+		      v-model="editForm.role_name"
+		      type="date"
+		      placeholder="选择日期">
+		    </el-date-picker>
+			</el-form-item>
+			<el-form-item label="重量选择" prop="role_name">
+				<el-select v-model="editForm.role_name" placeholder="请选择">
+			    <el-option
+			      v-for="item in 5"
+			      :key="item"
+			      :label="item"
+			      :value="item">
+			    </el-option>
+			  </el-select>
+			</el-form-item>
+		<div v-for="(item,index) in editForm.tableData">
+			<div style="border: 1px solid #EBEEF5;padding-top: 5px;">
+				<el-form-item label="始发" prop="role_name">
+					<el-select @change="change" style="vertical-align: middle;" v-model="editForm.role_name" placeholder="请选择">
+				    <el-option
+				      v-for="(value,name) in province"
+				      :key="name"
+				      :label="value"
+				      :value="name">
+				    </el-option>
+				  </el-select>
+				  省
+				</el-form-item>
+				<el-form-item label-width="5px" label=" " prop="role_name">
+					<el-select style="vertical-align: middle;" v-model="editForm.role_name" placeholder="请选择">
+				    <el-option
+				      v-for="(value,name) in city"
+				      :key="name"
+				      :label="value"
+				      :value="name">
+				    </el-option>
+				  </el-select>
+				  市
+				</el-form-item>
+			</div>
+			<el-table
+				:data="item"
+				border
+				style="width: 100%">
+					<el-table-column
+						prop="id"
+						label="送运到"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<span>上海{{scope.$index}}</span>
+							<el-button @click="edit(scope.$index)" type="text" size="small">编辑    </el-button>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="role_name"
+						label="1KG"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<el-form-item label="" prop="role_name">
+								<el-input style="width: 50px;" v-model="scope.row.role_name" placeholder=""></el-input>
+							</el-form-item>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="remark"
+						label="2KG"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<el-form-item label="" prop="role_name">
+								<el-input style="width: 50px;" v-model="scope.row.role_name" placeholder=""></el-input>
+							</el-form-item>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="updatetime"
+						label="3KG"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<el-form-item label="" prop="role_name">
+								<el-input style="width: 50px;" v-model="scope.row.role_name" placeholder=""></el-input>
+							</el-form-item>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="status"
+						align="center"
+						min-width="200px"
+						>
+						<template slot="header" slot-scope="scope">
+			        3KG以上<br> <span>首重费(KG/元)</span><span style="margin-left: 5px;">续费(KG/元)</span>
+			      </template>
+			      <template slot-scope="scope">
+							<el-form-item label="" prop="role_name">
+								<el-input style="width: 50px;" v-model="scope.row.role_name" placeholder=""></el-input>
+							</el-form-item>
+							<el-form-item label="" prop="role_name">
+								<el-input style="width: 50px;" v-model="scope.row.role_name" placeholder=""></el-input>
+							</el-form-item>
+						</template>
+					</el-table-column>
+					<el-table-column
+						fixed='right'
+						label="操作"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<el-button @click="delAddress(index,scope.$index)" type="text" size="small">删除    </el-button>
+						</template>
+					</el-table-column>
+			</el-table>
+			<div style="height: 50px;line-height: 50px;border: 1px solid #EBEEF5;"><span @click="newMoney(index)" style="color: blue;text-decoration:underline;">新增目的地运费</span></div>
+		</div>
+			<div style=""><span @click="newModel" style="color: blue;text-decoration:underline;">新增始发模板</span></div>
+		</el-form>
+		<span slot="footer">
+			<el-button type="primary" @click="submitForm('editRoleForm')">提交</el-button>
+			<!-- <el-button type="primary" @click="resetForm('editRoleForm')">重置</el-button> -->
+			<el-button type="primary" @click="editCancel">取消</el-button>
+		</span>
+	</el-dialog>
+	<el-dialog
+		title="新增报价"
+		:visible.sync="addFlag"
+		width="800px"
+		:modal-append-to-body="false"
+		:append-to-body="true"
+		center>
+		<el-form :model="editForm" :inline="true" :rules="rules" ref="editRoleForm" label-width="80px" class="demo-ruleForm">
+			<el-form-item label="客户名称" prop="role_name">
+				<el-input v-model.trim="editForm.role_name" placeholder="请输入"></el-input>
+			</el-form-item>
+			<el-form-item label="起始日期" prop="role_name">
+				<el-date-picker
+		      v-model="editForm.role_name"
+		      type="date"
+		      placeholder="选择日期">
+		    </el-date-picker>
+			</el-form-item>
+			<el-form-item label="结束日期" prop="role_name">
+				<el-date-picker
+		      v-model="editForm.role_name"
+		      type="date"
+		      placeholder="选择日期">
+		    </el-date-picker>
+			</el-form-item>
+			<el-form-item label="重量选择" prop="role_name">
+				<el-select v-model="editForm.role_name" placeholder="请选择">
+			    <el-option
+			      v-for="item in 5"
+			      :key="item"
+			      :label="item"
+			      :value="item">
+			    </el-option>
+			  </el-select>
+			</el-form-item>
+
+			<el-table
+				:data="tableData"
+				border
+				style="width: 100%">
+
+				<el-table-column
+					align="left"
+					>
+					<template slot="header" slot-scope="scope">
+						<div>
+							<span style="vertical-align: middle;">始发</span>
+						<!-- <el-form-item label="始发" prop="role_name"> -->
+							<el-select @change="change" style="vertical-align: middle;" v-model="editForm.role_name" placeholder="请选择">
+						    <el-option
+						      v-for="(value,name) in province"
+						      :key="name"
+						      :label="value"
+						      :value="name">
+						    </el-option>
+						  </el-select>
+						  省
+						<!-- </el-form-item> -->
+						<!-- <el-form-item label="" prop="role_name"> -->
+							<el-select style="vertical-align: middle;" v-model="editForm.role_name" placeholder="请选择">
+						    <el-option
+						      v-for="(value,name) in city"
+						      :key="name"
+						      :label="value"
+						      :value="name">
+						    </el-option>
+						  </el-select>
+						  市
+						<!-- </el-form-item> -->
+						</div>
+					</template>
+					<el-table-column
+						prop="id"
+						label="送运到"
+						align="center"
+						>
+						<template slot-scope="scope">
+							<span>{{scope.$index}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="role_name"
+						label="1KG"
+						align="center"
+						>
+					</el-table-column>
+					<el-table-column
+						prop="remark"
+						label="2KG"
+						align="center"
+						>
+					</el-table-column>
+					<el-table-column
+						prop="updatetime"
+						label="3KG"
+						align="center"
+						>
+					</el-table-column>
+					<el-table-column
+						prop="status"
+						align="center"
+						min-width="200px"
+						>
+						<template slot="header" slot-scope="scope">
+			        3KG以上<br> <span>首重费(KG/元)</span><span style="margin-left: 5px;">续费(KG/元)</span>
+			      </template>
+			      <template slot-scope="scope">
+			      </template>
+					</el-table-column>
+					<el-table-column
+						fixed='right'
+						label="操作"
+						align="center"
+						width="200px"
+						>
+						<template slot-scope="scope">
+							<el-button @click="edit(scope.row)" type="text" size="small">删除    </el-button>
+						</template>
+					</el-table-column>
+				</el-table-column>
+			</el-table>
+			<div style="height: 50px;line-height: 50px;border: 1px solid #EBEEF5;"><span style="color: blue;text-decoration:underline;">新增目的地运费</span></div>
+			<div style=""><span style="color: blue;text-decoration:underline;">新增始发模板</span></div>
+		</el-form>
+		<span slot="footer">
+			<el-button type="primary" @click="submitForm('editRoleForm')">提交</el-button>
+			<!-- <el-button type="primary" @click="resetForm('editRoleForm')">重置</el-button> -->
+			<el-button type="primary" @click="addFlag = false">取消</el-button>
+		</span>
+	</el-dialog>
+	<el-dialog
+		title="选择区域"
+		:visible.sync="addressFlag"
+		width="800px"
+		:modal-append-to-body="false"
+		:append-to-body="true"
+		center>
+		<el-row :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.huadong.flag" v-model="address.huadong.model" @change="huadongChange">华东</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="shanghaiFlag=true" :indeterminate="address.huadong.shanghai.flag" v-model="address.huadong.shanghai.model" @change="shanghaiChange">
+		  			上海<span style="color: red;">({{address.huadong.shanghai.value.length}})</span>
+		  			<i @click.prevent="shanghaiFlag=true" :class="shanghaiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="shanghaiFlag" class="address" v-model="address.huadong.shanghai.value" @change="shanghai">
+				    <el-checkbox v-for="(city,name) in address.huadong.shanghai.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="shanghaiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="anhuiFlag=true" :indeterminate="address.huadong.anhui.flag" v-model="address.huadong.anhui.model" @change="anhuiChange">
+		  			安徽省<span style="color: red;">({{address.huadong.anhui.value.length}})</span>
+		  			<i @click.prevent="anhuiFlag=true" :class="anhuiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="anhuiFlag" class="address" v-model="address.huadong.anhui.value" @change="anhui">
+				    <el-checkbox v-for="(city,name) in address.huadong.anhui.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="anhuiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="jiangsuFlag=true" :indeterminate="address.huadong.jiangsu.flag" v-model="address.huadong.jiangsu.model" @change="jiangsuChange">
+		  			江苏省<span style="color: red;">({{address.huadong.jiangsu.value.length}})</span>
+		  			<i @click.prevent="jiangsuFlag=true" :class="jiangsuFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="jiangsuFlag" class="address" v-model="address.huadong.jiangsu.value" @change="jiangsu">
+				    <el-checkbox v-for="(city,name) in address.huadong.jiangsu.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="jiangsuFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="jiangxiFlag=true" :indeterminate="address.huadong.jiangxi.flag" v-model="address.huadong.jiangxi.model" @change="jiangxiChange">
+		  			江西省<span style="color: red;">({{address.huadong.jiangxi.value.length}})</span>
+		  			<i @click.prevent="jiangxiFlag=true" :class="jiangxiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="jiangxiFlag" class="address" v-model="address.huadong.jiangxi.value" @change="jiangxi">
+				    <el-checkbox v-for="(city,name) in address.huadong.jiangxi.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="jiangxiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="zhejiangFlag=true" :indeterminate="address.huadong.zhejiang.flag" v-model="address.huadong.zhejiang.model" @change="zhejiangChange">
+		  			浙江省<span style="color: red;">({{address.huadong.zhejiang.value.length}})</span>
+		  			<i @click.prevent="zhejiangFlag=true" :class="zhejiangFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="zhejiangFlag" class="address" v-model="address.huadong.zhejiang.value" @change="zhejiang">
+				    <el-checkbox v-for="(city,name) in address.huadong.zhejiang.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="zhejiangFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.huabei.flag" v-model="address.huabei.model" @change="huabeiChange">华北</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="beijingFlag=true" :indeterminate="address.huabei.beijing.flag" v-model="address.huabei.beijing.model" @change="beijingChange">
+		  			北京<span style="color: red;">({{address.huabei.beijing.value.length}})</span>
+		  			<i @click.prevent="beijingFlag=true" :class="beijingFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="beijingFlag" class="address" v-model="address.huabei.beijing.value" @change="beijing">
+				    <el-checkbox v-for="(city,name) in address.huabei.beijing.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="beijingFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="shandongFlag=true" :indeterminate="address.huabei.shandong.flag" v-model="address.huabei.shandong.model" @change="shandongChange">
+		  			山东省<span style="color: red;">({{address.huabei.shandong.value.length}})</span>
+		  			<i @click.prevent="shandongFlag=true" :class="shandongFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="shandongFlag" class="address" v-model="address.huabei.shandong.value" @change="shandong">
+				    <el-checkbox v-for="(city,name) in address.huabei.shandong.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="shandongFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="tianjinFlag=true" :indeterminate="address.huabei.tianjin.flag" v-model="address.huabei.tianjin.model" @change="tianjinChange">
+		  			天津<span style="color: red;">({{address.huabei.tianjin.value.length}})</span>
+		  			<i @click.prevent="tianjinFlag=true" :class="tianjinFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="tianjinFlag" class="address" v-model="address.huabei.tianjin.value" @change="tianjin">
+				    <el-checkbox v-for="(city,name) in address.huabei.tianjin.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="tianjinFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="hebeiFlag=true" :indeterminate="address.huabei.hebei.flag" v-model="address.huabei.hebei.model" @change="hebeiChange">
+		  			河北省<span style="color: red;">({{address.huabei.hebei.value.length}})</span>
+		  			<i @click.prevent="hebeiFlag=true" :class="hebeiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="hebeiFlag" class="address" v-model="address.huabei.hebei.value" @change="hebei">
+				    <el-checkbox v-for="(city,name) in address.huabei.hebei.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="hebeiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="shanxiFlag=true" :indeterminate="address.huabei.shanxi.flag" v-model="address.huabei.shanxi.model" @change="shanxiChange">
+		  			山西省<span style="color: red;">({{address.huabei.shanxi.value.length}})</span>
+		  			<i @click.prevent="shanxiFlag=true" :class="shanxiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="shanxiFlag" class="address" v-model="address.huabei.shanxi.value" @change="shanxi">
+				    <el-checkbox v-for="(city,name) in address.huabei.shanxi.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="shanxiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="neimengFlag=true" :indeterminate="address.huabei.neimeng.flag" v-model="address.huabei.neimeng.model" @change="neimengChange">
+		  			内蒙古自治区<span style="color: red;">({{address.huabei.neimeng.value.length}})</span>
+		  			<i @click.prevent="neimengFlag=true" :class="neimengFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="neimengFlag" class="address" v-model="address.huabei.neimeng.value" @change="neimeng">
+				    <el-checkbox v-for="(city,name) in address.huabei.neimeng.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="neimengFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.huazhong.flag" v-model="address.huazhong.flag" @change="huazhongChange">华中</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="hunanFlag=true" :indeterminate="address.huazhong.hunan.flag" v-model="address.huazhong.hunan.model" @change="hunanChange">
+		  			湖南省<span style="color: red;">({{address.huazhong.hunan.value.length}})</span>
+		  			<i @click.prevent="hunanFlag=true" :class="hunanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="hunanFlag" class="address" v-model="address.huazhong.hunan.value" @change="hunan">
+				    <el-checkbox v-for="(city,name) in address.huazhong.hunan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="hunanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="hubeiFlag=true" :indeterminate="address.huazhong.hubei.flag" v-model="address.huazhong.hubei.model" @change="hubeiChange">
+		  			湖北省<span style="color: red;">({{address.huazhong.hubei.value.length}})</span>
+		  			<i @click.prevent="hubeiFlag=true" :class="hubeiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="hubeiFlag" class="address" v-model="address.huazhong.hubei.value" @change="hubei">
+				    <el-checkbox v-for="(city,name) in address.huazhong.hubei.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="hubeiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="henanFlag=true" :indeterminate="address.huazhong.henan.flag" v-model="address.huazhong.henan.model" @change="henanChange">
+		  			河南省<span style="color: red;">({{address.huazhong.henan.value.length}})</span>
+		  			<i @click.prevent="henanFlag=true" :class="henanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="henanFlag" class="address" v-model="address.huazhong.henan.value" @change="henan">
+				    <el-checkbox v-for="(city,name) in address.huazhong.henan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="henanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.huanan.flag" v-model="address.huanan.flag" @change="huananChange">华南</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="guangdongFlag=true" :indeterminate="address.huanan.guangdong.flag" v-model="address.huanan.guangdong.model" @change="guangdongChange">
+		  			广东省<span style="color: red;">({{address.huanan.guangdong.value.length}})</span>
+		  			<i @click.prevent="guangdongFlag=true" :class="guangdongFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="guangdongFlag" class="address" v-model="address.huanan.guangdong.value" @change="guangdong">
+				    <el-checkbox v-for="(city,name) in address.huanan.guangdong.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="guangdongFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="hainanFlag=true" :indeterminate="address.huanan.hainan.flag" v-model="address.huanan.hainan.model" @change="hainanChange">
+		  			海南省<span style="color: red;">({{address.huanan.hainan.value.length}})</span>
+		  			<i @click.prevent="hainanFlag=true" :class="hainanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="hainanFlag" class="address" v-model="address.huanan.hainan.value" @change="hainan">
+				    <el-checkbox v-for="(city,name) in address.huanan.hainan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="hainanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="guangxiFlag=true" :indeterminate="address.huanan.guangxi.flag" v-model="address.huanan.guangxi.model" @change="guangxiChange">
+		  			广西壮族自治区<span style="color: red;">({{address.huanan.guangxi.value.length}})</span>
+		  			<i @click.prevent="guangxiFlag=true" :class="guangxiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="guangxiFlag" class="address" v-model="address.huanan.guangxi.value" @change="guangxi">
+				    <el-checkbox v-for="(city,name) in address.huanan.guangxi.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="guangxiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="fujianFlag=true" :indeterminate="address.huanan.fujian.flag" v-model="address.huanan.fujian.model" @change="fujianChange">
+		  			福建省<span style="color: red;">({{address.huanan.fujian.value.length}})</span>
+		  			<i @click.prevent="fujianFlag=true" :class="fujianFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="fujianFlag" class="address" v-model="address.huanan.fujian.value" @change="fujian">
+				    <el-checkbox v-for="(city,name) in address.huanan.fujian.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="fujianFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.dongbei.flag" v-model="address.dongbei.model" @change="dongbeiChange">东北</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="liaoningFlag=true" :indeterminate="address.dongbei.liaoning.flag" v-model="address.dongbei.liaoning.model" @change="liaoningChange">
+		  			辽宁省<span style="color: red;">({{address.dongbei.liaoning.value.length}})</span>
+		  			<i @click.prevent="liaoningFlag=true" :class="liaoningFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="liaoningFlag" class="address" v-model="address.dongbei.liaoning.value" @change="liaoning">
+				    <el-checkbox v-for="(city,name) in address.dongbei.liaoning.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="liaoningFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="jilinFlag=true" :indeterminate="address.dongbei.jilin.flag" v-model="address.dongbei.jilin.model" @change="jilinChange">
+		  			吉林省<span style="color: red;">({{address.dongbei.jilin.value.length}})</span>
+		  			<i @click.prevent="jilinFlag=true" :class="jilinFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="jilinFlag" class="address" v-model="address.dongbei.jilin.value" @change="jilin">
+				    <el-checkbox v-for="(city,name) in address.dongbei.jilin.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="jilinFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="heilongjiangFlag=true" :indeterminate="address.dongbei.heilongjiang.flag" v-model="address.dongbei.heilongjiang.model" @change="heilongjiangChange">
+		  			黑龙江省<span style="color: red;">({{address.dongbei.heilongjiang.value.length}})</span>
+		  			<i @click.prevent="heilongjiangFlag=true" :class="heilongjiangFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="heilongjiangFlag" class="address" v-model="address.dongbei.heilongjiang.value" @change="heilongjiang">
+				    <el-checkbox v-for="(city,name) in address.dongbei.heilongjiang.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="heilongjiangFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.xibei.flag" v-model="address.xibei.model" @change="xibeiChange">西北</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="sanxiFlag=true" :indeterminate="address.xibei.sanxi.flag" v-model="address.xibei.sanxi.model" @change="sanxiChange">
+		  			陕西省<span style="color: red;">({{address.xibei.sanxi.value.length}})</span>
+		  			<i @click.prevent="sanxiFlag=true" :class="sanxiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="sanxiFlag" class="address" v-model="address.xibei.sanxi.value" @change="sanxi">
+				    <el-checkbox v-for="(city,name) in address.xibei.sanxi.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="sanxiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="ningxiaFlag=true" :indeterminate="address.xibei.ningxia.flag" v-model="address.xibei.ningxia.model" @change="ningxiaChange">
+		  			宁夏回族自治区<span style="color: red;">({{address.xibei.ningxia.value.length}})</span>
+		  			<i @click.prevent="ningxiaFlag=true" :class="ningxiaFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="ningxiaFlag" class="address" v-model="address.xibei.ningxia.value" @change="ningxia">
+				    <el-checkbox v-for="(city,name) in address.xibei.ningxia.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="ningxiaFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="xinjiangFlag=true" :indeterminate="address.xibei.xinjiang.flag" v-model="address.xibei.xinjiang.model" @change="xinjiangChange">
+		  			新疆维吾尔自治区<span style="color: red;">({{address.xibei.xinjiang.value.length}})</span>
+		  			<i @click.prevent="xinjiangFlag=true" :class="xinjiangFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="xinjiangFlag" class="address" v-model="address.xibei.xinjiang.value" @change="xinjiang">
+				    <el-checkbox v-for="(city,name) in address.xibei.xinjiang.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="xinjiangFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="qinghaiFlag=true" :indeterminate="address.xibei.qinghai.flag" v-model="address.xibei.qinghai.model" @change="qinghaiChange">
+		  			青海省<span style="color: red;">({{address.xibei.qinghai.value.length}})</span>
+		  			<i @click.prevent="qinghaiFlag=true" :class="qinghaiFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="qinghaiFlag" class="address" v-model="address.xibei.qinghai.value" @change="qinghai">
+				    <el-checkbox v-for="(city,name) in address.xibei.qinghai.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="qinghaiFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="gansuFlag=true" :indeterminate="address.xibei.gansu.flag" v-model="address.xibei.gansu.model" @change="gansuChange">
+		  			甘肃省<span style="color: red;">({{address.xibei.gansu.value.length}})</span>
+		  			<i @click.prevent="gansuFlag=true" :class="gansuFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="gansuFlag" class="address" v-model="address.xibei.gansu.value" @change="gansu">
+				    <el-checkbox v-for="(city,name) in address.xibei.gansu.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="gansuFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.flag" v-model="address.flag" @change="addressChange">西南</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="chongqingFlag=true" :indeterminate="address.xinan.chongqing.flag" v-model="address.xinan.chongqing.model" @change="chongqingChange">
+		  			重庆省<span style="color: red;">({{address.xinan.chongqing.value.length}})</span>
+		  			<i @click.prevent="chongqingFlag=true" :class="chongqingFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="chongqingFlag" class="address" v-model="address.xinan.chongqing.value" @change="chongqing">
+				    <el-checkbox v-for="(city,name) in address.xinan.chongqing.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="chongqingFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="xizangFlag=true" :indeterminate="address.xinan.xizang.flag" v-model="address.xinan.xizang.model" @change="xizangChange">
+		  			西藏自治区<span style="color: red;">({{address.xinan.xizang.value.length}})</span>
+		  			<i @click.prevent="xizangFlag=true" :class="xizangFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="xizangFlag" class="address" v-model="address.xinan.xizang.value" @change="xizang">
+				    <el-checkbox v-for="(city,name) in address.xinan.xizang.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="xizangFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="yunnanFlag=true" :indeterminate="address.xinan.yunnan.flag" v-model="address.xinan.yunnan.model" @change="yunnanChange">
+		  			云南省<span style="color: red;">({{address.xinan.yunnan.value.length}})</span>
+		  			<i @click.prevent="yunnanFlag=true" :class="yunnanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="yunnanFlag" class="address" v-model="address.xinan.yunnan.value" @change="yunnan">
+				    <el-checkbox v-for="(city,name) in address.xinan.yunnan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="yunnanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="sichuanFlag=true" :indeterminate="address.xinan.sichuan.flag" v-model="address.xinan.sichuan.model" @change="sichuanChange">
+		  			四川省<span style="color: red;">({{address.xinan.sichuan.value.length}})</span>
+		  			<i @click.prevent="sichuanFlag=true" :class="sichuanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="sichuanFlag" class="address" v-model="address.xinan.sichuan.value" @change="sichuan">
+				    <el-checkbox v-for="(city,name) in address.xinan.sichuan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="sichuanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="guizhouFlag=true" :indeterminate="address.xinan.guizhou.flag" v-model="address.xinan.guizhou.model" @change="guizhouChange">
+		  			贵州省<span style="color: red;">({{address.xinan.guizhou.value.length}})</span>
+		  			<i @click.prevent="guizhouFlag=true" :class="guizhouFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="guizhouFlag" class="address" v-model="address.xinan.guizhou.value" @change="guizhou">
+				    <el-checkbox v-for="(city,name) in address.xinan.guizhou.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="guizhouFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<el-row style="margin-top: 15px;" :gutter="20">
+		  <el-col :span="6">
+		  	<div>
+		  		<el-checkbox :indeterminate="address.flag" v-model="address.flag" @change="addressChange">港澳台</el-checkbox>
+		  	</div>
+	  	</el-col>
+			<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="xianggangFlag=true" :indeterminate="address.gangaotai.xianggang.flag" v-model="address.gangaotai.xianggang.model" @change="xianggangChange">
+		  			香港特别行政区<span style="color: red;">({{address.gangaotai.xianggang.value.length}})</span>
+		  			<i @click.prevent="xianggangFlag=true" :class="xianggangFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="xianggangFlag" class="address" v-model="address.gangaotai.xianggang.value" @change="xianggang">
+				    <el-checkbox v-for="(city,name) in address.gangaotai.xianggang.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="xianggangFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="aomenFlag=true" :indeterminate="address.gangaotai.aomen.flag" v-model="address.gangaotai.aomen.model" @change="aomenChange">
+		  			澳门特别行政区<span style="color: red;">({{address.gangaotai.aomen.value.length}})</span>
+		  			<i @click.prevent="aomenFlag=true" :class="aomenFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="aomenFlag" class="address" v-model="address.gangaotai.aomen.value" @change="aomen">
+				    <el-checkbox v-for="(city,name) in address.gangaotai.aomen.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="aomenFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+				<div style="position: relative;">
+		  		<el-checkbox @click.native="aomenFlag=true" :indeterminate="address.gangaotai.aomen.flag" v-model="address.gangaotai.aomen.model" @change="aomenChange">
+		  			澳门特别行政区<span style="color: red;">({{address.gangaotai.aomen.value.length}})</span>
+		  			<i @click.prevent="aomenFlag=true" :class="aomenFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="aomenFlag" class="address" v-model="address.gangaotai.aomen.value" @change="aomen">
+				    <el-checkbox v-for="(city,name) in address.gangaotai.aomen.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="aomenFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+	  	<el-col :span="6">
+		  	<div style="position: relative;">
+		  		<el-checkbox @click.native="taiwanFlag=true" :indeterminate="address.gangaotai.taiwan.flag" v-model="address.gangaotai.taiwan.model" @change="taiwanChange">
+		  			台湾省<span style="color: red;">({{address.gangaotai.taiwan.value.length}})</span>
+		  			<i @click.prevent="taiwanFlag=true" :class="taiwanFlag ? 'el-icon-caret-bottom' : 'el-icon-caret-top'"></i>
+		  		</el-checkbox>
+					<el-checkbox-group style="background: #C0C4CC;" v-show="taiwanFlag" class="address" v-model="address.gangaotai.taiwan.value" @change="taiwan">
+				    <el-checkbox v-for="(city,name) in address.gangaotai.taiwan.citys" :label="name" :key="name">{{city}}</el-checkbox>
+				    <div style="text-align: right;font-size: 20px;"><span @click="taiwanFlag=false">关闭</span></div>
+				  </el-checkbox-group style="background: #C0C4CC;">
+		  	</div>
+	  	</el-col>
+		</el-row>
+		<div style="text-align: right;">
+			<el-button>保存</el-button>
+			<el-button>取消</el-button>
+		</div>
+	</el-dialog>
+	</div>
+</div>
+<script type="text/javascript">
+let province = ChineseDistricts[86];
+Vue.prototype.$ELEMENT = { size: 'medium', zIndex: 3000 };
+let app =	new Vue({
+		el:'#app',
+		data:{
+			file:'',
+			checkTable:[],
+			taiwanFlag:false,
+			aomenFlag:false,
+			xianggangFlag:false,
+			guizhouFlag:false,
+			sichuanFlag:false,
+			yunnanFlag:false,
+			xizangFlag:false,
+			chongqingFlag:false,
+			gansuFlag:false,
+			qinghaiFlag:false,
+			xinjiangFlag:false,
+			ningxiaFlag:false,
+			sanxiFlag:false,
+			heilongjiangFlag:false,
+			jilinFlag:false,
+			liaoningFlag:false,
+			fujianFlag:false,
+			guangxiFlag:false,
+			hainanFlag:false,
+			guangdongFlag:false,
+			henanFlag:false,
+			hubeiFlag:false,
+			hunanFlag:false,
+			neimengFlag:false,
+			shanxiFlag:false,
+			hebeiFlag:false,
+			tianjinFlag:false,
+			shandongFlag:false,
+			beijingFlag:false,
+			jiangxiFlag:false,
+			anhuiFlag:false,
+			zhejiangFlag:false,
+			shanghaiFlag:false,
+			jiangsuFlag:false,
+			addressFlag:true,
+			address:{
+				huadong:{
+					flag:false,
+					model:false,
+					shanghai:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							310100: "上海市市辖区",
+							310200: "上海市郊县"
+						},
+					},
+					anhui:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							340100: "合肥市",
+							340200: "芜湖市",
+							340300: "蚌埠市",
+							340400: "淮南市",
+							340500: "马鞍山市",
+							340600: "淮北市",
+							340700: "铜陵市",
+							340800: "安庆市",
+							341e3: "黄山市",
+							341100: "滁州市",
+							341200: "阜阳市",
+							341300: "宿州市",
+							341500: "六安市",
+							341600: "亳州市",
+							341700: "池州市",
+							341800: "宣城市"
+						},
+					},
+					jiangsu:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							320100: "南京市",
+							320200: "无锡市",
+							320300: "徐州市",
+							320400: "常州市",
+							320500: "苏州市",
+							320600: "南通市",
+							320700: "连云港市",
+							320800: "淮安市",
+							320900: "盐城市",
+							321e3: "扬州市",
+							321100: "镇江市",
+							321200: "泰州市",
+							321300: "宿迁市"
+						},
+					},
+					jiangxi:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							360100: "南昌市",
+							360200: "景德镇市",
+							360300: "萍乡市",
+							360400: "九江市",
+							360500: "新余市",
+							360600: "鹰潭市",
+							360700: "赣州市",
+							360800: "吉安市",
+							360900: "宜春市",
+							361e3: "抚州市",
+							361100: "上饶市"
+						},
+					},
+					zhejiang:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							330100: "杭州市",
+							330200: "宁波市",
+							330300: "温州市",
+							330400: "嘉兴市",
+							330500: "湖州市",
+							330600: "绍兴市",
+							330700: "金华市",
+							330800: "衢州市",
+							330900: "舟山市",
+							331e3: "台州市",
+							331100: "丽水市"
+						},
+					}
+				},
+				huabei:{
+					flag:false,
+					model:false,
+					beijing:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							110100: "北京市市辖区"
+						},
+					},
+					shandong:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							370100: "济南市",
+							370200: "青岛市",
+							370300: "淄博市",
+							370400: "枣庄市",
+							370500: "东营市",
+							370600: "烟台市",
+							370700: "潍坊市",
+							370800: "济宁市",
+							370900: "泰安市",
+							371e3: "威海市",
+							371100: "日照市",
+							371200: "莱芜市",
+							371300: "临沂市",
+							371400: "德州市",
+							371500: "聊城市",
+							371600: "滨州市",
+							371700: "菏泽市"
+						},
+					},
+					tianjin:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							120100: "天津市市辖区",
+							120200: "天津市郊县"
+						},
+					},
+					hebei:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							130100: "石家庄市",
+							130200: "唐山市",
+							130300: "秦皇岛市",
+							130400: "邯郸市",
+							130500: "邢台市",
+							130600: "保定市",
+							130700: "张家口市",
+							130800: "承德市",
+							130900: "沧州市",
+							131e3: "廊坊市",
+							131100: "衡水市"
+						},
+					},
+					shanxi:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							140100: "太原市",
+							140200: "大同市",
+							140300: "阳泉市",
+							140400: "长治市",
+							140500: "晋城市",
+							140600: "朔州市",
+							140700: "晋中市",
+							140800: "运城市",
+							140900: "忻州市",
+							141e3: "临汾市",
+							141100: "吕梁市"
+						},
+					},
+					neimeng:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							140100: "太原市",
+							140200: "大同市",
+							140300: "阳泉市",
+							140400: "长治市",
+							140500: "晋城市",
+							140600: "朔州市",
+							140700: "晋中市",
+							140800: "运城市",
+							140900: "忻州市",
+							141e3: "临汾市",
+							141100: "吕梁市"
+						},
+					},
+				},
+				huazhong:{
+					flag:false,
+					model:false,
+					hunan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							430100: "长沙市",
+							430200: "株洲市",
+							430300: "湘潭市",
+							430400: "衡阳市",
+							430500: "邵阳市",
+							430600: "岳阳市",
+							430700: "常德市",
+							430800: "张家界市",
+							430900: "益阳市",
+							431e3: "郴州市",
+							431100: "永州市",
+							431200: "怀化市",
+							431300: "娄底市",
+							433100: "湘西土家族苗族自治州"
+						},
+					},
+					hubei:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							420100: "武汉市",
+							420200: "黄石市",
+							420300: "十堰市",
+							420500: "宜昌市",
+							420600: "襄阳市",
+							420700: "鄂州市",
+							420800: "荆门市",
+							420900: "孝感市",
+							421e3: "荆州市",
+							421100: "黄冈市",
+							421200: "咸宁市",
+							421300: "随州市",
+							422800: "恩施土家族苗族自治州",
+							429004: "仙桃市",
+							429005: "潜江市",
+							429006: "天门市",
+							429021: "神农架林区"
+						},
+					},
+					henan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							410100: "郑州市",
+							410200: "开封市",
+							410300: "洛阳市",
+							410400: "平顶山市",
+							410500: "安阳市",
+							410600: "鹤壁市",
+							410700: "新乡市",
+							410800: "焦作市",
+							410900: "濮阳市",
+							411e3: "许昌市",
+							411100: "漯河市",
+							411200: "三门峡市",
+							411300: "南阳市",
+							411400: "商丘市",
+							411500: "信阳市",
+							411600: "周口市",
+							411700: "驻马店市",
+							419001: "济源市"
+						},
+					},
+				},
+				huanan:{
+					flag:false,
+					model:false,
+					guangdong:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							440100: "广州市",
+							440200: "韶关市",
+							440300: "深圳市",
+							440400: "珠海市",
+							440500: "汕头市",
+							440600: "佛山市",
+							440700: "江门市",
+							440800: "湛江市",
+							440900: "茂名市",
+							441200: "肇庆市",
+							441300: "惠州市",
+							441400: "梅州市",
+							441500: "汕尾市",
+							441600: "河源市",
+							441700: "阳江市",
+							441800: "清远市",
+							441900: "东莞市",
+							442e3: "中山市",
+							445100: "潮州市",
+							445200: "揭阳市",
+							445300: "云浮市"
+						},
+					},
+					hainan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							460100: "海口市",
+							460200: "三亚市",
+							460300: "三沙市",
+							460400: "儋州市",
+							469001: "五指山市",
+							469002: "琼海市",
+							469005: "文昌市",
+							469006: "万宁市",
+							469007: "东方市",
+							469021: "定安县",
+							469022: "屯昌县",
+							469023: "澄迈县",
+							469024: "临高县",
+							469025: "白沙黎族自治县",
+							469026: "昌江黎族自治县",
+							469027: "乐东黎族自治县",
+							469028: "陵水黎族自治县",
+							469029: "保亭黎族苗族自治县",
+							469030: "琼中黎族苗族自治县"
+						},
+					},
+					guangxi:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							450100: "南宁市",
+							450200: "柳州市",
+							450300: "桂林市",
+							450400: "梧州市",
+							450500: "北海市",
+							450600: "防城港市",
+							450700: "钦州市",
+							450800: "贵港市",
+							450900: "玉林市",
+							451e3: "百色市",
+							451100: "贺州市",
+							451200: "河池市",
+							451300: "来宾市",
+							451400: "崇左市"
+						},
+					},
+					fujian:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							350100: "福州市",
+							350200: "厦门市",
+							350300: "莆田市",
+							350400: "三明市",
+							350500: "泉州市",
+							350600: "漳州市",
+							350700: "南平市",
+							350800: "龙岩市",
+							350900: "宁德市"
+						},
+					},
+				},
+				dongbei:{
+					flag:false,
+					model:false,
+					liaoning:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							210100: "沈阳市",
+							210200: "大连市",
+							210300: "鞍山市",
+							210400: "抚顺市",
+							210500: "本溪市",
+							210600: "丹东市",
+							210700: "锦州市",
+							210800: "营口市",
+							210900: "阜新市",
+							211e3: "辽阳市",
+							211100: "盘锦市",
+							211200: "铁岭市",
+							211300: "朝阳市",
+							211400: "葫芦岛市"
+						},
+					},
+					jilin:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							220100: "长春市",
+							220200: "吉林市",
+							220300: "四平市",
+							220400: "辽源市",
+							220500: "通化市",
+							220600: "白山市",
+							220700: "松原市",
+							220800: "白城市",
+							222400: "延边朝鲜族自治州"
+						},
+					},
+					guangxi:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							450100: "南宁市",
+							450200: "柳州市",
+							450300: "桂林市",
+							450400: "梧州市",
+							450500: "北海市",
+							450600: "防城港市",
+							450700: "钦州市",
+							450800: "贵港市",
+							450900: "玉林市",
+							451e3: "百色市",
+							451100: "贺州市",
+							451200: "河池市",
+							451300: "来宾市",
+							451400: "崇左市"
+						},
+					},
+					heilongjiang:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							230100: "哈尔滨市",
+							230200: "齐齐哈尔市",
+							230300: "鸡西市",
+							230400: "鹤岗市",
+							230500: "双鸭山市",
+							230600: "大庆市",
+							230700: "伊春市",
+							230800: "佳木斯市",
+							230900: "七台河市",
+							231e3: "牡丹江市",
+							231100: "黑河市",
+							231200: "绥化市",
+							232700: "大兴安岭地区"
+						},
+					},
+				},
+				xibei:{
+					flag:false,
+					model:false,
+					sanxi:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							610100: "西安市",
+							610200: "铜川市",
+							610300: "宝鸡市",
+							610400: "咸阳市",
+							610500: "渭南市",
+							610600: "延安市",
+							610700: "汉中市",
+							610800: "榆林市",
+							610900: "安康市",
+							611e3: "商洛市"
+						},
+					},
+					ningxia:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							640100: "银川市",
+							640200: "石嘴山市",
+							640300: "吴忠市",
+							640400: "固原市",
+							640500: "中卫市"
+						},
+					},
+					xinjiang:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							650100: "乌鲁木齐市",
+							650200: "克拉玛依市",
+							650400: "吐鲁番市",
+							652200: "哈密地区",
+							652300: "昌吉回族自治州",
+							652700: "博尔塔拉蒙古自治州",
+							652800: "巴音郭楞蒙古自治州",
+							652900: "阿克苏地区",
+							653e3: "克孜勒苏柯尔克孜自治州",
+							653100: "喀什地区",
+							653200: "和田地区",
+							654e3: "伊犁哈萨克自治州",
+							654200: "塔城地区",
+							654300: "阿勒泰地区",
+							659001: "石河子市",
+							659002: "阿拉尔市",
+							659003: "图木舒克市",
+							659004: "五家渠市",
+							659005: "北屯市",
+							659006: "铁门关市",
+							659007: "双河市",
+							659008: "可克达拉市"
+						},
+					},
+					qinghai:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							630100: "西宁市",
+							630200: "海东市",
+							632200: "海北藏族自治州",
+							632300: "黄南藏族自治州",
+							632500: "海南藏族自治州",
+							632600: "果洛藏族自治州",
+							632700: "玉树藏族自治州",
+							632800: "海西蒙古族藏族自治州"
+						},
+					},
+					gansu:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							620100: "兰州市",
+							620200: "嘉峪关市",
+							620300: "金昌市",
+							620400: "白银市",
+							620500: "天水市",
+							620600: "武威市",
+							620700: "张掖市",
+							620800: "平凉市",
+							620900: "酒泉市",
+							621e3: "庆阳市",
+							621100: "定西市",
+							621200: "陇南市",
+							622900: "临夏回族自治州",
+							623e3: "甘南藏族自治州"
+						},
+					},
+				},
+				xinan:{
+					chongqing:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							500100: "重庆市市辖区",
+							500200: "重庆市郊县"
+						},
+					},
+					xizang:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							540100: "拉萨市",
+							540200: "日喀则市",
+							540300: "昌都市",
+							540400: "林芝市",
+							542200: "山南地区",
+							542400: "那曲地区",
+							542500: "阿里地区"
+						},
+					},
+					yunnan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							530100: "昆明市",
+							530300: "曲靖市",
+							530400: "玉溪市",
+							530500: "保山市",
+							530600: "昭通市",
+							530700: "丽江市",
+							530800: "普洱市",
+							530900: "临沧市",
+							532300: "楚雄彝族自治州",
+							532500: "红河哈尼族彝族自治州",
+							532600: "文山壮族苗族自治州",
+							532800: "西双版纳傣族自治州",
+							532900: "大理白族自治州",
+							533100: "德宏傣族景颇族自治州",
+							533300: "怒江傈僳族自治州",
+							533400: "迪庆藏族自治州"
+						},
+					},
+					sichuan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							510100: "成都市",
+							510300: "自贡市",
+							510400: "攀枝花市",
+							510500: "泸州市",
+							510600: "德阳市",
+							510700: "绵阳市",
+							510800: "广元市",
+							510900: "遂宁市",
+							511e3: "内江市",
+							511100: "乐山市",
+							511300: "南充市",
+							511400: "眉山市",
+							511500: "宜宾市",
+							511600: "广安市",
+							511700: "达州市",
+							511800: "雅安市",
+							511900: "巴中市",
+							512e3: "资阳市",
+							513200: "阿坝藏族羌族自治州",
+							513300: "甘孜藏族自治州",
+							513400: "凉山彝族自治州"
+						},
+					},
+					guizhou:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							520100: "贵阳市",
+							520200: "六盘水市",
+							520300: "遵义市",
+							520400: "安顺市",
+							520500: "毕节市",
+							520600: "铜仁市",
+							522300: "黔西南布依族苗族自治州",
+							522600: "黔东南苗族侗族自治州",
+							522700: "黔南布依族苗族自治州"
+						},
+					},
+				},
+				gangaotai:{
+					xianggang:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							810001: "中西区",
+							810002: "湾仔区",
+							810003: "东区",
+							810004: "南区",
+							810005: "油尖旺区",
+							810006: "深水埗区",
+							810007: "九龙城区",
+							810008: "黄大仙区",
+							810009: "观塘区",
+							810010: "荃湾区",
+							810011: "屯门区",
+							810012: "元朗区",
+							810013: "北区",
+							810014: "大埔区",
+							810015: "西贡区",
+							810016: "沙田区",
+							810017: "葵青区",
+							810018: "离岛区"
+						},
+					},
+					aomen:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+							820001: "花地玛堂区",
+							820002: "花王堂区",
+							820003: "望德堂区",
+							820004: "大堂区",
+							820005: "风顺堂区",
+							820006: "嘉模堂区",
+							820007: "路凼填海区",
+							820008: "圣方济各堂区"
+						},
+					},
+					taiwan:{
+						flag:false,
+						model:false,
+						value:[],
+						citys:{
+						},
+					},
+				},
+			},
+			province:province,
+			city:{},
+			editForm: {
+				role_name:'',
+				tableData:[[{
+									id:55,
+									role_name:55,
+									remark:55,
+									updatetime:55,
+									status:55,
+								}]],
+			},
+			rules: {
+				role_name: [
+					{ required: true, message: '请输入名称', trigger: 'blur' },
+				],
+				remark: [
+					{ required: true, message: '请输入角色说明', trigger: 'blur' },
+				],
+			},
+			tableData: [],
+			search: {
+				text: '',
+				querySearch: [],
+			},
+			detailFlag: false,
+			editFlag: false,
+			addFlag: false,
+		},
+		created() {
+
+		},
+		methods:{
+			editCancel() {
+				this.$confirm('取消将放弃现有编辑内容，确定放弃吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					this.editFlag = false;
+				}).catch(() => {
+				});
+			},
+			changeFile() {
+				let value = document.getElementById('file')
+				console.log(value.files)
+			},
+			delAddress(I,i) {
+				this.$confirm('是否删除此行数据？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					this.editForm.tableData[I].splice(i,1)
+				}).catch(() => {
+				});
+			},
+			newMoney(i) {
+				console.log(i)
+				this.editForm.tableData[i].push({
+					id:55,
+					role_name:55,
+					remark:55,
+					updatetime:55,
+					status:55,
+				})
+			},
+			newModel() {
+				this.editForm.tableData.push([{
+									id:55,
+									role_name:55,
+									remark:55,
+									updatetime:55,
+									status:55,
+								}])
+			},
+			addressChange(flag,value) {
+				console.log(flag,value)
+			},
+			change(name) {
+				this.city = ChineseDistricts[name]
+			},
+			submitForm(formName) {
+				this.$refs[formName].validate(async (valid) => {
+					if (valid) {
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
+			currentChange(i) {
+				this.detailFlag = true;
+			},
+			sizeChange(size) {
+				this.detailFlag = true;
+			},
+			import(i) {
+				this.detailFlag = true;
+			},
+			del(i) {
+				if(this.checkTable.length === 0){
+					this.$message({
+						type: 'error',
+						message: '请选中后，再删除'
+					});
+				}else {
+					this.$confirm('锁定后改用户无法登陆，请确认是否锁定？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(async () => {
+					}).catch(() => {
+					});
+				}
+			},
+			edit(i) {
+				this.editFlag = true;
+			},
+			add(i) {
+				this.detailFlag = true;
+			},
+			querySearch(queryString, cb) {
+				if (queryString.length >1) {
+					cb([{ "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },]);
+				}else {
+					cb([])
+				}
+			},
+			searchSelect(i) {
+				this.detailFlag = true;
+			},
+			showDetail(i) {
+				this.detailFlag = true;
+			},
+			xibeiChange(flag) {
+				if(flag){
+					this.address.xibei.flag = false;
+					this.address.xibei.model = true;
+					this.address.xibei.sanxi.value = Object.keys(this.address.xibei.sanxi.citys);
+					this.address.xibei.ningxia.value = Object.keys(this.address.xibei.ningxia.citys);
+					this.address.xibei.xinjiang.value = Object.keys(this.address.xibei.xinjiang.citys);
+					this.address.xibei.qinghai.value = Object.keys(this.address.xibei.qinghai.citys);
+					this.address.xibei.gansu.value = Object.keys(this.address.xibei.gansu.citys);
+
+					this.address.xibei.sanxi.model = true;
+					this.address.xibei.ningxia.model = true;
+					this.address.xibei.xinjiang.model = true;
+					this.address.xibei.qinghai.model = true;
+					this.address.xibei.gansu.model = true;
+				}else{
+					this.address.xibei.flag = false;
+					this.address.xibei.model = false;
+					this.address.xibei.sanxi.value = [];
+					this.address.xibei.ningxia.value = [];
+					this.address.xibei.xinjiang.value = [];
+					this.address.xibei.qinghai.value = [];
+					this.address.xibei.gansu.value = [];
+					this.address.dongbei.liaoning.value = [];
+					this.address.dongbei.jilin.value = [];
+					this.address.dongbei.heilongjiang.value = [];
+					this.address.xibei.sanxi.model = false;
+					this.address.xibei.ningxia.model = false;
+					this.address.xibei.xinjiang.model = false;
+					this.address.xibei.qinghai.model = false;
+					this.address.xibei.gansu.model = false;
+				}
+				this.address.xibei.sanxi.flag = false;
+				this.address.xibei.ningxia.flag = false;
+				this.address.xibei.xinjiang.flag = false;
+				this.address.xibei.qinghai.flag = false;
+				this.address.xibei.gansu.flag = false;
+			},
+			dongbeiChange(flag) {
+				if(flag){
+					this.address.dongbei.flag = false;
+					this.address.dongbei.model = true;
+					this.address.dongbei.liaoning.value = Object.keys(this.address.dongbei.liaoning.citys);
+					this.address.dongbei.jilin.value = Object.keys(this.address.dongbei.jilin.citys);
+					this.address.dongbei.heilongjiang.value = Object.keys(this.address.dongbei.heilongjiang.citys);
+					this.address.dongbei.liaoning.model = true;
+					this.address.dongbei.jilin.model = true;
+					this.address.dongbei.heilongjiang.model = true;
+				}else{
+					this.address.dongbei.flag = false;
+					this.address.dongbei.model = false;
+					this.address.dongbei.liaoning.value = [];
+					this.address.dongbei.jilin.value = [];
+					this.address.dongbei.heilongjiang.value = [];
+					this.address.dongbei.liaoning.model = false;
+					this.address.dongbei.jilin.model = false;
+					this.address.dongbei.heilongjiang.model = false;
+				}
+				this.address.dongbei.liaoning.flag = false;
+				this.address.dongbei.jilin.flag = false;
+				this.address.dongbei.heilongjiang.flag = false;
+			},
+			huananChange(flag) {
+				if(flag){
+					this.address.huanan.flag = false;
+					this.address.huanan.model = true;
+					this.address.huanan.guangdong.value = Object.keys(this.address.huanan.guangdong.citys);
+					this.address.huanan.hainan.value = Object.keys(this.address.huanan.hainan.citys);
+					this.address.huanan.guangxi.value = Object.keys(this.address.huanan.guangxi.citys);
+					this.address.huanan.fujian.value = Object.keys(this.address.huanan.fujian.citys);
+					this.address.huanan.guangdong.model = true;
+					this.address.huanan.hainan.model = true;
+					this.address.huanan.guangxi.model = true;
+					this.address.huanan.fujian.model = true;
+				}else{
+					this.address.huanan.flag = false;
+					this.address.huanan.model = false;
+					this.address.huanan.guangdong.value = [];
+					this.address.huanan.hainan.value = [];
+					this.address.huanan.guangxi.value = [];
+					this.address.huanan.fujian.value = [];
+					this.address.huanan.guangdong.model = false;
+					this.address.huanan.hainan.model = false;
+					this.address.huanan.guangxi.model = false;
+					this.address.huanan.fujian.model = false;
+				}
+				this.address.huanan.guangdong.flag = false;
+				this.address.huanan.hainan.flag = false;
+				this.address.huanan.guangxi.flag = false;
+				this.address.huanan.fujian.flag = false;
+			},
+			huazhongChange(flag) {
+				if(flag){
+					this.address.huazhong.flag = false;
+					this.address.huazhong.model = true;
+					this.address.huazhong.hunan.value = Object.keys(this.address.huazhong.hunan.citys);
+					this.address.huazhong.hubei.value = Object.keys(this.address.huazhong.hubei.citys);
+					this.address.huazhong.henan.value = Object.keys(this.address.huazhong.henan.citys);
+					this.address.huazhong.hunan.model = true;
+					this.address.huazhong.hubei.model = true;
+					this.address.huazhong.henan.model = true;
+				}else{
+					this.address.huazhong.flag = false;
+					this.address.huazhong.model = false;
+					this.address.huazhong.hunan.value = [];
+					this.address.huazhong.hubei.value = [];
+					this.address.huazhong.henan.value = [];
+					this.address.huazhong.hunan.model = false;
+					this.address.huazhong.hubei.model = false;
+					this.address.huazhong.henan.model = false;
+				}
+				this.address.huazhong.hunan.flag = false;
+				this.address.huazhong.hubei.flag = false;
+				this.address.huazhong.henan.flag = false;
+			},
+			huabeiChange(flag) {
+				if(flag){
+					this.address.huabei.flag = false;
+					this.address.huabei.model = true;
+					this.address.huabei.beijing.value = Object.keys(this.address.huabei.beijing.citys);
+					this.address.huabei.shandong.value = Object.keys(this.address.huabei.shandong.citys);
+					this.address.huabei.tianjin.value = Object.keys(this.address.huabei.tianjin.citys);
+					this.address.huabei.hebei.value = Object.keys(this.address.huabei.hebei.citys);
+					this.address.huabei.shanxi.value = Object.keys(this.address.huabei.shanxi.citys);
+					this.address.huabei.neimeng.value = Object.keys(this.address.huabei.neimeng.citys);
+
+					this.address.huabei.beijing.model = true;
+					this.address.huabei.shandong.model = true;
+					this.address.huabei.tianjin.model = true;
+					this.address.huabei.hebei.model = true;
+					this.address.huabei.shanxi.model = true;
+					this.address.huabei.neimeng.model = true;
+				}else{
+					this.address.huabei.flag = false;
+					this.address.huabei.model = false;
+          this.address.huabei.beijing.value = [];
+					this.address.huabei.shandong.value = [];
+					this.address.huabei.tianjin.value = [];
+					this.address.huabei.hebei.value = [];
+					this.address.huabei.shanxi.value = [];
+					this.address.huabei.neimeng.value = [];
+          this.address.huabei.beijing.model = false;
+					this.address.huabei.shandong.model = false;
+					this.address.huabei.tianjin.model = false;
+					this.address.huabei.hebei.model = false;
+					this.address.huabei.shanxi.model = false;
+					this.address.huabei.neimeng.model = false;
+				}
+				this.address.huabei.beijing.flag = false;
+				this.address.huabei.shandong.flag = false;
+				this.address.huabei.tianjin.flag = false;
+				this.address.huabei.hebei.flag = false;
+				this.address.huabei.shanxi.flag = false;
+				this.address.huabei.neimeng.flag = false;
+			},
+			huadongChange(flag) {
+				if(flag){
+					this.address.huadong.flag = false;
+					this.address.huadong.model = true;
+					this.address.huadong.shanghai.value = Object.keys(this.address.huadong.shanghai.citys);
+					this.address.huadong.anhui.value = Object.keys(this.address.huadong.anhui.citys);
+					this.address.huadong.jiangsu.value = Object.keys(this.address.huadong.jiangsu.citys);
+					this.address.huadong.jiangxi.value = Object.keys(this.address.huadong.jiangxi.citys);
+					this.address.huadong.zhejiang.value = Object.keys(this.address.huadong.zhejiang.citys);
+					this.address.huadong.shanghai.model = true;
+					this.address.huadong.anhui.model = true;
+					this.address.huadong.jiangsu.model = true;
+					this.address.huadong.jiangxi.model = true;
+					this.address.huadong.zhejiang.model = true;
+
+				}else{
+					this.address.huadong.flag = false;
+					this.address.huadong.model = false;
+					this.address.huadong.shanghai.value = [];
+					this.address.huadong.anhui.value = [];
+					this.address.huadong.jiangsu.value = [];
+					this.address.huadong.jiangxi.value = [];
+					this.address.huadong.zhejiang.value = [];
+					this.address.huadong.shanghai.model = false;
+					this.address.huadong.anhui.model = false;
+					this.address.huadong.jiangsu.model = false;
+					this.address.huadong.jiangxi.model = false;
+					this.address.huadong.zhejiang.model = false;
+				}
+				this.address.huadong.shanghai.flag = false;
+				this.address.huadong.anhui.flag = false;
+				this.address.huadong.jiangsu.flag = false;
+				this.address.huadong.jiangxi.flag = false;
+				this.address.huadong.zhejiang.flag = false;
+			},
+			taiwanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.gangaotai.taiwan.citys);
+					this.address.gangaotai.taiwan.value = citys;
+					this.address.gangaotai.taiwan.flag = false;
+					this.address.gangaotai.taiwan.model = true;
+				}else{
+					this.address.gangaotai.taiwan.flag = false;
+					this.address.gangaotai.taiwan.model = false;
+					this.address.gangaotai.taiwan.value = [];
+				}
+			},
+			taiwan(arr) {
+				let citys = Object.keys(this.address.gangaotai.taiwan.citys);
+				if(arr.length === citys.length){
+					this.address.gangaotai.taiwan.flag = false;
+					this.address.gangaotai.taiwan.model = true;
+				}else if(arr.length === 0) {
+					this.address.gangaotai.taiwan.flag = false;
+					this.address.gangaotai.taiwan.model = false;
+				}else {
+					this.address.gangaotai.taiwan.flag = true;
+					this.address.gangaotai.taiwan.model = false;
+
+				}
+			},
+			aomenChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.gangaotai.aomen.citys);
+					this.address.gangaotai.aomen.value = citys;
+					this.address.gangaotai.aomen.flag = false;
+					this.address.gangaotai.aomen.model = true;
+				}else{
+					this.address.gangaotai.aomen.flag = false;
+					this.address.gangaotai.aomen.model = false;
+					this.address.gangaotai.aomen.value = [];
+				}
+			},
+			aomen(arr) {
+				let citys = Object.keys(this.address.gangaotai.aomen.citys);
+				if(arr.length === citys.length){
+					this.address.gangaotai.aomen.flag = false;
+					this.address.gangaotai.aomen.model = true;
+				}else if(arr.length === 0) {
+					this.address.gangaotai.aomen.flag = false;
+					this.address.gangaotai.aomen.model = false;
+				}else {
+					this.address.gangaotai.aomen.flag = true;
+					this.address.gangaotai.aomen.model = false;
+				}
+			},
+			xianggangChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.gangaotai.xianggang.citys);
+					this.address.gangaotai.xianggang.value = citys;
+					this.address.gangaotai.xianggang.flag = false;
+					this.address.gangaotai.xianggang.model = true;
+				}else{
+					this.address.gangaotai.xianggang.flag = false;
+					this.address.gangaotai.xianggang.model = false;
+					this.address.gangaotai.xianggang.value = [];
+				}
+			},
+			xianggang(arr) {
+				let citys = Object.keys(this.address.gangaotai.xianggang.citys);
+				if(arr.length === citys.length){
+					this.address.gangaotai.xianggang.flag = false;
+					this.address.gangaotai.xianggang.model = true;
+				}else if(arr.length === 0) {
+					this.address.gangaotai.xianggang.flag = false;
+					this.address.gangaotai.xianggang.model = false;
+				}else {
+					this.address.gangaotai.xianggang.flag = true;
+					this.address.gangaotai.xianggang.model = false;
+
+				}
+			},
+			guizhouChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xinan.guizhou.citys);
+					this.address.xinan.guizhou.value = citys;
+					this.address.xinan.guizhou.flag = false;
+					this.address.xinan.guizhou.model = true;
+				}else{
+					this.address.xinan.guizhou.flag = false;
+					this.address.xinan.guizhou.model = false;
+					this.address.xinan.guizhou.value = [];
+				}
+			},
+			guizhou(arr) {
+				let citys = Object.keys(this.address.xinan.guizhou.citys);
+				if(arr.length === citys.length){
+					this.address.xinan.guizhou.flag = false;
+					this.address.xinan.guizhou.model = true;
+				}else if(arr.length === 0) {
+					this.address.xinan.guizhou.flag = false;
+					this.address.xinan.guizhou.model = false;
+				}else {
+					this.address.xinan.guizhou.flag = true;
+					this.address.xinan.guizhou.model = false;
+
+				}
+			},
+			sichuanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xinan.sichuan.citys);
+					this.address.xinan.sichuan.value = citys;
+					this.address.xinan.sichuan.flag = false;
+					this.address.xinan.sichuan.model = true;
+				}else{
+					this.address.xinan.sichuan.flag = false;
+					this.address.xinan.sichuan.model = false;
+					this.address.xinan.sichuan.value = [];
+				}
+			},
+			sichuan(arr) {
+				let citys = Object.keys(this.address.xinan.sichuan.citys);
+				if(arr.length === citys.length){
+					this.address.xinan.sichuan.flag = false;
+					this.address.xinan.sichuan.model = true;
+				}else if(arr.length === 0) {
+					this.address.xinan.sichuan.flag = false;
+					this.address.xinan.sichuan.model = false;
+				}else {
+					this.address.xinan.sichuan.flag = true;
+					this.address.xinan.sichuan.model = false;
+
+				}
+			},
+			yunnanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xinan.yunnan.citys);
+					this.address.xinan.yunnan.value = citys;
+					this.address.xinan.yunnan.flag = false;
+					this.address.xinan.yunnan.model = true;
+				}else{
+					this.address.xinan.yunnan.flag = false;
+					this.address.xinan.yunnan.model = false;
+					this.address.xinan.yunnan.value = [];
+				}
+			},
+			yunnan(arr) {
+				let citys = Object.keys(this.address.xinan.yunnan.citys);
+				if(arr.length === citys.length){
+					this.address.xinan.yunnan.flag = false;
+					this.address.xinan.yunnan.model = true;
+				}else if(arr.length === 0) {
+					this.address.xinan.yunnan.flag = false;
+					this.address.xinan.yunnan.model = false;
+				}else {
+					this.address.xinan.yunnan.flag = true;
+					this.address.xinan.yunnan.model = false;
+
+				}
+			},
+			xizangChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xinan.xizang.citys);
+					this.address.xinan.xizang.value = citys;
+					this.address.xinan.xizang.flag = false;
+					this.address.xinan.xizang.model = true;
+				}else{
+					this.address.xinan.xizang.flag = false;
+					this.address.xinan.xizang.model = false;
+					this.address.xinan.xizang.value = [];
+				}
+			},
+			xizang(arr) {
+				let citys = Object.keys(this.address.xinan.xizang.citys);
+				if(arr.length === citys.length){
+					this.address.xinan.xizang.flag = false;
+					this.address.xinan.xizang.model = true;
+				}else if(arr.length === 0) {
+					this.address.xinan.xizang.flag = false;
+					this.address.xinan.xizang.model = false;
+				}else {
+					this.address.xinan.xizang.flag = true;
+					this.address.xinan.xizang.model = false;
+
+				}
+			},
+			chongqingChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xinan.chongqing.citys);
+					this.address.xinan.chongqing.value = citys;
+					this.address.xinan.chongqing.flag = false;
+					this.address.xinan.chongqing.model = true;
+				}else{
+					this.address.xinan.chongqing.flag = false;
+					this.address.xinan.chongqing.model = false;
+					this.address.xinan.chongqing.value = [];
+				}
+			},
+			chongqing(arr) {
+				let citys = Object.keys(this.address.xinan.chongqing.citys);
+				if(arr.length === citys.length){
+					this.address.xinan.chongqing.flag = false;
+					this.address.xinan.chongqing.model = true;
+				}else if(arr.length === 0) {
+					this.address.xinan.chongqing.flag = false;
+					this.address.xinan.chongqing.model = false;
+				}else {
+					this.address.xinan.chongqing.flag = true;
+					this.address.xinan.chongqing.model = false;
+
+				}
+			},
+			gansuChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xibei.gansu.citys);
+					this.address.xibei.gansu.value = citys;
+					this.address.xibei.gansu.flag = false;
+					this.address.xibei.gansu.model = true;
+				}else{
+					this.address.xibei.gansu.flag = false;
+					this.address.xibei.gansu.model = false;
+					this.address.xibei.gansu.value = [];
+				}
+			},
+			gansu(arr) {
+				let citys = Object.keys(this.address.xibei.gansu.citys);
+				if(arr.length === citys.length){
+					this.address.xibei.gansu.flag = false;
+					this.address.xibei.gansu.model = true;
+				}else if(arr.length === 0) {
+					this.address.xibei.gansu.flag = false;
+					this.address.xibei.gansu.model = false;
+				}else {
+					this.address.xibei.gansu.flag = true;
+					this.address.xibei.gansu.model = false;
+
+				}
+			},
+			qinghaiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xibei.qinghai.citys);
+					this.address.xibei.qinghai.value = citys;
+					this.address.xibei.qinghai.flag = false;
+					this.address.xibei.qinghai.model = true;
+				}else{
+					this.address.xibei.qinghai.flag = false;
+					this.address.xibei.qinghai.model = false;
+					this.address.xibei.qinghai.value = [];
+				}
+			},
+			qinghai(arr) {
+				let citys = Object.keys(this.address.xibei.qinghai.citys);
+				if(arr.length === citys.length){
+					this.address.xibei.qinghai.flag = false;
+					this.address.xibei.qinghai.model = true;
+				}else if(arr.length === 0) {
+					this.address.xibei.qinghai.flag = false;
+					this.address.xibei.qinghai.model = false;
+				}else {
+					this.address.xibei.qinghai.flag = true;
+					this.address.xibei.qinghai.model = false;
+
+				}
+			},
+			xinjiangChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xibei.xinjiang.citys);
+					this.address.xibei.xinjiang.value = citys;
+					this.address.xibei.xinjiang.flag = false;
+					this.address.xibei.xinjiang.model = true;
+				}else{
+					this.address.xibei.xinjiang.flag = false;
+					this.address.xibei.xinjiang.model = false;
+					this.address.xibei.xinjiang.value = [];
+				}
+			},
+			xinjiang(arr) {
+				let citys = Object.keys(this.address.xibei.xinjiang.citys);
+				if(arr.length === citys.length){
+					this.address.xibei.xinjiang.flag = false;
+					this.address.xibei.xinjiang.model = true;
+				}else if(arr.length === 0) {
+					this.address.xibei.xinjiang.flag = false;
+					this.address.xibei.xinjiang.model = false;
+				}else {
+					this.address.xibei.xinjiang.flag = true;
+					this.address.xibei.xinjiang.model = false;
+
+				}
+			},
+			ningxiaChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xibei.ningxia.citys);
+					this.address.xibei.ningxia.value = citys;
+					this.address.xibei.ningxia.flag = false;
+					this.address.xibei.ningxia.model = true;
+				}else{
+					this.address.xibei.ningxia.flag = false;
+					this.address.xibei.ningxia.model = false;
+					this.address.xibei.ningxia.value = [];
+				}
+			},
+			ningxia(arr) {
+				let citys = Object.keys(this.address.xibei.ningxia.citys);
+				if(arr.length === citys.length){
+					this.address.xibei.ningxia.flag = false;
+					this.address.xibei.ningxia.model = true;
+				}else if(arr.length === 0) {
+					this.address.xibei.ningxia.flag = false;
+					this.address.xibei.ningxia.model = false;
+				}else {
+					this.address.xibei.ningxia.flag = true;
+					this.address.xibei.ningxia.model = false;
+
+				}
+			},
+			sanxiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.xibei.sanxi.citys);
+					this.address.xibei.sanxi.value = citys;
+					this.address.xibei.sanxi.flag = false;
+					this.address.xibei.sanxi.model = true;
+				}else{
+					this.address.xibei.sanxi.flag = false;
+					this.address.xibei.sanxi.model = false;
+					this.address.xibei.sanxi.value = [];
+				}
+			},
+			sanxi(arr) {
+				let citys = Object.keys(this.address.xibei.sanxi.citys);
+				if(arr.length === citys.length){
+					this.address.xibei.sanxi.flag = false;
+					this.address.xibei.sanxi.model = true;
+				}else if(arr.length === 0) {
+					this.address.xibei.sanxi.flag = false;
+					this.address.xibei.sanxi.model = false;
+				}else {
+					this.address.xibei.sanxi.flag = true;
+					this.address.xibei.sanxi.model = false;
+
+				}
+			},
+			heilongjiangChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.dongbei.heilongjiang.citys);
+					this.address.dongbei.heilongjiang.value = citys;
+					this.address.dongbei.heilongjiang.flag = false;
+					this.address.dongbei.heilongjiang.model = true;
+				}else{
+					this.address.dongbei.heilongjiang.flag = false;
+					this.address.dongbei.heilongjiang.model = false;
+					this.address.dongbei.heilongjiang.value = [];
+				}
+			},
+			heilongjiang(arr) {
+				let citys = Object.keys(this.address.dongbei.heilongjiang.citys);
+				if(arr.length === citys.length){
+					this.address.dongbei.heilongjiang.flag = false;
+					this.address.dongbei.heilongjiang.model = true;
+				}else if(arr.length === 0) {
+					this.address.dongbei.heilongjiang.flag = false;
+					this.address.dongbei.heilongjiang.model = false;
+				}else {
+					this.address.dongbei.heilongjiang.flag = true;
+					this.address.dongbei.heilongjiang.model = false;
+
+				}
+			},
+			jilinChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.dongbei.jilin.citys);
+					this.address.dongbei.jilin.value = citys;
+					this.address.dongbei.jilin.flag = false;
+					this.address.dongbei.jilin.model = true;
+				}else{
+					this.address.dongbei.jilin.flag = false;
+					this.address.dongbei.jilin.model = false;
+					this.address.dongbei.jilin.value = [];
+				}
+			},
+			jilin(arr) {
+				let citys = Object.keys(this.address.dongbei.jilin.citys);
+				if(arr.length === citys.length){
+					this.address.dongbei.jilin.flag = false;
+					this.address.dongbei.jilin.model = true;
+				}else if(arr.length === 0) {
+					this.address.dongbei.jilin.flag = false;
+					this.address.dongbei.jilin.model = false;
+				}else {
+					this.address.dongbei.jilin.flag = true;
+					this.address.dongbei.jilin.model = false;
+
+				}
+			},
+			liaoningChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.dongbei.liaoning.citys);
+					this.address.dongbei.liaoning.value = citys;
+					this.address.dongbei.liaoning.flag = false;
+					this.address.dongbei.liaoning.model = true;
+				}else{
+					this.address.dongbei.liaoning.flag = false;
+					this.address.dongbei.liaoning.model = false;
+					this.address.dongbei.liaoning.value = [];
+				}
+			},
+			liaoning(arr) {
+				let citys = Object.keys(this.address.dongbei.liaoning.citys);
+				if(arr.length === citys.length){
+					this.address.dongbei.liaoning.flag = false;
+					this.address.dongbei.liaoning.model = true;
+				}else if(arr.length === 0) {
+					this.address.dongbei.liaoning.flag = false;
+					this.address.dongbei.liaoning.model = false;
+				}else {
+					this.address.dongbei.liaoning.flag = true;
+					this.address.dongbei.liaoning.model = false;
+
+				}
+			},
+			fujianChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huanan.fujian.citys);
+					this.address.huanan.fujian.value = citys;
+					this.address.huanan.fujian.flag = false;
+					this.address.huanan.fujian.model = true;
+				}else{
+					this.address.huanan.fujian.flag = false;
+					this.address.huanan.fujian.model = false;
+					this.address.huanan.fujian.value = [];
+				}
+			},
+			fujian(arr) {
+				let citys = Object.keys(this.address.huanan.fujian.citys);
+				if(arr.length === citys.length){
+					this.address.huanan.fujian.flag = false;
+					this.address.huanan.fujian.model = true;
+				}else if(arr.length === 0) {
+					this.address.huanan.fujian.flag = false;
+					this.address.huanan.fujian.model = false;
+				}else {
+					this.address.huanan.fujian.flag = true;
+					this.address.huanan.fujian.model = false;
+
+				}
+			},
+			guangxiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huanan.guangxi.citys);
+					this.address.huanan.guangxi.value = citys;
+					this.address.huanan.guangxi.flag = false;
+					this.address.huanan.guangxi.model = true;
+				}else{
+					this.address.huanan.guangxi.flag = false;
+					this.address.huanan.guangxi.model = false;
+					this.address.huanan.guangxi.value = [];
+				}
+			},
+			guangxi(arr) {
+				let citys = Object.keys(this.address.huanan.guangxi.citys);
+				if(arr.length === citys.length){
+					this.address.huanan.guangxi.flag = false;
+					this.address.huanan.guangxi.model = true;
+				}else if(arr.length === 0) {
+					this.address.huanan.guangxi.flag = false;
+					this.address.huanan.guangxi.model = false;
+				}else {
+					this.address.huanan.guangxi.flag = true;
+					this.address.huanan.guangxi.model = false;
+
+				}
+			},
+			hainanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huanan.hainan.citys);
+					this.address.huanan.hainan.value = citys;
+					this.address.huanan.hainan.flag = false;
+					this.address.huanan.hainan.model = true;
+				}else{
+					this.address.huanan.hainan.flag = false;
+					this.address.huanan.hainan.model = false;
+					this.address.huanan.hainan.value = [];
+				}
+			},
+			hainan(arr) {
+				let citys = Object.keys(this.address.huanan.hainan.citys);
+				if(arr.length === citys.length){
+					this.address.huanan.hainan.flag = false;
+					this.address.huanan.hainan.model = true;
+				}else if(arr.length === 0) {
+					this.address.huanan.hainan.flag = false;
+					this.address.huanan.hainan.model = false;
+				}else {
+					this.address.huanan.hainan.flag = true;
+					this.address.huanan.hainan.model = false;
+
+				}
+			},
+			guangdongChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huanan.guangdong.citys);
+					this.address.huanan.guangdong.value = citys;
+					this.address.huanan.guangdong.flag = false;
+					this.address.huanan.guangdong.model = true;
+				}else{
+					this.address.huanan.guangdong.flag = false;
+					this.address.huanan.guangdong.model = false;
+					this.address.huanan.guangdong.value = [];
+				}
+			},
+			guangdong(arr) {
+				let citys = Object.keys(this.address.huanan.guangdong.citys);
+				if(arr.length === citys.length){
+					this.address.huanan.guangdong.flag = false;
+					this.address.huanan.guangdong.model = true;
+				}else if(arr.length === 0) {
+					this.address.huanan.guangdong.flag = false;
+					this.address.huanan.guangdong.model = false;
+				}else {
+					this.address.huanan.guangdong.flag = true;
+					this.address.huanan.guangdong.model = false;
+
+				}
+			},
+			henanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huazhong.henan.citys);
+					this.address.huazhong.henan.value = citys;
+					this.address.huazhong.henan.flag = false;
+					this.address.huazhong.henan.model = true;
+				}else{
+					this.address.huazhong.henan.flag = false;
+					this.address.huazhong.henan.model = false;
+					this.address.huazhong.henan.value = [];
+				}
+			},
+			henan(arr) {
+				let citys = Object.keys(this.address.huazhong.henan.citys);
+				if(arr.length === citys.length){
+					this.address.huazhong.henan.flag = false;
+					this.address.huazhong.henan.model = true;
+				}else if(arr.length === 0) {
+					this.address.huazhong.henan.flag = false;
+					this.address.huazhong.henan.model = false;
+				}else {
+					this.address.huazhong.henan.flag = true;
+					this.address.huazhong.henan.model = false;
+
+				}
+			},
+			hubeiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huazhong.hubei.citys);
+					this.address.huazhong.hubei.value = citys;
+					this.address.huazhong.hubei.flag = false;
+					this.address.huazhong.hubei.model = true;
+				}else{
+					this.address.huazhong.hubei.flag = false;
+					this.address.huazhong.hubei.model = false;
+					this.address.huazhong.hubei.value = [];
+				}
+			},
+			hubei(arr) {
+				let citys = Object.keys(this.address.huazhong.hubei.citys);
+				if(arr.length === citys.length){
+					this.address.huazhong.hubei.flag = false;
+					this.address.huazhong.hubei.model = true;
+				}else if(arr.length === 0) {
+					this.address.huazhong.hubei.flag = false;
+					this.address.huazhong.hubei.model = false;
+				}else {
+					this.address.huazhong.hubei.flag = true;
+					this.address.huazhong.hubei.model = false;
+
+				}
+			},
+			hunanChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huazhong.hunan.citys);
+					this.address.huazhong.hunan.value = citys;
+					this.address.huazhong.hunan.flag = false;
+					this.address.huazhong.hunan.model = true;
+				}else{
+					this.address.huazhong.hunan.flag = false;
+					this.address.huazhong.hunan.model = false;
+					this.address.huazhong.hunan.value = [];
+				}
+			},
+			hunan(arr) {
+				let citys = Object.keys(this.address.huazhong.hunan.citys);
+				if(arr.length === citys.length){
+					this.address.huazhong.hunan.flag = false;
+					this.address.huazhong.hunan.model = true;
+				}else if(arr.length === 0) {
+					this.address.huazhong.hunan.flag = false;
+					this.address.huazhong.hunan.model = false;
+				}else {
+					this.address.huazhong.hunan.flag = true;
+					this.address.huazhong.hunan.model = false;
+
+				}
+			},
+			neimengChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.neimeng.citys);
+					this.address.huabei.neimeng.value = citys;
+					this.address.huabei.neimeng.flag = false;
+					this.address.huabei.neimeng.model = true;
+				}else{
+					this.address.huabei.neimeng.flag = false;
+					this.address.huabei.neimeng.model = false;
+					this.address.huabei.neimeng.value = [];
+				}
+			},
+			neimeng(arr) {
+				let citys = Object.keys(this.address.huabei.neimeng.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.neimeng.flag = false;
+					this.address.huabei.neimeng.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.neimeng.flag = false;
+					this.address.huabei.neimeng.model = false;
+				}else {
+					this.address.huabei.neimeng.flag = true;
+					this.address.huabei.neimeng.model = false;
+
+				}
+			},
+			shanxiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.shanxi.citys);
+					this.address.huabei.shanxi.value = citys;
+					this.address.huabei.shanxi.flag = false;
+					this.address.huabei.shanxi.model = true;
+				}else{
+					this.address.huabei.shanxi.flag = false;
+					this.address.huabei.shanxi.model = false;
+					this.address.huabei.shanxi.value = [];
+				}
+			},
+			shanxi(arr) {
+				let citys = Object.keys(this.address.huabei.shanxi.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.shanxi.flag = false;
+					this.address.huabei.shanxi.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.shanxi.flag = false;
+					this.address.huabei.shanxi.model = false;
+				}else {
+					this.address.huabei.shanxi.flag = true;
+					this.address.huabei.shanxi.model = false;
+
+				}
+			},
+			hebeiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.hebei.citys);
+					this.address.huabei.hebei.value = citys;
+					this.address.huabei.hebei.flag = false;
+					this.address.huabei.hebei.model = true;
+				}else{
+					this.address.huabei.hebei.flag = false;
+					this.address.huabei.hebei.model = false;
+					this.address.huabei.hebei.value = [];
+				}
+			},
+			hebei(arr) {
+				let citys = Object.keys(this.address.huabei.hebei.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.hebei.flag = false;
+					this.address.huabei.hebei.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.hebei.flag = false;
+					this.address.huabei.hebei.model = false;
+				}else {
+					this.address.huabei.hebei.flag = true;
+					this.address.huabei.hebei.model = false;
+
+				}
+			},
+			tianjinChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.tianjin.citys);
+					this.address.huabei.tianjin.value = citys;
+					this.address.huabei.tianjin.flag = false;
+					this.address.huabei.tianjin.model = true;
+				}else{
+					this.address.huabei.tianjin.flag = false;
+					this.address.huabei.tianjin.model = false;
+					this.address.huabei.tianjin.value = [];
+				}
+			},
+			tianjin(arr) {
+				let citys = Object.keys(this.address.huabei.tianjin.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.tianjin.flag = false;
+					this.address.huabei.tianjin.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.tianjin.flag = false;
+					this.address.huabei.tianjin.model = false;
+				}else {
+					this.address.huabei.tianjin.flag = true;
+					this.address.huabei.tianjin.model = false;
+
+				}
+			},
+			shandongChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.shandong.citys);
+					this.address.huabei.shandong.value = citys;
+					this.address.huabei.shandong.flag = false;
+					this.address.huabei.shandong.model = true;
+				}else{
+					this.address.huabei.shandong.flag = false;
+					this.address.huabei.shandong.model = false;
+					this.address.huabei.shandong.value = [];
+				}
+			},
+			shandong(arr) {
+				let citys = Object.keys(this.address.huabei.shandong.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.shandong.flag = false;
+					this.address.huabei.shandong.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.shandong.flag = false;
+					this.address.huabei.shandong.model = false;
+				}else {
+					this.address.huabei.shandong.flag = true;
+					this.address.huabei.shandong.model = false;
+
+				}
+			},
+			beijingChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huabei.beijing.citys);
+					this.address.huabei.beijing.value = citys;
+					this.address.huabei.beijing.flag = false;
+					this.address.huabei.beijing.model = true;
+				}else{
+					this.address.huabei.beijing.flag = false;
+					this.address.huabei.beijing.model = false;
+					this.address.huabei.beijing.value = [];
+				}
+			},
+			beijing(arr) {
+				let citys = Object.keys(this.address.huabei.beijing.citys);
+				if(arr.length === citys.length){
+					this.address.huabei.beijing.flag = false;
+					this.address.huabei.beijing.model = true;
+				}else if(arr.length === 0) {
+					this.address.huabei.beijing.flag = false;
+					this.address.huabei.beijing.model = false;
+				}else {
+					this.address.huabei.beijing.flag = true;
+					this.address.huabei.beijing.model = false;
+
+				}
+			},
+			jiangxiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huadong.jiangxi.citys);
+					this.address.huadong.jiangxi.value = citys;
+					this.address.huadong.jiangxi.flag = false;
+					this.address.huadong.jiangxi.model = true;
+				}else{
+					this.address.huadong.jiangxi.flag = false;
+					this.address.huadong.jiangxi.model = false;
+					this.address.huadong.jiangxi.value = [];
+				}
+			},
+			jiangxi(arr) {
+				let citys = Object.keys(this.address.huadong.jiangxi.citys);
+				if(arr.length === citys.length){
+					this.address.huadong.jiangxi.flag = false;
+					this.address.huadong.jiangxi.model = true;
+				}else if(arr.length === 0) {
+					this.address.huadong.jiangxi.flag = false;
+					this.address.huadong.jiangxi.model = false;
+				}else {
+					this.address.huadong.jiangxi.flag = true;
+					this.address.huadong.jiangxi.model = false;
+
+				}
+			},
+			anhuiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huadong.anhui.citys);
+					this.address.huadong.anhui.value = citys;
+					this.address.huadong.anhui.flag = false;
+					this.address.huadong.anhui.model = true;
+				}else{
+					this.address.huadong.anhui.flag = false;
+					this.address.huadong.anhui.model = false;
+					this.address.huadong.anhui.value = [];
+				}
+			},
+			anhui(arr) {
+				let citys = Object.keys(this.address.huadong.anhui.citys);
+				if(arr.length === citys.length){
+					this.address.huadong.anhui.flag = false;
+					this.address.huadong.anhui.model = true;
+				}else if(arr.length === 0) {
+					this.address.huadong.anhui.flag = false;
+					this.address.huadong.anhui.model = false;
+				}else {
+					this.address.huadong.anhui.flag = true;
+					this.address.huadong.anhui.model = false;
+
+				}
+			},
+			zhejiangChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huadong.zhejiang.citys);
+					this.address.huadong.zhejiang.value = citys;
+					this.address.huadong.zhejiang.flag = false;
+					this.address.huadong.zhejiang.model = true;
+				}else{
+					this.address.huadong.zhejiang.flag = false;
+					this.address.huadong.zhejiang.model = false;
+					this.address.huadong.zhejiang.value = [];
+				}
+			},
+			zhejiang(arr) {
+				let citys = Object.keys(this.address.huadong.zhejiang.citys);
+				if(arr.length === citys.length){
+					this.address.huadong.zhejiang.flag = false;
+					this.address.huadong.zhejiang.model = true;
+				}else if(arr.length === 0) {
+					this.address.huadong.zhejiang.flag = false;
+					this.address.huadong.zhejiang.model = false;
+				}else {
+					this.address.huadong.zhejiang.flag = true;
+					this.address.huadong.zhejiang.model = false;
+
+				}
+			},
+			shanghaiChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huadong.shanghai.citys);
+					this.address.huadong.shanghai.value = citys;
+					this.address.huadong.shanghai.flag = false;
+					this.address.huadong.shanghai.model = true;
+				}else{
+					this.address.huadong.shanghai.flag = false;
+					this.address.huadong.shanghai.model = false;
+					this.address.huadong.shanghai.value = [];
+				}
+			},
+			shanghai(arr) {
+				let citys = Object.keys(this.address.huadong.shanghai.citys);
+				if(arr.length === citys.length){
+					this.address.huadong.shanghai.flag = false;
+					this.address.huadong.shanghai.model = true;
+				}else if(arr.length === 0) {
+					this.address.huadong.shanghai.flag = false;
+					this.address.huadong.shanghai.model = false;
+				}else {
+					this.address.huadong.shanghai.flag = true;
+					this.address.huadong.shanghai.model = false;
+
+				}
+			},
+			jiangsuChange(flag) {
+				if(flag){
+					let citys = Object.keys(this.address.huadong.jiangsu.citys);
+					this.address.huadong.jiangsu.value = citys;
+					this.address.huadong.jiangsu.flag = false;
+					this.address.huadong.jiangsu.model = true;
+				}else{
+					this.address.huadong.jiangsu.flag = false;
+					this.address.huadong.jiangsu.model = false;
+					this.address.huadong.jiangsu.value = [];
+				}
+			},
+			jiangsu(arr) {
+				let citys = Object.keys(this.address.huadong.jiangsu.citys);
+				if(arr.length === citys.length){
+					this.address.huadong.jiangsu.flag = false;
+					this.address.huadong.jiangsu.model = true;
+				}else if(arr.length === 0) {
+					this.address.huadong.jiangsu.flag = false;
+					this.address.huadong.jiangsu.model = false;
+				}else {
+					this.address.huadong.jiangsu.flag = true;
+					this.address.huadong.jiangsu.model = false;
+
+				}
+			},
+		}
+	})
+</script>
+</body>
+</html>

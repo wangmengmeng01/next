@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.workorder.dao.ServiceWorkorderDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.workorder.domain.ServiceWorkorderDO">
+		select `work_order_id`,`customer_name`,`customer_id`,`ship_id`,`order_id`,`sender`,`send_number`,`send_address`,`receiver`,`receiver_number`,`receiver_address`,`consult_type`,`consult_dscr`,`affiliation`,`contact_number`,`consult_sheet_status`,`branch_name`,`branch_code`,`reminder_processing`,`handler`,`handler_name`,`handle_organize`,`handle_organize_name`,`statement_type`,`statement_time`,`version`,`create_time`,`update_time`,`work_order_type`,`receive_time`,`newest_time`,`handler_time` from crmkh_service_workorder where work_order_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.workorder.domain.ServiceWorkorderDO">
+		select `work_order_id`,`customer_name`,`customer_id`,`ship_id`,`order_id`,`sender`,`send_number`,`send_address`,`receiver`,`receiver_number`,`receiver_address`,`consult_type`,`consult_dscr`,`affiliation`,`contact_number`,`consult_sheet_status`,`branch_name`,`branch_code`,`reminder_processing`,`handler`,`handler_name`,`handle_organize`,`handle_organize_name`,`statement_type`,`statement_time`,`version`,`create_time`,`update_time`,`work_order_type`,`receive_time`,`newest_time`,`handler_time` from crmkh_service_workorder
+        <where>  
+		  		  <if test="workOrderId != null and workOrderId != ''"> and work_order_id = #{workOrderId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="shipId != null and shipId != ''"> and ship_id = #{shipId} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		  <if test="sender != null and sender != ''"> and sender = #{sender} </if>
+		  		  <if test="sendNumber != null and sendNumber != ''"> and send_number = #{sendNumber} </if>
+		  		  <if test="sendAddress != null and sendAddress != ''"> and send_address = #{sendAddress} </if>
+		  		  <if test="receiver != null and receiver != ''"> and receiver = #{receiver} </if>
+		  		  <if test="receiverNumber != null and receiverNumber != ''"> and receiver_number = #{receiverNumber} </if>
+		  		  <if test="receiverAddress != null and receiverAddress != ''"> and receiver_address = #{receiverAddress} </if>
+		  		  <if test="consultType != null and consultType != ''"> and consult_type = #{consultType} </if>
+		  		  <if test="consultDscr != null and consultDscr != ''"> and consult_dscr = #{consultDscr} </if>
+		  		  <if test="affiliation != null and affiliation != ''"> and affiliation = #{affiliation} </if>
+		  		  <if test="contactNumber != null and contactNumber != ''"> and contact_number = #{contactNumber} </if>
+		  		  <if test="consultSheetStatus != null and consultSheetStatus != ''"> and consult_sheet_status = #{consultSheetStatus} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="reminderProcessing != null and reminderProcessing != ''"> and reminder_processing = #{reminderProcessing} </if>
+		  		  <if test="handler != null and handler != ''"> and handler = #{handler} </if>
+		  		  <if test="handlerName != null and handlerName != ''"> and handler_name = #{handlerName} </if>
+		  		  <if test="handleOrganize != null and handleOrganize != ''"> and handle_organize = #{handleOrganize} </if>
+		  		  <if test="handleOrganizeName != null and handleOrganizeName != ''"> and handle_organize_name = #{handleOrganizeName} </if>
+		  		  <if test="statementType != null and statementType != ''"> and statement_type = #{statementType} </if>
+		  		  <if test="statementTime != null and statementTime != ''"> and statement_time = #{statementTime} </if>
+		  		  <if test="version != null and version != ''"> and version = #{version} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="workOrderType != null and workOrderType != ''"> and work_order_type = #{workOrderType} </if>
+		  		  <if test="receiveTime != null and receiveTime != ''"> and receive_time = #{receiveTime} </if>
+		  		  <if test="newestTime != null and newestTime != ''"> and newest_time = #{newestTime} </if>
+		  		  <if test="handlerTime != null and handlerTime != ''"> and handler_time = #{handlerTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when>
+			<otherwise>
+                order by work_order_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_service_workorder
+		 <where>  
+		  		  <if test="workOrderId != null and workOrderId != ''"> and work_order_id = #{workOrderId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="shipId != null and shipId != ''"> and ship_id = #{shipId} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		  <if test="sender != null and sender != ''"> and sender = #{sender} </if>
+		  		  <if test="sendNumber != null and sendNumber != ''"> and send_number = #{sendNumber} </if>
+		  		  <if test="sendAddress != null and sendAddress != ''"> and send_address = #{sendAddress} </if>
+		  		  <if test="receiver != null and receiver != ''"> and receiver = #{receiver} </if>
+		  		  <if test="receiverNumber != null and receiverNumber != ''"> and receiver_number = #{receiverNumber} </if>
+		  		  <if test="receiverAddress != null and receiverAddress != ''"> and receiver_address = #{receiverAddress} </if>
+		  		  <if test="consultType != null and consultType != ''"> and consult_type = #{consultType} </if>
+		  		  <if test="consultDscr != null and consultDscr != ''"> and consult_dscr = #{consultDscr} </if>
+		  		  <if test="affiliation != null and affiliation != ''"> and affiliation = #{affiliation} </if>
+		  		  <if test="contactNumber != null and contactNumber != ''"> and contact_number = #{contactNumber} </if>
+		  		  <if test="consultSheetStatus != null and consultSheetStatus != ''"> and consult_sheet_status = #{consultSheetStatus} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="reminderProcessing != null and reminderProcessing != ''"> and reminder_processing = #{reminderProcessing} </if>
+		  		  <if test="handler != null and handler != ''"> and handler = #{handler} </if>
+		  		  <if test="handlerName != null and handlerName != ''"> and handler_name = #{handlerName} </if>
+		  		  <if test="handleOrganize != null and handleOrganize != ''"> and handle_organize = #{handleOrganize} </if>
+		  		  <if test="handleOrganizeName != null and handleOrganizeName != ''"> and handle_organize_name = #{handleOrganizeName} </if>
+		  		  <if test="statementType != null and statementType != ''"> and statement_type = #{statementType} </if>
+		  		  <if test="statementTime != null and statementTime != ''"> and statement_time = #{statementTime} </if>
+		  		  <if test="version != null and version != ''"> and version = #{version} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="workOrderType != null and workOrderType != ''"> and work_order_type = #{workOrderType} </if>
+		  		  <if test="receiveTime != null and receiveTime != ''"> and receive_time = #{receiveTime} </if>
+		  		  <if test="newestTime != null and newestTime != ''"> and newest_time = #{newestTime} </if>
+		  		  <if test="handlerTime != null and handlerTime != ''"> and handler_time = #{handlerTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.workorder.domain.ServiceWorkorderDO" useGeneratedKeys="true" keyProperty="workOrderId">
+		insert into crmkh_service_workorder
+		(
+			`customer_name`, 
+			`customer_id`, 
+			`ship_id`, 
+			`order_id`, 
+			`sender`, 
+			`send_number`, 
+			`send_address`, 
+			`receiver`, 
+			`receiver_number`, 
+			`receiver_address`, 
+			`consult_type`, 
+			`consult_dscr`, 
+			`affiliation`, 
+			`contact_number`, 
+			`consult_sheet_status`, 
+			`branch_name`, 
+			`branch_code`, 
+			`reminder_processing`, 
+			`handler`, 
+			`handler_name`, 
+			`handle_organize`, 
+			`handle_organize_name`, 
+			`statement_type`, 
+			`statement_time`, 
+			`version`, 
+			`create_time`, 
+			`update_time`, 
+			`work_order_type`, 
+			`receive_time`, 
+			`newest_time`, 
+			`handler_time`
+		)
+		values
+		(
+			#{customerName}, 
+			#{customerId}, 
+			#{shipId}, 
+			#{orderId}, 
+			#{sender}, 
+			#{sendNumber}, 
+			#{sendAddress}, 
+			#{receiver}, 
+			#{receiverNumber}, 
+			#{receiverAddress}, 
+			#{consultType}, 
+			#{consultDscr}, 
+			#{affiliation}, 
+			#{contactNumber}, 
+			#{consultSheetStatus}, 
+			#{branchName}, 
+			#{branchCode}, 
+			#{reminderProcessing}, 
+			#{handler}, 
+			#{handlerName}, 
+			#{handleOrganize}, 
+			#{handleOrganizeName}, 
+			#{statementType}, 
+			#{statementTime}, 
+			#{version}, 
+			#{createTime}, 
+			#{updateTime}, 
+			#{workOrderType}, 
+			#{receiveTime}, 
+			#{newestTime}, 
+			#{handlerTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.workorder.domain.ServiceWorkorderDO">
+		update crmkh_service_workorder 
+		<set>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="shipId != null">`ship_id` = #{shipId}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}, </if>
+			<if test="sender != null">`sender` = #{sender}, </if>
+			<if test="sendNumber != null">`send_number` = #{sendNumber}, </if>
+			<if test="sendAddress != null">`send_address` = #{sendAddress}, </if>
+			<if test="receiver != null">`receiver` = #{receiver}, </if>
+			<if test="receiverNumber != null">`receiver_number` = #{receiverNumber}, </if>
+			<if test="receiverAddress != null">`receiver_address` = #{receiverAddress}, </if>
+			<if test="consultType != null">`consult_type` = #{consultType}, </if>
+			<if test="consultDscr != null">`consult_dscr` = #{consultDscr}, </if>
+			<if test="affiliation != null">`affiliation` = #{affiliation}, </if>
+			<if test="contactNumber != null">`contact_number` = #{contactNumber}, </if>
+			<if test="consultSheetStatus != null">`consult_sheet_status` = #{consultSheetStatus}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="reminderProcessing != null">`reminder_processing` = #{reminderProcessing}, </if>
+			<if test="handler != null">`handler` = #{handler}, </if>
+			<if test="handlerName != null">`handler_name` = #{handlerName}, </if>
+			<if test="handleOrganize != null">`handle_organize` = #{handleOrganize}, </if>
+			<if test="handleOrganizeName != null">`handle_organize_name` = #{handleOrganizeName}, </if>
+			<if test="statementType != null">`statement_type` = #{statementType}, </if>
+			<if test="statementTime != null">`statement_time` = #{statementTime}, </if>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="workOrderType != null">`work_order_type` = #{workOrderType}, </if>
+			<if test="receiveTime != null">`receive_time` = #{receiveTime}, </if>
+			<if test="newestTime != null">`newest_time` = #{newestTime}, </if>
+			<if test="handlerTime != null">`handler_time` = #{handlerTime}</if>
+		</set>
+		where work_order_id = #{workOrderId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_service_workorder where work_order_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_service_workorder where work_order_id in 
+		<foreach item="workOrderId" collection="array" open="(" separator="," close=")">
+			#{workOrderId}
+		</foreach>
+	</delete>
+
+</mapper>

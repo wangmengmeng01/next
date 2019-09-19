@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title th:text="${appName}" />
+<meta name="keywords" th:attr="content=${appName}">
+<meta name="description" th:attr="content=${appName}">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/font-awesome.css?v=4.4.0}" rel="stylesheet">
+<link th:href="@{/css/animate.css}" rel="stylesheet">
+<link th:href="@{/css/style.css}" rel="stylesheet">
+<link th:href="@{/css/login.css}" rel="stylesheet">
+<!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+
+<style>
+body {
+	height: 90%;
+	width: 90%;
+	background: #213838;
+	overflow: hidden;
+}
+
+canvas {
+	z-index: -1;
+	position: absolute;
+}
+</style>
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<!––[ifIE]>
+<!--[if lt IE 9]>
+	 <script src="js/jquery-1.11.3.js?v=2.1.4"></script>
+<![endif]-->
+<![endif]––>
+		<script th:src="@{/js/ajax-util.js}"></script>
+<script th:src="@{/js/plugins/verificationNumbers.js}"></script>
+<script>
+$(document).ready(function() {
+  $(".submit_btn").click(function(){
+	  });
+});
+</script>
+
+
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	height: 100vh;
+	background-position: center;
+	overflow: hidden;
+}
+
+h1 {
+	color: #fff;
+	text-align: center;
+	font-weight: 100;
+	margin-top: 40px;
+}
+
+#media {
+	width: 351px;
+	height: 250px;
+	margin: 10px auto 0;
+	border-radius: 30px;
+	overflow: hidden;
+	opacity: 0.7px;
+	text-align: center;
+}
+
+#video {
+	
+}
+
+#canvas {
+	display: none;
+}
+
+#btn {
+	width: 160px;
+	height: 50px;
+	background: #03a9f4;
+	margin: 70px auto 0;
+	text-align: center;
+	line-height: 50px;
+	color: #fff;
+	border-radius: 40px;
+}
+</style>
+</head>
+
+<body class="signin" style="background: transparent;">
+	<input type="hidden" th:value="${safelevel}" id="safeLevel" />
+	<div class="signinpanel" style="padding: 0;">
+		<div class="row">
+			<div class="col-sm-5">
+				<form id="signupForm" style="margin-top: -18px;overflow: auto;height: 460px">
+					<!-- MAC地址校验 -->
+					<div th:if="${#strings.contains(safelevel,'1')}">
+						<input type="hidden" id="mac" name="mac">
+						<span style="display: none; color: red" id="hint_mac"></span>
+					</div>
+					<!-- MAC地址校验 -->
+
+					<!-- 身份证登录 -->
+					<div th:if="${#strings.contains(safelevel,'2')}">
+						<input type="text" id="id_card" name="id_card" size="6" placeholder="请输入您的身份证号码" class="form-control uname">
+						<span style="display: none; color: red" id="hint_idCard"></span>
+					</div>
+					<!-- 身份证登录 -->
+
+					<!-- 短信验证码登录 -->
+					<div th:if="${#strings.contains(safelevel,'3')}">
+						<input type="text" id="phone" name="phone" th:value="${mobile}" size="6" style="width: 230px" class="form-control uname" placeholder="请输入您的手机号码" readonly="readonly" />
+						<span style="display: none; color: red" id="hint_phone"></span>
+						<input id="btnSendCode" type="button" value="发送验证码" onclick="sendMessage()" style="margin-top: -32px;float: right" class="btn btn-info btn-sm" />
+						<input type="text" id="message_valid" name="message_valid" size="6" placeholder="请输入短信验证码" class="form-control uname">
+						<span style="display: none; color: red" id="hint_messagevalid"></span>
+					</div>
+					<!-- 短信验证码登录 -->
+
+					<!-- 人脸识别 -->
+					<div class="admin_login" id="facelogin" th:if="${#strings.contains(safelevel,'4')}">
+						<dt style="margin-top: 14px; text-align: center; color: red;">
+							<strong>请把你的脸放摄像头面前</strong>
+						</dt>
+						<div id="media" style="margin-top: -40px">
+							<span style="display: none; color: red" id="hint_facevalid"></span>
+							<video id="video" width="300" height="220" style="margin-top: 32px" autoplay></video>
+							<canvas id="canvas" width="400" height="300"></canvas>
+						</div>
+					</div>
+					<!-- 人脸识别 -->
+
+					<!-- 全程录像 -->
+					<div th:if="${#strings.contains(safelevel,'5')}">
+						<video width="640" height="480" id="myVideo" hidden="true"></video>
+						<p id="record" style="color: red;text-align: center;margin-top: 2px">即将开始采集您的信息进行安全校验,我们将遵守用户隐私协议不会将您的信息用作非法用途!!!</p>
+					</div>
+					<!-- 全程录像 -->
+
+					<a id="login" class="btn btn-login btn-block">确认</a>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript"> var ctx = [[@{/}]] ; </script>
+	<script th:src="@{/js/fileSaver.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+	<!-- 自定义js -->
+	<script th:src="@{/js/content.js?v=1.0.0}"></script>
+
+	<!-- jQuery Validation plugin javascript-->
+	<script th:src="@{/js/plugins/validate/jquery.validate.min.js}"></script>
+	<script th:src="@{/js/plugins/validate/messages_zh.min.js}"></script>
+
+	<script th:src="@{/js/plugins/CryptoJS/rollups/tripledes.js}"></script>
+	<script th:src="@{/js/plugins/CryptoJS/components/cipher-core.js}"></script>
+	<script th:src="@{/js/plugins/CryptoJS/components/core.js}"></script>
+	<script th:src="@{/js/plugins/CryptoJS/components/mode-ecb.js}"></script>
+	<script th:src="@{/js/plugins/CryptoJS/components/md5.js}"></script>
+	<script th:src="@{/js/MD5BASE64Encoder.js}"></script>
+	<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+
+	<script type="text/javascript" th:src="@{/js/appjs/login/login.js?v=2}"></script>
+	<script type="text/javascript" th:src="@{/js/appjs/login/facevalidate.js?v=3}"></script>
+
+</body>
+</html>

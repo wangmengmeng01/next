@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.crmapp.report.dao.GsOdSumDao">
+
+	<select id="getBranchList" resultType="com.yunda.base.feiniao.crmapp.report.domain.GsOdSumDO">
+		SELECT a.branch_code,a.qu_date,a.dianzi_order_sum order_sum,b.dianzi_order_sum last_day_order_sum 
+		FROM
+		(
+			SELECT branch_code,qu_date,dianzi_order_sum 
+			from tmpv2_gs_od_sum 
+			where branch_code = #{branchCode} 
+			and  qu_date &lt;= date_format (#{quDate},'%Y-%m-%d')
+			ORDER BY qu_date DESC  
+			limit 10
+		) a
+		LEFT JOIN 
+		(
+			SELECT branch_code,date_add(qu_date, interval 1 day) qu_date,dianzi_order_sum 
+			from tmpv2_gs_od_sum 
+			where branch_code = #{branchCode} 
+			and  qu_date &lt;= date_format (#{quDate},'%Y-%m-%d')
+			ORDER BY qu_date DESC  
+			limit 1,10
+		) b on a.qu_date = b.qu_date
+	</select>
+	
+	<select id="getCustList" resultType="com.yunda.base.feiniao.crmapp.report.domain.GsOdSumDO">
+	
+		(
+			SELECT a.branch_code,a.qu_date,a.customer_id,a.order_sum order_sum,b.order_sum last_day_order_sum 
+			FROM
+			(
+				SELECT branch_code,qu_date,customer_id,order_sum 
+				from tmpv2_cust_od_sum 
+				where branch_code = #{branchCode} 
+				and qu_date = date_format (#{quDate},'%Y-%m-%d') 
+				ORDER BY customer_id DESC 
+			) a
+			LEFT JOIN 
+			(
+				SELECT branch_code,qu_date,customer_id,order_sum 
+				from tmpv2_cust_od_sum 
+				where branch_code = #{branchCode} 
+				and qu_date = date_format (#{lastDate},'%Y-%m-%d') 
+				ORDER BY customer_id DESC  
+			) b on a.customer_id = b.customer_id
+		)
+		union
+		(
+			SELECT a.branch_code,date_format (#{quDate},'%Y-%m-%d') quDate,a.customer_id,b.order_sum order_sum ,a.order_sum last_day_order_sum
+			FROM
+			(
+				SELECT branch_code,qu_date,customer_id,order_sum 
+				from tmpv2_cust_od_sum 
+				where branch_code = #{branchCode}  
+				and qu_date = date_format (#{lastDate},'%Y-%m-%d')  
+				ORDER BY customer_id DESC 
+			) a
+			LEFT JOIN 
+			(
+				SELECT branch_code,qu_date,customer_id,order_sum 
+				from tmpv2_cust_od_sum 
+				where branch_code = #{branchCode} 
+				and qu_date = date_format (#{quDate},'%Y-%m-%d') 
+				ORDER BY customer_id DESC  
+			) b on a.customer_id = b.customer_id
+			where b.order_sum is null
+		)
+		ORDER BY customer_id DESC
+		<if test="offset != null and limit != null">
+		  limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="custlistCount" resultType="int">
+		select count(*)
+		from 
+		(
+			(
+				SELECT a.branch_code,a.qu_date,a.customer_id,a.order_sum order_sum,b.order_sum last_day_order_sum 
+				FROM
+				(
+					SELECT branch_code,qu_date,customer_id,order_sum 
+					from tmpv2_cust_od_sum 
+					where branch_code = #{branchCode} 
+					and qu_date = date_format (#{quDate},'%Y-%m-%d') 
+					ORDER BY customer_id DESC 
+				) a
+				LEFT JOIN 
+				(
+					SELECT branch_code,qu_date,customer_id,order_sum 
+					from tmpv2_cust_od_sum 
+					where branch_code = #{branchCode} 
+					and qu_date = date_format (#{lastDate},'%Y-%m-%d') 
+					ORDER BY customer_id DESC  
+				) b on a.customer_id = b.customer_id
+			)
+			union
+			(
+				SELECT a.branch_code,date_format (#{quDate},'%Y-%m-%d') quDate,a.customer_id,b.order_sum order_sum ,a.order_sum last_day_order_sum
+				FROM
+				(
+					SELECT branch_code,qu_date,customer_id,order_sum 
+					from tmpv2_cust_od_sum 
+					where branch_code = #{branchCode}  
+					and qu_date = date_format (#{lastDate},'%Y-%m-%d')  
+					ORDER BY customer_id DESC 
+				) a
+				LEFT JOIN 
+				(
+					SELECT branch_code,qu_date,customer_id,order_sum 
+					from tmpv2_cust_od_sum 
+					where branch_code = #{branchCode} 
+					and qu_date = date_format (#{quDate},'%Y-%m-%d') 
+					ORDER BY customer_id DESC  
+				) b on a.customer_id = b.customer_id
+				where b.order_sum is null
+			)
+			ORDER BY customer_id DESC
+		) f
+	</select>
+
+</mapper>

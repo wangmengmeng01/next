@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="record_id" name="record_id" th:value="${costreportCustCostExt.record_id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">开始日期：</label>
+								<div class="col-sm-8">
+									<input id="startAccountDt" name="startAccountDt" th:value="${costreportCustCostExt.startAccountDt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">结束日期：</label>
+								<div class="col-sm-8">
+									<input id="endAccountDt" name="endAccountDt" th:value="${costreportCustCostExt.endAccountDt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">人力成本：</label>
+								<div class="col-sm-8">
+									<input id="peopleCost" name="peopleCost" th:value="${costreportCustCostExt.peopleCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">物料费：</label>
+								<div class="col-sm-8">
+									<input id="materielCost" name="materielCost" th:value="${costreportCustCostExt.materielCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">运输成本：</label>
+								<div class="col-sm-8">
+									<input id="tsfCost" name="tsfCost" th:value="${costreportCustCostExt.tsfCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">回扣：</label>
+								<div class="col-sm-8">
+									<input id="hhCost" name="hhCost" th:value="${costreportCustCostExt.hhCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">税金：</label>
+								<div class="col-sm-8">
+									<input id="taxesCost" name="taxesCost" th:value="${costreportCustCostExt.taxesCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">票均包仓费：</label>
+								<div class="col-sm-8">
+									<input id="packingCharge" name="packingCharge" th:value="${costreportCustCostExt.packingCharge}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">包仓费类型:0按公斤,1按票：</label>
+								<div class="col-sm-8">
+									<input id="packingChargeFlag" name="packingChargeFlag" th:value="${costreportCustCostExt.packingChargeFlag}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">其他费用：</label>
+								<div class="col-sm-8">
+									<input id="otherCost" name="otherCost" th:value="${costreportCustCostExt.otherCost}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点编码：</label>
+								<div class="col-sm-8">
+									<input id="branchCode" name="branchCode" th:value="${costreportCustCostExt.branchCode}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点名称：</label>
+								<div class="col-sm-8">
+									<input id="branchName" name="branchName" th:value="${costreportCustCostExt.branchName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户编码：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" th:value="${costreportCustCostExt.customerId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户名称：</label>
+								<div class="col-sm-8">
+									<input id="customerName" name="customerName" th:value="${costreportCustCostExt.customerName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户来源：</label>
+								<div class="col-sm-8">
+									<input id="customerSourceType" name="customerSourceType" th:value="${costreportCustCostExt.customerSourceType}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/costreport/costreportCustCostExt/edit.js}">
+	</script>
+</body>
+</html>

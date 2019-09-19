@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+	<link th:href="@{/css/layui.css}" rel="stylesheet">
+	<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}" />
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/bootstrap-table.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}" charset="utf-8"></script>
+
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		ul {
+			list-style-type: none;
+			width:818px;
+			margin:20px auto;
+		}
+
+		ul li .form-item .label-text {
+			display: inline-block;
+			width: 110px;
+			text-align: right;
+			font-size: 15px;
+		}
+
+		.form-item {
+			display: inline-block;
+			width: 59%;
+			margin-bottom: 15px;
+			position: relative;
+		}
+		.form-textarea label{
+			display: inline-block;
+			width:120px;
+			margin-right:10px;
+			float: left;
+			text-align: right;
+		}
+
+		.form-item input[type='text'], select, .form-item input[type='number'] {
+			width: 55%;
+			border: 1px solid #ccc;
+			height: 32px;
+			text-indent: 10px;
+		}
+		.checkbox input{
+			margin-right:5px;
+			width: 15px;
+			height: 15px;
+			position: relative;
+			top: 3px;
+		}
+		table{
+			border-collapse:collapse;
+		}
+		table td,th {
+			border:1px solid #ccc;
+			text-align: center;
+			width:120px;
+			font-size: 15px;
+			height:33px;
+		}
+		table td input{
+			width:67px;
+			border:1px solid #ccc;
+			height:22px;
+			padding-left:10px;
+		}
+		textarea{
+			width:74%;
+			height:40px;
+			padding:5px;
+			border: 1px solid #ccc;
+			resize:none
+		}
+		.bottom-btn {
+			width:350px;
+			margin:20px auto;
+		}
+		.bottom-btn button{
+			width:110px;
+			height: 35px;
+			border:none;
+			color: #fff;
+			margin:0 20px;
+			border-radius: 3px;
+		}
+		.defaultInput span{
+			position: absolute;
+			right:20px;
+			top:6px;
+			font-size: 12px;
+			background: #fff;
+			z-index: 100;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content" style="padding: 20px 20px 0 20px;">
+					<form class="form-horizontal m-t" id="signupForm">
+						<input name="id" type="hidden" th:value="${notCooperateCustomerDO.id}">
+						<input name="branchCode" type="hidden" th:value="${notCooperateCustomerDO.branchCode}">
+						<input name="time" type="hidden" th:value="${notCooperateCustomerDO.time}">
+						<div>
+							<ul>
+								<div class="form-item" style="margin-left: 21px;">
+										<label class="label-text">合作网点编码：</label>
+										<input required id="cooperateBranch" name="cooperateBranch" type="number" min="0" th:value="${notCooperateCustomerDO.cooperateBranch}" type="text" style="width: 55%;"/>
+								</div>
+							</ul>
+							<ul>
+								<div class="form-item" style="width: 65%;">
+									<label class="label-text" style="line-height: 15px">绑定客户VIP账号：</label>
+									<input required id="boundVipAccount" name="boundVipAccount" th:value="${notCooperateCustomerDO.boundVipAccount}" type="text" style="width: 50%;">
+								</div>
+							</ul>
+							<ul>
+								<div class="bottom-btn" style="margin-left: 85px">
+									<button type="submit" style="background: rgb(26,166,137)">保存</button>
+									<button type="button" onclick="quitAudit()" style="background: rgb(246,164,75)">取消</button>
+								</div>
+							</ul>
+
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/notCooperateCustomer/boundVip.js}"></script>
+</body>
+</html>

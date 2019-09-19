@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.costreport.dao.CostreportCustCostFinishDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostFinishDO">
+		select `record_id`,`account_dt`,`order_sum`,`weight`,`tsf_fee`,`delivery_fee`,`delivery_additional_weight_fee`,`delivery_balance_fee`,`shipment_fee`,`scan_fee`,`customer_id`,`branch_code`,`create_time` from crmkh_costreport_cust_cost_finish where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostFinishDO">
+			SELECT                                                                          
+					 	t1.record_id recordId, t1.customer_source_type customerSourceType,t2.account_dt as accountDt,                                                               
+					 	t1.customer_id customerId,t2.start_province_id startProvinceId,t2.end_province_id endProvinceId
+					 	, ifnull(t2.order_sum,0) orderSum,                                                               
+					 	ifnull(t2.weight,0) weight,                                                                  
+					 	ifnull(t2.tsf_fee,0) tsfFee,                                                                 
+					 	ifnull(t2.delivery_fee,0) deliveryFee,                                                            
+					 	ifnull(t2.delivery_additional_weight_fee,0) deliveryAdditionalWeightFee,                                          
+					 	ifnull(t2.delivery_balance_fee,0) deliveryBalanceFee,                                          
+					 	ifnull(t2.shipment_fee,0) shipmentFee,                                                            
+					 	ifnull(t2.scan_fee,0) scanFee,t1.branch_code branchCode ,                                                                
+					 	ifnull(t1.people_cost,0) peopleCost,                                                             
+					 	ifnull(t1.materiel_cost,0) materielCost,                                                           
+					 	ifnull(t1.tsf_cost,0) tsfCost,                                                                
+					 	case when packing_charge_flag=0   then ifnull(t1.packing_charge,0)*t2.weight else  ifnull(t1.packing_charge,0)*t2.order_sum  end as packingCharge,                                                                							 
+					 	ifnull(t1.hh_cost,0) hhCost,                                                                 
+					 	ifnull(t1.taxes_cost,0) taxesCost,                                                              
+					 	ifnull(t1.other_cost,0) otherCost                                                               
+					 FROM                                                                            
+					 	crmkh_costreport_cust_cost_finish	 t2                                            
+					 LEFT JOIN crmkh_costreport_cust_cost_ext t1 ON t1.customer_id = t2.customer_id  and t1.end_account_dt=#{accountDtExt}
+					 AND t1.branch_code = t2.branch_code 
+	         <where>  
+		  		  <if test="accountDt != null and accountDt != ''"> and t2.account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and t1.customer_id = #{customerId} </if>
+	  			  <if test="startProvinceId != null and startProvinceId != ''"> and t2.start_province_id = #{startProvinceId} </if>
+		  		  <if test="endProvinceId != null and endProvinceId != ''"> and t2.end_province_id = #{endProvinceId} </if>
+	  		
+	  		</where>
+
+			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+	</select>
+	
+		<select id="listTotal" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostFinishDO">
+		SELECT            
+				sum(ifnull(t2.order_sum,0))  orderSum, 
+				cast(sum(ifnull(t2.weight,0)) as decimal(10,2)) weight, 
+				cast(sum(ifnull(t2.tsf_fee,0)) as decimal(10,2))  tsfFee,
+				cast(sum(ifnull(t2.delivery_fee,0)) as decimal(10,2))  deliveryFee,
+				cast(sum(ifnull(t2.delivery_additional_weight_fee,0)) as decimal(10,2))  deliveryAdditionalWeightFee,
+				cast(sum(ifnull(t2.delivery_balance_fee,0)) as decimal(10,2))  deliveryBalanceFee,
+				cast(sum(ifnull(t2.shipment_fee,0)) as decimal(10,2))  shipmentFee,
+				cast(sum(ifnull(t2.scan_fee,0)) as decimal(10,2))  scanFee,
+				cast(sum(ifnull(t1.people_cost,0)) as decimal(10,2))  peopleCost,
+				cast(sum(ifnull(t1.materiel_cost,0)) as decimal(10,2))  materielCost,
+				cast(sum(ifnull(t1.tsf_cost,0)) as decimal(10,2))  tsfCost,
+				cast(sum(ifnull(t1.people_cost,0)) as decimal(10,2))  peopleCost,
+		        cast(sum(case when packing_charge_flag=0   then ifnull(t1.packing_charge,0)*t2.weight else  ifnull(t1.packing_charge,0)*t2.order_sum  end) as decimal(10,2))  as packingCharge,                                                                							 
+		 		cast(sum(ifnull(t1.hh_cost,0)) as decimal(10,2))  hhCost,
+		 		cast(sum(ifnull(t1.taxes_cost,0)) as decimal(10,2))  taxesCost,
+		 		cast(sum(ifnull(t1.other_cost,0)) as decimal(10,2))  otherCost                                                             
+				 FROM                                                                            
+				 	crmkh_costreport_cust_cost_finish	 t2                                            
+				 LEFT JOIN crmkh_costreport_cust_cost_ext t1 ON t1.customer_id = t2.customer_id  and t1.end_account_dt=#{accountDtExt}
+				 AND t1.branch_code = t2.branch_code 
+	         <where>  
+		  		  <if test="accountDt != null and accountDt != ''"> and t2.account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and t1.customer_id = #{customerId} </if>
+	  			  <if test="startProvinceId != null and startProvinceId != ''"> and t2.start_province_id = #{startProvinceId} </if>
+		  		  <if test="endProvinceId != null and endProvinceId != ''"> and t2.end_province_id = #{endProvinceId} </if>	  		
+	  		</where>
+	  			<if test="offset != null and limit != null">
+				limit #{offset}, #{limit}
+			</if>
+	
+	</select>
+	
+	
+ 	<select id="count" resultType="int">
+	     select count(*) 
+		 FROM                                                                            
+		 crmkh_costreport_cust_cost_finish	 t2                                            
+		 LEFT JOIN crmkh_costreport_cust_cost_ext t1 ON t1.customer_id = t2.customer_id  and date_format(t1.end_account_dt,'%Y%m')=#{accountDt}
+		 AND t1.branch_code = t2.branch_code 
+		 <where>  
+		  		  <if test="accountDt != null and accountDt != ''"> and t2.account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and t1.customer_id = #{customerId} </if>
+	  			  <if test="startProvinceId != null and startProvinceId != ''"> and t2.start_province_id = #{startProvinceId} </if>
+		  		  <if test="endProvinceId != null and endProvinceId != ''"> and t2.end_province_id = #{endProvinceId} </if>
+	  		
+	  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostFinishDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkh_costreport_cust_cost_finish
+		(
+			`account_dt`, 
+			`order_sum`, 
+			`weight`, 
+			`tsf_fee`, 
+			`delivery_fee`, 
+			`delivery_additional_weight_fee`, 
+			`delivery_balance_fee`, 
+			`shipment_fee`, 
+			`scan_fee`, 
+			`customer_id`, 
+			`branch_code`, 
+			`create_time`
+		)
+		values
+		(
+			#{accountDt}, 
+			#{orderSum}, 
+			#{weight}, 
+			#{tsfFee}, 
+			#{deliveryFee}, 
+			#{deliveryAdditionalWeightFee}, 
+			#{deliveryBalanceFee}, 
+			#{shipmentFee}, 
+			#{scanFee}, 
+			#{customerId}, 
+			#{branchCode}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostFinishDO">
+		update crmkh_costreport_cust_cost_finish 
+		<set>
+			<if test="accountDt != null">`account_dt` = #{accountDt}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
+			<if test="tsfFee != null">`tsf_fee` = #{tsfFee}, </if>
+			<if test="deliveryFee != null">`delivery_fee` = #{deliveryFee}, </if>
+			<if test="deliveryAdditionalWeightFee != null">`delivery_additional_weight_fee` = #{deliveryAdditionalWeightFee}, </if>
+			<if test="deliveryBalanceFee != null">`delivery_balance_fee` = #{deliveryBalanceFee}, </if>
+			<if test="shipmentFee != null">`shipment_fee` = #{shipmentFee}, </if>
+			<if test="scanFee != null">`scan_fee` = #{scanFee}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_costreport_cust_cost_finish where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_costreport_cust_cost_finish where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

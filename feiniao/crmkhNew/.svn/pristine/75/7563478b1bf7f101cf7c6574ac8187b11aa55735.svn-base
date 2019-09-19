@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.RebateAmountInterfaceDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select `branch_code`,`all_price_sum`,`report_date`,`create_time`,`fb_center` from crmkh_rebate_amount_interface where branch_code = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select `branch_code`,`all_price_sum`,`report_date`,`create_time`,`fb_center` from crmkh_rebate_amount_interface
+        <where>  
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="allPriceSum != null and allPriceSum != ''"> and all_price_sum = #{allPriceSum} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="fbCenter != null and fbCenter != ''"> and fb_center = #{fbCenter} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by branch_code desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_rebate_amount_interface
+		 <where>  
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="allPriceSum != null and allPriceSum != ''"> and all_price_sum = #{allPriceSum} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="fbCenter != null and fbCenter != ''"> and fb_center = #{fbCenter} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		insert into crmkh_rebate_amount_interface
+		(
+			`branch_code`, 
+			`all_price_sum`, 
+			`report_date`, 
+			`create_time`, 
+			`fb_center`
+		)
+		values
+		(
+			#{branchCode}, 
+			#{allPriceSum}, 
+			#{reportDate}, 
+			#{createTime}, 
+			#{fbCenter}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		update crmkh_rebate_amount_interface 
+		<set>
+			<if test="allPriceSum != null">`all_price_sum` = #{allPriceSum}, </if>
+			<if test="reportDate != null">`report_date` = #{reportDate}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="fbCenter != null">`fb_center` = #{fbCenter}</if>
+		</set>
+		where branch_code = #{branchCode}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_rebate_amount_interface where branch_code = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_rebate_amount_interface where branch_code in 
+		<foreach item="branchCode" collection="array" open="(" separator="," close=")">
+			#{branchCode}
+		</foreach>
+	</delete>
+	
+	<!-- 删除财务用大客户返利老逻辑落表目标天数据  -->
+	<delete id="removeOldRebateAmount">
+		delete from crmkhv2_rebate_amount_old_interface where report_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<delete id="removeFinanceCustPriceSumOld">
+		delete from tmpv2_finance_cust_price_sum_old where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<delete id="removeFinanceGsPriceSumOld">
+		delete from tmpv2_finance_gs_price_sum_old where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<!-- 财务大客户返利老逻辑中间表1 -->
+	<insert id="saveFinanceCustPriceSumOld" parameterType="java.util.HashMap">
+		insert into tmpv2_finance_cust_price_sum_old(`customer_id`,`qu_date`,  `customer_name`, `branch_code`, `gs`, `order_sum`, `order_avg`, `customer_source_type`, `price_level`, `price_num`, `all_price_sum`)
+			select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum 
+			from 
+			(
+				select customer_id,qu_date,customer_name,branch_code,gs,	
+					sum(daily_order_num) order_sum,	sum(daily_order_num) order_avg,customer_source_type, 
+					case 
+					when sum(daily_order_num) &lt;=50 then 'a'
+					when sum(daily_order_num) &gt;50   and sum(daily_order_num)&lt;=200  then 'b'
+					when sum(daily_order_num) &gt;200  and sum(daily_order_num)&lt;=1000 then 'c'
+					when sum(daily_order_num) &gt;1000 and sum(daily_order_num)&lt;=2000 then 'd'
+					when sum(daily_order_num) &gt;2000 and sum(daily_order_num)&lt;=3000 then 'e'
+					when sum(daily_order_num) &gt;3000 and sum(daily_order_num)&lt;=5000 then 'f'
+					when sum(daily_order_num) &gt;5000 then 'g'
+					else '' end as price_level 
+				from crmkhv2_report_order_stats_all a 
+				where a.qu_date = date_format(#{targetDay},'%Y-%m-%d')
+				GROUP BY customer_id,branch_code,a.customer_source_type,a.gs
+			) a 
+			LEFT JOIN crmkhv2_finance_price_table_old b on a.price_level = b.price_level 
+			WHERE b.price_type=#{priceType}
+	</insert>
+	
+	<!-- 财务大客户返利老逻辑中间表2 -->
+	<insert id="saveFinanceGsPriceSumOld" parameterType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		insert into tmpv2_finance_gs_price_sum_old(`branch_code`,`qu_date`,`price_sum`,`all_price_sum`,`A_price_sum`,`B_price_sum`,`C_price_sum`,`D_price_sum`,`E_price_sum`,`F_price_sum`,`G_price_sum`,`A_all_price_sum`,`B_all_price_sum`,`C_all_price_sum`,`D_all_price_sum`,`E_all_price_sum`,`F_all_price_sum`,`G_all_price_sum`)
+			select 
+				base5.branch_code,                																									
+				base5.qu_date,                                                                   
+				sum(base5.price_num) price_sum,                                                      
+				sum(base5.all_price_sum) all_price_sum,     
+				sum(case when base5.price_level = 'a' then base5.price_num else 0 end) A_price_sum,  
+				sum(case when base5.price_level = 'b' then base5.price_num else 0 end) B_price_sum,  
+				sum(case when base5.price_level = 'c' then base5.price_num else 0 end) C_price_sum,  
+				sum(case when base5.price_level = 'd' then base5.price_num else 0 end) D_price_sum,  
+				sum(case when base5.price_level = 'e' then base5.price_num else 0 end) E_price_sum,  
+				sum(case when base5.price_level = 'f' then base5.price_num else 0 end) F_price_sum,  
+				sum(case when base5.price_level = 'g' then base5.price_num else 0 end) G_price_sum,   
+				sum(case when base5.price_level = 'a' then base5.all_price_sum else 0 end) A_all_price_sum, 
+				sum(case when base5.price_level = 'b' then base5.all_price_sum else 0 end) B_all_price_sum, 
+				sum(case when base5.price_level = 'c' then base5.all_price_sum else 0 end) C_all_price_sum, 
+				sum(case when base5.price_level = 'd' then base5.all_price_sum else 0 end) D_all_price_sum, 
+				sum(case when base5.price_level = 'e' then base5.all_price_sum else 0 end) E_all_price_sum, 
+				sum(case when base5.price_level = 'f' then base5.all_price_sum else 0 end) F_all_price_sum, 
+				sum(case when base5.price_level = 'g' then base5.all_price_sum else 0 end) G_all_price_sum  
+				from tmpv2_finance_cust_price_sum_old base5 
+				where base5.qu_date = date_format(#{targetDay},'%Y-%m-%d')
+				GROUP BY base5.branch_code
+	</insert>
+	
+	<!-- 财务大客户返利老逻辑 -->
+	<select id="getFinanceGsPriceSumOldList" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select  branch_code,CAST(all_price_sum AS DECIMAL(8,2)) all_price_sum, #{targetDay} as report_date from tmpv2_finance_gs_price_sum_old
+		where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</select>
+	
+	<!-- 大客户返利老逻辑落表crmkhv2_rebate_amount_old_interface -->
+	<insert id="saveOldRebateAmount" parameterType="java.util.List">
+		insert into crmkhv2_rebate_amount_old_interface
+
+		(
+			branch_code, 
+			all_price_sum, 
+			report_date, 
+			fb_center		
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.branchCode,jdbcType=INTEGER } ,#{item.allPriceSum,jdbcType=DOUBLE } ,
+			 #{item.reportDate,jdbcType=DATE } ,#{item.fbCenter,jdbcType=INTEGER }  )
+		</foreach>
+
+	</insert>
+	
+	<!-- 财务大客户返利新逻辑中间表1 -->
+	<insert id="saveFinanceCustPriceSum" parameterType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		insert into tmpv2_finance_cust_price_sum(`qu_date`, `customer_id`, `customer_name`, `branch_code`, `gs`, `order_sum`, `order_avg`, `customer_source_type`, `price_level`, `price_type`, `price_num`, `all_price_sum`)
+			select #{targetDay} as qu_date, a.*,CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum 
+			from 
+			(
+				SELECT g.*,
+				case
+				when bp.Prov_ID in (86020,86057102,86057101,8602501,8602502,86021,860591,860531,86010) then 'X' 
+				when bp.Prov_ID is null then 'X' 
+				else 'Y' 
+				end as price_type
+				from 
+				(
+					select a.customer_id,
+					a.customer_name,
+					a.branch_code,
+					a.gs,	
+					sum(a.daily_order_num) order_sum,
+					sum(a.daily_order_num) order_avg,
+					a.customer_source_type, 
+					case 
+					when sum(a.daily_order_num) &lt;=50 then 'a' 
+					when sum(a.daily_order_num) &gt;50   and sum(a.daily_order_num)&lt;=100  then 'b' 
+					when sum(a.daily_order_num) &gt;100  and sum(a.daily_order_num)&lt;=500 then 'c' 
+					when sum(a.daily_order_num) &gt;500 and sum(a.daily_order_num)&lt;=1000 then 'd' 
+					when sum(a.daily_order_num) &gt;1000 and sum(a.daily_order_num)&lt;=3000 then 'e' 
+					when sum(a.daily_order_num) &gt;3000 and sum(a.daily_order_num)&lt;=5000 then 'f' 
+					when sum(a.daily_order_num) &gt;5000 then 'g' 
+					else '' end as price_level
+					from crmkhv2_report_order_stats_all a 
+					where a.qu_date = date_format(#{targetDay},'%Y-%m-%d') 
+					GROUP BY a.customer_id,a.customer_name,a.branch_code,a.customer_source_type,a.gs
+				) g 
+				left join crmkh_finance_branch_belong_province bp on g.branch_code = bp.Belong_Org_ID   
+				GROUP BY customer_id,customer_name,branch_code,customer_source_type,gs
+			) a 
+			LEFT JOIN crmkh_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+	</insert>
+	
+	
+	<!-- 财务大客户返利新逻辑中间表2 -->
+	<insert id="saveFinanceGsPriceSum" parameterType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		insert into tmpv2_finance_gs_price_sum(`qu_date`,`branch_code`,`price_sum`,`all_price_sum`,`A_price_sum`,`B_price_sum`,`C_price_sum`,`D_price_sum`,`E_price_sum`,`F_price_sum`,`G_price_sum`,`A_all_price_sum`,`B_all_price_sum`,`C_all_price_sum`,`D_all_price_sum`,`E_all_price_sum`,`F_all_price_sum`,`G_all_price_sum`)
+			select                 																									
+				base5.qu_date,
+				base5.branch_code,                                                                   
+				sum(base5.price_num) price_sum,                                                      
+				sum(base5.all_price_sum) all_price_sum,     
+				sum(case when base5.price_level = 'a' then base5.price_num else 0 end) A_price_sum,  
+				sum(case when base5.price_level = 'b' then base5.price_num else 0 end) B_price_sum,  
+				sum(case when base5.price_level = 'c' then base5.price_num else 0 end) C_price_sum,  
+				sum(case when base5.price_level = 'd' then base5.price_num else 0 end) D_price_sum,  
+				sum(case when base5.price_level = 'e' then base5.price_num else 0 end) E_price_sum,  
+				sum(case when base5.price_level = 'f' then base5.price_num else 0 end) F_price_sum,  
+				sum(case when base5.price_level = 'g' then base5.price_num else 0 end) G_price_sum,   
+				sum(case when base5.price_level = 'a' then base5.all_price_sum else 0 end) A_all_price_sum, 
+				sum(case when base5.price_level = 'b' then base5.all_price_sum else 0 end) B_all_price_sum, 
+				sum(case when base5.price_level = 'c' then base5.all_price_sum else 0 end) C_all_price_sum, 
+				sum(case when base5.price_level = 'd' then base5.all_price_sum else 0 end) D_all_price_sum, 
+				sum(case when base5.price_level = 'e' then base5.all_price_sum else 0 end) E_all_price_sum, 
+				sum(case when base5.price_level = 'f' then base5.all_price_sum else 0 end) F_all_price_sum, 
+				sum(case when base5.price_level = 'g' then base5.all_price_sum else 0 end) G_all_price_sum  
+				from tmpv2_finance_cust_price_sum base5 
+				where base5.qu_date = date_format(#{targetDay},'%Y-%m-%d')
+				GROUP BY base5.branch_code
+	</insert>
+	
+	
+	<!-- 财务大客户返利新逻辑 -->
+	<select id="getFinanceGsPriceSumList" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select  branch_code,CAST(all_price_sum AS DECIMAL(8,2)) all_price_sum, #{targetDay} as report_date from tmpv2_finance_gs_price_sum
+		where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</select>
+	
+	<!--获取一级网点所属分拨中心  -->
+	<select id="getBranchFB" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select zzz as fbCenter from ydserver.region 
+		where bm = #{branchCode}
+	</select>
+	
+	<!-- 大客户返利新逻辑落表crmkhv2_rebate_amount_interface -->
+	<insert id="saveRebateAmount" parameterType="java.util.List">
+		insert into crmkhv2_rebate_amount_interface
+
+		(
+			branch_code, 
+			all_price_sum, 
+			report_date, 
+			fb_center		
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.branchCode,jdbcType=INTEGER } ,#{item.allPriceSum,jdbcType=DOUBLE } ,
+			 #{item.reportDate,jdbcType=DATE } ,#{item.fbCenter,jdbcType=INTEGER }  )
+		</foreach>
+
+	</insert>
+	
+	<delete id="removeRebateAmount">
+		delete from crmkhv2_rebate_amount_interface where report_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<delete id="removeFinanceCustPriceSum">
+		delete from tmpv2_finance_cust_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<delete id="removeFinanceGsPriceSum">
+		delete from tmpv2_finance_gs_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<select id="reportOrderCount" resultType="int">
+		SELECT COUNT(1) FROM crmkhv2_report_order_stats_all WHERE qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</select>
+
+	<!-- 财务大客户返利老逻辑 -->
+	<!-- <select id="getGsPriceSumList" resultType="com.yunda.base.feiniao.report.domain.RebateAmountInterfaceDO">
+		select  branch_code,CAST(all_price_sum AS DECIMAL(8,2)) all_price_sum, #{targetDay} as report_date from tmpv2_gs_price_sum
+		where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</select> -->
+	
+
+	
+	<select id="reportGsPriceSumCount" resultType="int">
+		SELECT COUNT(1) FROM tmpv2_gs_price_sum WHERE qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</select>
+	
+</mapper>

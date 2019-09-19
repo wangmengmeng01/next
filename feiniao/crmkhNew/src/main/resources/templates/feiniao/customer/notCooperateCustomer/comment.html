@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+    <script src="jquery.editable-select.min.js"></script>
+    <style>
+        input{
+            width: 320px;
+            height: 40px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-indent: 20px;
+            border: 1px solid #e5e5e5;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        ul li {
+            list-style-type: none;
+        }
+        .es-list{
+            display: none;
+        }
+        input.es-input{padding-right:0px!important;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat}input.es-input:focus{-webkit-border-bottom-left-radius:0;-moz-border-radius-bottomleft:0;border-bottom-left-radius:0;-webkit-border-bottom-right-radius:0;-moz-border-radius-bottomright:0;border-bottom-right-radius:0}.es-list{display:block;position:absolute;padding:0;margin:0;border:1px solid #d1d1d1;display:none;z-index:1000;background:#fff;max-height:260px;overflow-y:auto;-moz-box-shadow:0 2px 3px #ccc;-webkit-box-shadow:0 2px 3px #ccc;box-shadow:0 2px 3px #ccc}.es-list li{display:block;padding:5px 0 0 10px;box-sizing:border-box;margin:0;width: 100%;cursor: pointer}.es-list li.selected{background:#19AEFE;color: #fff}
+    </style>
+</head>
+<body>
+<!--校验输入框数字-->
+<input type="text" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9]+/,'');}).call(this)" onblur="this.v();" ><br>
+<!--可编辑的选择框-->
+<select id="main" class="main" onchange="searchItem(this)" onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+    <option value="01">北京</option>
+    <option value="03">上海</option>
+    <option value="05">广州</option>
+    <option value="09">深圳</option>
+    <option value="11">重庆</option>
+    <option value="14">天津</option>
+    <option value="16">珠海</option>
+    <option value="21">厦门</option>
+    <option value="26">大连</option>
+</select>
+<input type="button" value="点击" onclick="test()">
+<script>
+//    filter：过滤，即当输入内容时下拉选项会匹配输入的字符，支持中文，true/false，默认true。
+//
+//    duration：下拉选项框展示的过渡动画速度，有fast，slow，以及数字（毫秒），默认是fast。
+//
+//    onCreate：当输入时触发。
+//
+//    onShow：当下拉时触发。
+//
+//    onHide：当下拉框隐藏时触发。
+    $('#main').editableSelect({
+//        effects: 'slide',
+        onSelect:function (element) {
+            $('.main').val(element.attr('value'));
+            console.log(element)
+        },
+        onHide:function(){
+            console.log($('.main').val())
+        }
+    }).prop('placeholder','请输入或选择班次名..');
+    function searchItem(that) {
+//        console.log($('.main').val())
+    }
+//    function test() {
+//        console.log($('.main').val())
+//    }
+</script>
+</body>
+</html>
+

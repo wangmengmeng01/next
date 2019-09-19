@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.costreport.dao.CostreportOrderCostFinishDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostFinishDO">
+		select `record_id`,`account_dt`,`customer_id`,`branch_code`,`order_sum`,`weight_all`,`income`,`expenditure`,`profit`,`income_each`,`kilogram_each`,`profit_each`,`kilogram_profit_each`,`create_time`,`finish_flag`,`sender_weight`,`T3_weight` from crmkh_costreport_order_cost_finish where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostFinishDO">
+			SELECT       
+				 	(@i :=@i + 1) AS record_Id,
+				 	t1.account_dt as account_dt,       
+				 	t1.customer_id customer_id,       
+				 	t1.order_sum orderSum,       
+				 	ifnull(t1.weight_all,0) weight_all,       
+				 	ifnull(t1.income,0) income,       
+				    ifnull(t1.expenditure,0) expenditure,       
+				    ifnull(t1.profit,0) profit,       
+				    ifnull(t1.income_each,0) income_each,     
+				    ifnull(t1.kilogram_each,0) kilogram_each,      
+				    ifnull(t1.profit_each,0)    profit_each,     
+				    ifnull(t1.kilogram_profit_each,0)  kilogram_profit_each     
+				    FROM       
+					 crmkh_costreport_order_cost_finish  t1 ,(SELECT @i := 0) AS it
+        <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+	 		  	  <if test="branchCodeAll != null and branchCodeAll != ''"> and branch_code in (#{branchCode}) </if>		  		 
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="weightAll != null and weightAll != ''"> and weight_all = #{weightAll} </if>
+		  		  <if test="income != null and income != ''"> and income = #{income} </if>
+		  		  <if test="expenditure != null and expenditure != ''"> and expenditure = #{expenditure} </if>
+		  		  <if test="profit != null and profit != ''"> and profit = #{profit} </if>
+		  		  <if test="incomeEach != null and incomeEach != ''"> and income_each = #{incomeEach} </if>
+		  		  <if test="kilogramEach != null and kilogramEach != ''"> and kilogram_each = #{kilogramEach} </if>
+		  		  <if test="profitEach != null and profitEach != ''"> and profit_each = #{profitEach} </if>
+		  		  <if test="kilogramProfitEach != null and kilogramProfitEach != ''"> and kilogram_profit_each = #{kilogramProfitEach} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="finishFlag != null and finishFlag != ''"> and finish_flag = #{finishFlag} </if>
+		  		  <if test="senderWeight != null and senderWeight != ''"> and sender_weight = #{senderWeight} </if>
+		  		  <if test="t3Weight != null and t3Weight != ''"> and T3_weight = #{t3Weight} </if>		  		
+		  		  <if test="branchCodeAll != null and branchCodeAll != ''">
+			  		and branch_code in
+		        	<foreach collection="branchCodeAll" item="branchCodeAll" index="index" open="(" close=")" separator=",">
+				   			 #{branchCodeAll}
+				   	</foreach>
+		  		  </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	
+		<select id="totalList" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostFinishDO">
+			SELECT       
+		            sum(ifnull(t1.order_sum,0)) orderSum, 
+				    cast(sum(ifnull(t1.weight_all,0)) as decimal(10,2)) weightAll,
+  					cast(sum(ifnull(t1.income,0)) as decimal(10,2)) income, 
+					cast(sum(ifnull(t1.expenditure,0)) as decimal(10,2)) expenditure,
+					cast(sum(ifnull(t1.profit,0)) as decimal(10,2)) profit ,
+					cast(sum(ifnull(t1.income_each,0)) as decimal(10,2)) incomeEach,
+					cast(sum(ifnull(t1.kilogram_each,0)) as decimal(10,2)) kilogramEach,
+					cast(sum(ifnull(t1.profit_each,0)) as decimal(10,2)) profitEach,
+					cast(sum(ifnull(t1.kilogram_profit_each,0)) as decimal(10,2)) kilogramProfitEach		        
+		       FROM       
+			   (
+			   	SELECT 
+			   		a.order_sum,a.weight_all,a.income,a.expenditure,a.profit ,a.income_each,a.kilogram_each,a.profit_each,a.kilogram_profit_each 
+			    from crmkh_costreport_order_cost_finish a
+			    <where> 
+		          	<if test="accountDt != null and accountDt != ''"> account_dt = #{accountDt} </if>     
+		          	<if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>  
+		          	<if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+				 </where>
+			 	order by record_id desc  	
+			 	<if test="offset != null and limit != null">
+					limit #{offset}, #{limit}
+				</if> 
+				) t1
+
+	</select>
+	
+	<select id="getProvinceCodeNameMap"  resultType="java.util.Map">
+		SELECT `code`,name FROM CRMKHV2_BASIC_CITYS WHERE type = 'province'
+	</select>	
+	
+	<select id="getCityCodeNameMap"  resultType="java.util.Map">
+		SELECT `code`,name FROM CRMKHV2_BASIC_CITYS WHERE type = 'city'
+	</select>	
+	
+	<select id="searchCustomerData"  resultType="java.util.Map">
+		SELECT `code` as id, concat(name,'(',`code`,')') AS name, branch_code FROM (select concat(`ydserver`.`cqkh`.`GS`,`ydserver`.`cqkh`.`BM`) AS `code`, 
+				ifnull(convert(`ydserver`.`cqkh`.`KHMC` using utf8),convert(concat(`ydserver`.`cqkh`.`GS`,`ydserver`.`cqkh`.`BM`) using utf8)) AS `name`, 
+				`ydserver`.`cqkh`.`GS` AS `branch_code`, 
+				(select `g`.`sjdw` from `ydserver`.`gs` `g` where (`g`.`bm` = `ydserver`.`cqkh`.`GS`)) AS `belong_branch` 
+				from `ydserver`.`cqkh` where (`ydserver`.`cqkh`.`isdelete` = 0)) t where 1=1 				
+		<if test="queryString != null and queryString != ''">
+				and (t.name LIKE concat(concat('%',#{queryString}),'%') or t.code like concat(concat('%',#{queryString}),'%'))	 </if>
+		<if test="orgType != 1 and orgType != 50">
+				and t.belong_branch=(SELECT gs FROM ydserver.ry WHERE gh_oa = #{userId}) 
+		</if>
+			    limit 20 					
+		</select>
+	
+	<select id="searchCustBraData"  resultType="java.util.Map">
+			SELECT  concat(mc,'(',`bm`,')') mc,bm FROM `ydserver`.`gs`  WHERE 1=1 
+		<if test="queryString != null and queryString != ''">
+				and (gs.bm LIKE concat(concat('%',#{queryString}),'%') or gs.mc LIKE concat(concat('%',#{queryString}),'%'))
+		</if>
+		<if test="orgType != 1 and orgType != 50">
+				 and gs.bm = #{orgCode}
+		</if>
+			  limit 20 					
+	</select>
+
+	<select id="searchLbByGsInfo" parameterType="java.lang.String" resultType="java.util.Map">
+			SELECT lb FROM `ydserver`.`gs` WHERE bm = #{orgCode}					
+	</select>
+	
+	 <select id="queryWdByOrgCodeNew" parameterType="java.lang.String" resultType="java.util.Map">
+			SELECT g.bm AS wd FROM ydserver.gs AS g WHERE g.sjdw = #{orgCode}					
+	</select>
+	
+	
+	
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_costreport_order_cost_finish
+		 <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="weightAll != null and weightAll != ''"> and weight_all = #{weightAll} </if>
+		  		  <if test="income != null and income != ''"> and income = #{income} </if>
+		  		  <if test="expenditure != null and expenditure != ''"> and expenditure = #{expenditure} </if>
+		  		  <if test="profit != null and profit != ''"> and profit = #{profit} </if>
+		  		  <if test="incomeEach != null and incomeEach != ''"> and income_each = #{incomeEach} </if>
+		  		  <if test="kilogramEach != null and kilogramEach != ''"> and kilogram_each = #{kilogramEach} </if>
+		  		  <if test="profitEach != null and profitEach != ''"> and profit_each = #{profitEach} </if>
+		  		  <if test="kilogramProfitEach != null and kilogramProfitEach != ''"> and kilogram_profit_each = #{kilogramProfitEach} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="finishFlag != null and finishFlag != ''"> and finish_flag = #{finishFlag} </if>
+		  		  <if test="senderWeight != null and senderWeight != ''"> and sender_weight = #{senderWeight} </if>
+		  		  <if test="t3Weight != null and t3Weight != ''"> and T3_weight = #{t3Weight} </if>
+		  		  <if test="branchCodeAll != null and branchCodeAll != ''">
+			  		and branch_code in
+		        	<foreach collection="branchCodeAll" item="branchCodeAll" index="index" open="(" close=")" separator=",">
+				   			 #{branchCodeAll}
+				   	</foreach>
+		  		  </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostFinishDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkh_costreport_order_cost_finish
+		(
+			`account_dt`, 
+			`customer_id`, 
+			`branch_code`, 
+			`order_sum`, 
+			`weight_all`, 
+			`income`, 
+			`expenditure`, 
+			`profit`, 
+			`income_each`, 
+			`kilogram_each`, 
+			`profit_each`, 
+			`kilogram_profit_each`, 
+			`create_time`, 
+			`finish_flag`, 
+			`sender_weight`, 
+			`T3_weight`
+		)
+		values
+		(
+			#{accountDt}, 
+			#{customerId}, 
+			#{branchCode}, 
+			#{orderSum}, 
+			#{weightAll}, 
+			#{income}, 
+			#{expenditure}, 
+			#{profit}, 
+			#{incomeEach}, 
+			#{kilogramEach}, 
+			#{profitEach}, 
+			#{kilogramProfitEach}, 
+			#{createTime}, 
+			#{finishFlag}, 
+			#{senderWeight}, 
+			#{t3Weight}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostFinishDO">
+		update crmkh_costreport_order_cost_finish 
+		<set>
+			<if test="accountDt != null">`account_dt` = #{accountDt}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="weightAll != null">`weight_all` = #{weightAll}, </if>
+			<if test="income != null">`income` = #{income}, </if>
+			<if test="expenditure != null">`expenditure` = #{expenditure}, </if>
+			<if test="profit != null">`profit` = #{profit}, </if>
+			<if test="incomeEach != null">`income_each` = #{incomeEach}, </if>
+			<if test="kilogramEach != null">`kilogram_each` = #{kilogramEach}, </if>
+			<if test="profitEach != null">`profit_each` = #{profitEach}, </if>
+			<if test="kilogramProfitEach != null">`kilogram_profit_each` = #{kilogramProfitEach}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="finishFlag != null">`finish_flag` = #{finishFlag}, </if>
+			<if test="senderWeight != null">`sender_weight` = #{senderWeight}, </if>
+			<if test="t3Weight != null">`T3_weight` = #{t3Weight}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_costreport_order_cost_finish where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_costreport_order_cost_finish where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

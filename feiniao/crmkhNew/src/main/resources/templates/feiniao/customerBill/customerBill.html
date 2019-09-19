@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新增大客户</title>
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../../../static/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="../../../static/js/lay/laydate/theme/default/laydate.css">
+	<link rel="stylesheet" type="text/css" href="../../../static/css/element.css">
+	<script type="text/javascript" src="../../../static/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../static/js/vue.min.js"></script>
+	<script type="text/javascript" src="../../../static/js/element.js"></script>
+	<script type="text/javascript" src="../../../static/js/plugins/distpicker/distpicker.data.min.js"></script>
+	<style type="text/css">
+		#app {
+			padding: 10px;
+		}
+		.el-input {
+			width: 220px;
+		}
+		.address {
+			position: absolute;
+			left: 0;
+			top: 100%;
+			background: #fff;
+			padding: 5px;
+			z-index: 5;
+		}
+	</style>
+</head>
+<body>
+<div id="app">
+	<el-card class="box-card">
+	  <div>
+	    <el-form :model="searchForm" :inline="true" :rules="rules" ref="searchForm" label-width="80px">
+	    	<el-row :gutter="20">
+				  <el-col :span="6">
+						<el-form-item label="单号" prop="role_name">
+							<el-input type="textarea" v-model.trim="searchForm.role_name" placeholder="一次最多查询50单"></el-input>
+						</el-form-item>
+				  </el-col>
+				  <el-col :span="6">
+						<el-form-item label="客户名称" prop="role_name">
+							<el-input v-model.trim="searchForm.role_name" placeholder="请输入"></el-input>
+						</el-form-item>
+						<el-form-item label="客户编码" prop="role_name">
+							<el-input v-model.trim="searchForm.role_name" placeholder="请输入"></el-input>
+						</el-form-item>
+						<el-form-item label="网点编码" prop="role_name">
+							<el-input v-model.trim="searchForm.role_name" placeholder="请输入"></el-input>
+						</el-form-item>
+				  </el-col>
+				  <el-col :span="12">
+						<el-form-item label="下单时间" prop="role_name">
+							<el-select v-model="searchForm.role_name" placeholder="请选择">
+						    <el-option
+						      v-for="item in 5"
+						      :key="item"
+						      :label="item"
+						      :value="item">
+						    </el-option>
+						  </el-select>
+						</el-form-item>
+				  </el-col>
+				</el-row>
+		</el-form>
+		<div slot="footer" style="text-align: center;">
+			<el-button @click="submitForm('editRoleForm')">查询</el-button>
+			<el-button @click="resetForm('editRoleForm')">重置</el-button>
+			<el-button @click="editFlag = false">导出</el-button>
+		</div>
+	  </div>
+	</el-card>
+	<el-card style="margin-top: 20px;">
+	  <div style="margin-top: 10px;">
+			<el-table
+				:data="tableData"
+				border
+				style="width: 100%">
+				<el-table-column
+					prop="id"
+					label="网点编码"
+					align="center"
+					>
+					<template slot-scope="scope">
+						<span>{{scope.$index}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="role_name"
+					label="客户编码"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="remark"
+					label="客户名称"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="updatetime"
+					label="下单号"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="下单时间"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="揽件时间"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="始发地"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="目的地"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="运费"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="揽件重量"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="始发分拨重量"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="目的分拨重量"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="计泡重量"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="末端网点重量"
+					align="center"
+					>
+				</el-table-column>
+				<el-table-column
+					prop="status"
+					label="11天调整重量"
+					align="center"
+					>
+				</el-table-column>
+			</el-table>
+		</div>
+		<div style="text-align: right;margin-top: 10px;">
+			<el-pagination
+				background
+	      @size-change="sizeChange"
+	      @current-change="currentChange"
+	      :current-page="1"
+	      :page-sizes="[10, 20, 50]"
+	      :page-size="100"
+	      layout="total, sizes, prev, pager, next, jumper"
+	      :total="400">
+	    </el-pagination>
+		</div>
+	</el-card>
+	<div>
+	</el-dialog>
+	</div>
+</div>
+<script type="text/javascript">
+
+let province = ChineseDistricts[86];
+Vue.prototype.$ELEMENT = { size: 'medium', zIndex: 3000 };
+let app =	new Vue({
+		el:'#app',
+		data:{
+			searchForm: {
+				role_name:'',
+			},
+			checkTable:[],
+			rules: {
+				role_name: [
+					{ required: false, message: '请输入名称', trigger: 'blur' },
+				],
+				remark: [
+					{ required: true, message: '请输入角色说明', trigger: 'blur' },
+				],
+			},
+			tableData: [],
+			search: {
+				text: '',
+				querySearch: [],
+			},
+			detailFlag: false,
+			editFlag: false,
+			addFlag: false,
+		},
+		created() {
+
+		},
+		methods:{
+			addressChange(flag,value) {
+				console.log(flag,value)
+			},
+			change(name) {
+				this.city = ChineseDistricts[name]
+			},
+			submitForm(formName) {
+				this.$refs[formName].validate(async (valid) => {
+					if (valid) {
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
+			currentChange(i) {
+				this.detailFlag = true;
+			},
+			sizeChange(size) {
+				this.detailFlag = true;
+			},
+			import(i) {
+				this.detailFlag = true;
+			},
+			del(i) {
+				if(this.checkTable.length === 0){
+					this.$message({
+						type: 'error',
+						message: '请选中后，再删除'
+					});
+				}else {
+					this.$confirm('锁定后改用户无法登陆，请确认是否锁定？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(async () => {
+					}).catch(() => {
+					});
+				}
+			},
+			edit(i) {
+				this.editFlag = true;
+			},
+			add(i) {
+				this.detailFlag = true;
+			},
+			querySearch(queryString, cb) {
+				if (queryString.length >1) {
+					cb([{ "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
+          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
+          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },]);
+				}else {
+					cb([])
+				}
+			},
+			searchSelect(i) {
+				this.detailFlag = true;
+			},
+			showDetail(i) {
+				this.detailFlag = true;
+			}
+		}
+	})
+</script>
+</body>
+</html>

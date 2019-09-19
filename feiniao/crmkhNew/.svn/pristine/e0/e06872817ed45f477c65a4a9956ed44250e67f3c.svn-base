@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.customer.dao.CustomerDealPlanDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select `id`,`organization`,`customer_num`,`average_amount`,`deal_customer_num`,`deal_customer_amount`,`customer_deal_ratio`,`customer_deal_amount_ratio`,`wait_deal_customer_num`,`change_cooperation_amount`,`customer_change_ratio` from crmkhv2_customer_deal_plan where id = #{value}
+	</select>
+
+	<!-- 根据业务省id获取业务省名称 -->
+	<select id="getProvinceNameByProvinceId" resultType="java.lang.String">
+		select ProvinceName_b from ydserver.province_business
+		<where>
+			ProvinceID_b in
+			<foreach collection="list" item="provinceId" index="index" open="(" close=")" separator=",">
+				'${provinceId}'
+			</foreach>
+		</where>
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select `id`,`organization`,`customer_num`,`average_amount`,`deal_customer_num`,`deal_customer_amount`,`customer_deal_ratio`,`customer_deal_amount_ratio`,`wait_deal_customer_num`,`change_cooperation_amount`,`customer_change_ratio` from crmkhv2_customer_deal_plan
+        <where>
+		  <if test="organization != null and organization != ''"> and organization  like concat(concat('%',#{organization}),'%') </if>
+		</where>
+			order by id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+ 	<select id="count" resultType="java.lang.Integer">
+		select count(*) from crmkhv2_customer_deal_plan
+		 <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="organization != null and organization != ''"> and organization  like concat(concat('%',#{organization}),'%') </if>
+		  		  <if test="customerNum != null and customerNum != ''"> and customer_num = #{customerNum} </if>
+		  		  <if test="averageAmount != null and averageAmount != ''"> and average_amount = #{averageAmount} </if>
+		  		  <if test="dealCustomerNum != null and dealCustomerNum != ''"> and deal_customer_num = #{dealCustomerNum} </if>
+		  		  <if test="dealCustomerAmount != null and dealCustomerAmount != ''"> and deal_customer_amount = #{dealCustomerAmount} </if>
+		  		  <if test="customerDealRatio != null and customerDealRatio != ''"> and customer_deal_ratio = #{customerDealRatio} </if>
+		  		  <if test="customerDealAmountRatio != null and customerDealAmountRatio != ''"> and customer_deal_amount_ratio = #{customerDealAmountRatio} </if>
+		  		  <if test="waitDealCustomerNum != null and waitDealCustomerNum != ''"> and wait_deal_customer_num = #{waitDealCustomerNum} </if>
+		  		  <if test="changeCooperationAmount != null and changeCooperationAmount != ''"> and change_cooperation_amount = #{changeCooperationAmount} </if>
+		  		  <if test="customerChangeRatio != null and customerChangeRatio != ''"> and customer_change_ratio = #{customerChangeRatio} </if>
+		  		</where>
+	</select>
+
+	<insert id="save" parameterType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_customer_deal_plan
+		(
+			`province_name`,
+			`province_id`,
+			`mc`,
+			`mc_code`,
+			`branch_name`,
+			`branch_code`,
+			`customer_num`,
+			`average_amount`,
+			`deal_customer_num`,
+			`deal_customer_amount`,
+			`wait_deal_customer_num`,
+			`change_cooperation_amount`,
+			`success_cooperate_num`,
+			`time`
+		)
+		values
+		(
+			#{provinceName},
+			#{provinceId},
+			#{mc},
+			#{mcCode},
+			#{branchName},
+			#{branchCode},
+			#{customerNum},
+			#{averageAmount},
+			#{dealCustomerNum},
+			#{dealCustomerAmount},
+			#{waitDealCustomerNum},
+			#{changeCooperationAmount},
+			#{successCooperateNum},
+			#{time}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		update crmkhv2_customer_deal_plan 
+		<set>
+			<if test="provinceName != null">`province_name` = #{provinceName}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="mc != null">`mc` = #{mc}, </if>
+			<if test="mcCode != null">`mc_code` = #{mcCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="customerCode != null">`customer_code` = #{customerCode}, </if>
+			<if test="customerNum != null">`customer_num` = #{customerNum}, </if>
+			<if test="averageAmount != null">`average_amount` = #{averageAmount}, </if>
+			<if test="dealCustomerNum != null">`deal_customer_num` = #{dealCustomerNum}, </if>
+			<if test="dealCustomerAmount != null">`deal_customer_amount` = #{dealCustomerAmount},</if>
+			<if test="waitDealCustomerNum != null">`wait_deal_customer_num` = #{waitDealCustomerNum},</if>
+			<if test="changeCooperationAmount != null">`change_cooperation_amount` = #{changeCooperationAmount},</if>
+			<if test="successCooperateNum != null">`success_cooperate_num` = #{successCooperateNum},</if>
+			<!--<if test="time != null">`time` = #{time}</if>-->
+		</set>
+		where branch_code = #{branchCode} and `time` = #{time} limit 1;
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_customer_deal_plan where branch_code = #{branchCode} limit 1;
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_customer_deal_plan where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+<!-- 获取省公司下面的所有网点的上传数量 -->
+	<select id="getNumByProvinceName" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select count(*) customer_num,SUM(`day_average_amount`) average_amount from crmkhv2_not_cooperate_customer
+		<where>
+			province=#{organization}
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	<!-- 获取1级网点下面的所有网点的上传数量 -->
+	<select id="getNumByMcCode" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select mc organization,count(*) customer_num,SUM(`day_average_amount`) average_amount from crmkhv2_not_cooperate_customer
+		<where>
+			mc_code =#{mcCode}
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		group by mcCode
+	</select>
+<!-- 处理客户数,处理客户单量 -->
+	<select id="getNumByNotState" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select count(*) customer_num,SUM(`day_average_amount`) average_amount from crmkhv2_not_cooperate_customer
+		<where>
+			state <![CDATA[ <> ]]> #{state}
+			<if test="organization != null and organization != ''"> and `province` = #{organization} </if>
+			<if test="branchCode != null and branchCode != ''"> and `branch_Code` in (#{branchCode}) </if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	<!-- 待处理客户数 -->
+	<select id="getNumByState" resultType="java.lang.Integer">
+		select count(*) customer_num from crmkhv2_not_cooperate_customer
+		<where>
+			state = #{state}
+			<if test="organization != null and organization != ''"> and `province` = #{organization} </if>
+			<if test="branchCode != null and branchCode != ''"> and `branch_Code` in (#{branchCode}) </if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	<!-- 获取所有省公司名称 -->
+	<select id="getProvinceNameAll" resultType="java.lang.String">
+		select province province_name from crmkhv2_not_cooperate_customer
+		<where>
+			<if test="organization != null and organization != ''"> and `province` = #{organization}</if>
+			<if test="state != null and state != ''"> and `state` = #{state} </if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		group by province
+	</select>
+
+	<!-- 根据客户编码获取揽件量(转化合作单量) -->
+	<select id="getChangeCooperationAmount" resultType="java.lang.String">
+		select SUM(order_sum) from tmpv2_cust_od_sum
+		<where>
+			customer_id in (#{customerIds})
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `qu_date` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `qu_date` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	<!-- 根据省名字获取省id(这个是最新的表),endDate在这个表的时间范围内 -->
+    <select id="getMcCodeByProvinceName" resultType="java.lang.String">
+		select mc_code from crmkhv2_not_cooperate_customer where province = #{organization} and time <![CDATA[ <= ]]> #{startDate} and time <![CDATA[ >= ]]> #{endDate};
+	</select>
+	<!-- 根据省名字获取省id(这个是最新的表),endDate在这个表的时间范围内 -->
+	<select id="getBranchId" resultType="java.lang.String">
+		select bm from ydserver.gs where sjdw=#{branchCode};
+	</select>
+	<!-- 获取一级网点下面的所有网点的上传数量 -->
+	<select id="getNumByDateAndMcCode" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select count(*) customer_num,SUM(`day_average_amount`) average_amount from crmkhv2_not_cooperate_customer
+		<where>
+			<if test="organization != null and organization != ''"> and province = #{organization}</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY mc_code
+	</select>
+
+
+	<!-- 获取省下面所有的1级网点的汇总数据(通过省公司下钻进去的) -->
+	<select id="getDataByProvinceName" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select (@i :=@i + 1) AS `id`, `mc` organization,`mc_code`,`customer_code`,sum(`customer_num`) customer_num,sum(`average_amount`) average_amount,sum(`deal_customer_num`) deal_customer_num,sum(`deal_customer_amount`) deal_customer_amount,
+		sum(`wait_deal_customer_num`) wait_deal_customer_num,sum(`change_cooperation_amount`) change_cooperation_amount,sum(`success_cooperate_num`) success_cooperate_num, CONCAT(round(sum(`deal_customer_num`)/ sum(`customer_num`)*100,0),'%') as customerDealRatio,
+		CONCAT(round(sum(`deal_customer_amount`)/ sum(`average_amount`)*100,0),'%') as customerDealAmountRatio,CONCAT(round(sum(`success_cooperate_num`)/ sum(`customer_num`)*100,0),'%') as customerChangeRatio
+		from crmkhv2_customer_deal_plan,(SELECT @i := 0) AS it
+		<where>
+			<if test="organizationH != null and organizationH != ''"> and `province_name` = #{organizationH}</if>
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY mc_code
+		order by id ASC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="countDataByProvinceName" resultType="java.lang.Integer">
+		select count(1) from crmkhv2_customer_deal_plan
+		<where>
+			<if test="organizationH != null and organizationH != ''"> and `province_name` = #{organizationH}</if>
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	
+	<!-- 总部看所有省的汇总数据 -->
+	<select id="getAllProvinceHuiZongData" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select (@i :=@i + 1) AS `id`, `province_name` organization,`customer_code`,sum(`customer_num`) customer_num,sum(`average_amount`) average_amount,sum(`deal_customer_num`) deal_customer_num,sum(`deal_customer_amount`) deal_customer_amount,
+		sum(`wait_deal_customer_num`) wait_deal_customer_num,sum(`change_cooperation_amount`) change_cooperation_amount,sum(`success_cooperate_num`) success_cooperate_num, CONCAT(round(sum(`deal_customer_num`)/ sum(`customer_num`)*100,0),'%') as customerDealRatio,
+		CONCAT(round(sum(`deal_customer_amount`)/ sum(`average_amount`)*100,0),'%') as customerDealAmountRatio,CONCAT(round(sum(`success_cooperate_num`)/ sum(`customer_num`)*100,0),'%') as customerChangeRatio
+		from crmkhv2_customer_deal_plan,(SELECT @i := 0) AS it
+		<where>
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY province_id
+		order by id ASC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="countAllProvinceHuiZongData" resultType="java.lang.Integer">
+		select count(1) from crmkhv2_customer_deal_plan
+		<where>
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	
+	<!-- 省总看到自己所管辖的省的汇总数据 -->
+	<select id="getProvinceHuiZongDataByProvinceIds" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select (@i :=@i + 1) AS `id`,`province_id`,`province_name` organization,`customer_code`,sum(`customer_num`) customer_num,sum(`average_amount`) average_amount,sum(`deal_customer_num`) deal_customer_num,sum(`deal_customer_amount`) deal_customer_amount,
+		sum(`wait_deal_customer_num`) wait_deal_customer_num,sum(`change_cooperation_amount`) change_cooperation_amount,sum(`success_cooperate_num`) success_cooperate_num, CONCAT(round(sum(`deal_customer_num`)/ sum(`customer_num`)*100,0),'%') as customerDealRatio,
+		CONCAT(round(sum(`deal_customer_amount`)/ sum(`average_amount`)*100,0),'%') as customerDealAmountRatio,CONCAT(round(sum(`success_cooperate_num`)/ sum(`customer_num`)*100,0),'%') as customerChangeRatio
+		from crmkhv2_customer_deal_plan,(SELECT @i := 0) AS it
+		<where>
+			`province_id` in (#{provinceIds})
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY province_id
+		order by id ASC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="countProvinceHuiZongDataByProvinceIds" resultType="java.lang.Integer">
+		select count(1) from crmkhv2_customer_deal_plan
+		<where>
+			`province_id` in (#{provinceIds})
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	
+	<!-- 1级网点所看到的1级网点的汇总数据 -->
+	<select id="getMcHuiZongDataByMcCode" resultType="com.yunda.base.feiniao.customer.domain.CustomerDealPlanDO">
+		select (@i :=@i + 1) AS `id`, `mc` organization,`mc_code`,`customer_code`,sum(`customer_num`) customer_num,sum(`average_amount`) average_amount,sum(`deal_customer_num`) deal_customer_num,sum(`deal_customer_amount`) deal_customer_amount,
+		sum(`wait_deal_customer_num`) wait_deal_customer_num,sum(`change_cooperation_amount`) change_cooperation_amount,sum(`success_cooperate_num`) success_cooperate_num, CONCAT(round(sum(`deal_customer_num`)/ sum(`customer_num`)*100,0),'%') as customerDealRatio,
+		CONCAT(round(sum(`deal_customer_amount`)/ sum(`average_amount`)*100,0),'%') as customerDealAmountRatio,CONCAT(round(sum(`success_cooperate_num`)/ sum(`customer_num`)*100,0),'%') as customerChangeRatio
+		from crmkhv2_customer_deal_plan,(SELECT @i := 0) AS it
+		<where>
+			 and `mc_code` = #{mcCode}
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY mc_code
+		order by id ASC
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="countMcHuiZongDataByMcCode" resultType="java.lang.Integer">
+		select count(1) from crmkhv2_customer_deal_plan
+		<where>
+			 and `mc_code` = #{mcCode}
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	
+	<!-- 下钻获取揽件量 -->
+	<select id="getOrderNumByProvinceName" resultType="java.lang.String">
+		select IFNULL(SUM(order_num),'0') change_cooperation_amount from crmkhv2_change_cooperate_order_num
+		<where>
+			<if test="organizationH != null and organizationH != ''"> and `province_name` = #{organizationH}</if>
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="tongjiStartDate != null and tongjiStartDate != '' and tongjiEndDate != null and tongjiEndDate != ''"> and `time` &gt;= date_format (#{tongjiStartDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{tongjiEndDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY mc_code
+	</select>
+	<!-- 获取所有省各自的揽件量统计 -->
+	<select id="getAllProvinceOrderNum" resultType="java.lang.String">
+		select IFNULL(SUM(order_num),'0') change_cooperation_amount from crmkhv2_change_cooperate_order_num
+		<where>
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="tongjiStartDate != null and tongjiStartDate != '' and tongjiEndDate != null and tongjiEndDate != ''"> and `time` &gt;= date_format (#{tongjiStartDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{tongjiEndDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY province_name
+	</select>
+	<!-- 获取所有省各自的揽件量统计 -->
+	<select id="getProvinceOrderNum" resultType="java.lang.String">
+		select IFNULL(SUM(order_num),'0') change_cooperation_amount from crmkhv2_change_cooperate_order_num
+		<where>
+			`province_id` = #{provinceId}
+			<if test="organization != null and organization != ''"> and `province_name` like concat(concat('%',#{organization}),'%')</if>
+			<if test="tongjiStartDate != null and tongjiStartDate != '' and tongjiEndDate != null and tongjiEndDate != ''"> and `time` &gt;= date_format (#{tongjiStartDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{tongjiEndDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+	<!-- 1级网点的揽件量统计 -->
+	<select id="getMcOrderNum" resultType="java.lang.String">
+		select IFNULL(SUM(order_num),'0') change_cooperation_amount from crmkhv2_change_cooperate_order_num
+		<where>
+			and `mc_code` = #{mcCode}
+			<if test="organization != null and organization != ''"> and `mc` like concat(concat('%',#{organization}),'%')</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+		GROUP BY mc_code
+	</select>
+</mapper>

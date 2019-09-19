@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${warningHandle.id}"  type="hidden">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">品类：</label>
+								<div class="col-sm-8">
+									<input id="branchCategory" required name="branchCategory" th:value="${warningHandle.branchCategory}" class="form-control" maxlength="10" placeholder="限定10个字"/>
+								</div>
+							</div>	
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">均重(Kg)：</label>
+								<div class="col-sm-8">
+									<!-- <input id="branchAveWeight" name="branchAveWeight" th:value="${warningHandle.branchAveWeight}" 
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}"  type="number" min="0" max="100000"> -->
+									 <input id="branchAveWeight" required name="branchAveWeight" th:value="${warningHandle.branchAveWeight}" class="form-control" maxlength="10" placeholder="限定10个字"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">网点反馈类型：</label>
+								<div class="col-sm-8">
+									<!-- <input id="branchDealType" name="branchDealType" th:value="${warningHandle.branchDealType}" class="form-control" type="text"> -->
+									<input id="branchDealTypeHiden" th:value="${warningHandle.branchDealType}" type="hidden"/>
+									<select id = "branchDealType" required name="branchDealType" class="form-control">
+										<option value="">请选择</option>
+										<option value="A">A同行竞争(因价格、服务质量不足等造成客户流失)</option>
+										<option value="B">B客户原因(客户无货、被封店、等)</option>
+										<option value="C">C促销影响(客户促销后的短期业务量不稳定)</option>
+										<option value="D">D称重问题(称重导致流失)</option>
+										<option value="E">E其他(季节性、海关政策等)</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">网点反馈内容：</label>
+								<div class="col-sm-8">
+									<textarea rows="10" cols="60" id="branchDealDesc" name="branchDealDesc" th:text="${warningHandle.branchDealDesc}" maxlength="100" placeholder="限定100个字" required/>
+								</div>
+							</div>
+							<div style="color:red; margin:20px 30px; text-align:left;">
+							1.网点上传的信息必须真实有效<br />
+							2.网点反馈类型选择价格政策必须提供同行的价格，总部会进行核实<br />
+							3.网点在收到预警反馈订单后必须在当天16:00点之前把反馈信息提交给总部，16:00点之后未反馈总部会按每票10元罚款<br />
+							</div>
+							
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/warning/warningHandle/wdFeedback.js}">
+	</script>
+</body>
+</html>

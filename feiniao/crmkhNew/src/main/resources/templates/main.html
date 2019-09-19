@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢迎页</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" th:href="@{css/bootstrap.min.css}">
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">欢迎：<span th:text="${session.AUTH_USER.username}"></span></div>
+     <div class="admin_login" id="facelogin" style ="display: none">
+				<div id="media">
+					<video id="video" width="351" height="250" autoplay></video>
+					<canvas id="canvas" width="400" height="300"></canvas>
+				</div>
+			</div>
+</div>
+</body>
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<!––[ifIE]>
+<!--[if lt IE 9]>
+	 <script src="js/jquery-1.11.3.js?v=2.1.4"></script>
+<![endif]-->
+<![endif]––>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+<script th:src="@{/js/MediaStreamRecorder.js}"></script>
+<script th:src="@{/js/respond.js?v=2.1.4}"></script>
+<script th:src="@{/js/appjs/heartbeat.js}"></script>
+<script type="text/javascript">
+$(function() {
+	window.setInterval(faceCheck, 10000);//10秒进行人脸检测
+});
+
+function faceCheck(){
+	context.drawImage(video, 0, 0, 400, 300);
+	var base = getBase64();
+	$.ajax({
+		type : "POST",
+		url : "/crmkh/system/warningSMS",
+		async:false,
+		data : {
+			"base" : base
+		},
+		success : function(r) {
+			if(r.code=="809"){
+                alert(r.message);
+                //直接跳转到登录页面
+                parent.location.href = './logout';
+            }
+		}
+	});
+}
+
+
+//人脸检测
+var video = document.getElementById("video"); // 获取video标签
+var context = canvas.getContext("2d");
+var con = {
+	audio : false,
+	video : {
+		width : 1980,
+		height : 1024,
+	}
+};
+
+navigator.mediaDevices.getUserMedia(con).then(function(stream) {
+	try {
+		video.src = window.URL.createObjectURL(stream);
+	} catch (e) {
+		console.log(e);
+		video.srcObject = stream;
+	}
+	video.onloadmetadate = function(e) {
+		video.play();
+	}
+});
+
+function getBase64() {
+	var imgSrc = document.getElementById("canvas").toDataURL("image/png");
+	return imgSrc.split("base64,")[1];
+}
+
+</script>
+</html>

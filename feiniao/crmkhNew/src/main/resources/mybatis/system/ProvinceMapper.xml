@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.ProvinceDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.ProvinceDO">
+		select `ProvinceID`,`ProvinceName`,`miniName`,`bigarea`,`rg_id`,`order_id`,`maintain_state` from sys_province where ProvinceID = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.ProvinceDO">
+		select `ProvinceID`,`ProvinceName`,`miniName`,`bigarea`,`rg_id`,`order_id`,`maintain_state` from sys_province
+        <where>  
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="mininame != null and mininame != ''"> and miniName = #{mininame} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="rgId != null and rgId != ''"> and rg_id = #{rgId} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		  <if test="maintainState != null and maintainState != ''"> and maintain_state = #{maintainState} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by ProvinceID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+		<!-- 获取可维护的省总公司 -->
+	<select id="maintainProvincelist" resultType="com.yunda.base.system.domain.ProvinceDO">
+		select `ProvinceID`,`ProvinceName` from sys_province 
+        <where>  
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="mininame != null and mininame != ''"> and miniName = #{mininame} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="rgId != null and rgId != ''"> and rg_id = #{rgId} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		  <if test="maintainState != null and maintainState != ''"> and maintain_state = #{maintainState} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by ProvinceID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="getAllProvinces" resultType="com.yunda.base.system.domain.ProvinceDO">
+		select ProvinceID bm,ProvinceName mc from sys_province where maintain_state = 1 ORDER BY 'code' ASC;
+	
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_province
+		 <where>  
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="mininame != null and mininame != ''"> and miniName = #{mininame} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="rgId != null and rgId != ''"> and rg_id = #{rgId} </if>
+		  		  <if test="orderId != null and orderId != ''"> and order_id = #{orderId} </if>
+		  		  <if test="maintainState != null and maintainState != ''"> and maintain_state = #{maintainState} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.ProvinceDO">
+		insert into sys_province
+		(
+			`ProvinceID`, 
+			`ProvinceName`, 
+			`miniName`, 
+			`bigarea`, 
+			`rg_id`, 
+			`order_id`, 
+			`maintain_state`
+		)
+		values
+		(
+			#{provinceid}, 
+			#{provincename}, 
+			#{mininame}, 
+			#{bigarea}, 
+			#{rgId}, 
+			#{orderId}, 
+			#{maintainState}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.ProvinceDO">
+		update sys_province 
+		<set>
+			<if test="provincename != null">`ProvinceName` = #{provincename}, </if>
+			<if test="mininame != null">`miniName` = #{mininame}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="rgId != null">`rg_id` = #{rgId}, </if>
+			<if test="orderId != null">`order_id` = #{orderId}, </if>
+			<if test="maintainState != null">`maintain_state` = #{maintainState}</if>
+		</set>
+		where ProvinceID = #{provinceid}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_province where ProvinceID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_province where ProvinceID in 
+		<foreach item="provinceid" collection="array" open="(" separator="," close=")">
+			#{provinceid}
+		</foreach>
+	</delete>
+
+</mapper>

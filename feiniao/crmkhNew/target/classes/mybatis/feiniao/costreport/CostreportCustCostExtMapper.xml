@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.costreport.dao.CostreportCustCostExtDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostExtDO">
+		select `record_id`,`start_account_dt`,`end_account_dt`,`people_cost`,`materiel_cost`,`tsf_cost`,`hh_cost`,`taxes_cost`,`packing_charge`,`packing_charge_flag`,`other_cost`,`branch_code`,`branch_name`,`customer_id`,`customer_name`,`customer_source_type` from crmkh_costreport_cust_cost_ext where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostExtDO">
+				SELECT                                                                          
+					 	*                                                              
+					 FROM                                                                            
+					 	crmkh_costreport_cust_cost_finish	 t2                                            
+					 LEFT JOIN crmkh_costreport_cust_cost_ext t1 ON t1.customer_id = t2.customer_id  and date_format(t1.end_account_dt,'%Y%m')=#{accountDt}
+					 AND t1.branch_code = t2.branch_code   
+        		<where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="startAccountDt != null and startAccountDt != ''"> and start_account_dt = #{startAccountDt} </if>
+		  		  <if test="endAccountDt != null and endAccountDt != ''"> and end_account_dt = #{endAccountDt} </if>
+		  		  <if test="peopleCost != null and peopleCost != ''"> and people_cost = #{peopleCost} </if>
+		  		  <if test="materielCost != null and materielCost != ''"> and materiel_cost = #{materielCost} </if>
+		  		  <if test="tsfCost != null and tsfCost != ''"> and tsf_cost = #{tsfCost} </if>
+		  		  <if test="hhCost != null and hhCost != ''"> and hh_cost = #{hhCost} </if>
+		  		  <if test="taxesCost != null and taxesCost != ''"> and taxes_cost = #{taxesCost} </if>
+		  		  <if test="packingCharge != null and packingCharge != ''"> and packing_charge = #{packingCharge} </if>
+		  		  <if test="packingChargeFlag != null and packingChargeFlag != ''"> and packing_charge_flag = #{packingChargeFlag} </if>
+		  		  <if test="otherCost != null and otherCost != ''"> and other_cost = #{otherCost} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>	
+	
+	
+	<select id="listDetail" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostDO">
+			SELECT                                                                           
+			 	t2.record_id recordId,                                                              
+			 	date_format(t2.account_dt,'%Y/%m/%d') as accountDt, date_format(t2.sender_account_dt,'%Y/%m/%d') as senderAccountDt,date_format(t2.td_account_dt,'%Y/%m/%d') as tdAccountDt,                                                          
+			 	t2.customer_id customerId,                                                            
+			    t2.shipment_no shipmentNo,                                                          
+			 	t2.start_province_id startProvinceId,                                                        
+			 	t2.end_province_id endProvinceId,                                                          
+			 	sum(ifnull(t2.weight,0)) weight,                                                                   
+			 	sum(ifnull(t2.tsf_fee,0)) tsfFee,                                                                  
+			 	sum(ifnull(t2.delivery_fee,0)) deliveryFee,  sum(ifnull(t2.delivery_additional_weight_fee,0)) deliveryAdditionalWeightFee, sum(ifnull(t2.delivery_balance_fee,0)) deliveryBalanceFee,                                                             
+			 	sum(ifnull(t2.shipment_fee,0)) shipmentFee,t2.customer_source_type customerSourceType,t2.branch_code branchCode,                                                              
+			 	sum(ifnull(t2.scan_fee,0)) scanFee                                                                 
+			 FROM                                                                             
+			 crmkh_costreport_order_cost t2   
+																						
+        <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  	<!--  	  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>-->
+		  	
+		  		  <if test="accountDt != null and accountDt != ''"> and t2.sender_account between DATE_FORMAT(#{accountDtStart},'%Y-%m-%d') and DATE_FORMAT(#{accountDtEnd},'%Y-%m-%d') </if>
+		  		  <if test="shipmentNo != null and shipmentNo != ''"> and t2.shipment_no = #{shipmentNo} </if>
+		  		  <if test="startCityId != null and startCityId != ''"> and t2.start_city_id = #{startCityId} </if>
+		  		  <if test="startProvinceId != null and startProvinceId != ''"> and t2.start_province_id = #{startProvinceId} </if>
+		  		  <if test="endCityId != null and endCityId != ''"> and end_city_id = #{endCityId} </if>
+		  		  <if test="endProvinceId != null and endProvinceId != ''"> and end_province_id = #{endProvinceId} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="firstWeight != null and firstWeight != ''"> and first_weight = #{firstWeight} </if>
+		  		  <if test="firstWeightFee != null and firstWeightFee != ''"> and first_weight_fee = #{firstWeightFee} </if>
+		  		  <if test="additionalWeight != null and additionalWeight != ''"> and additional_weight = #{additionalWeight} </if>
+		  		  <if test="additionalWeightFee != null and additionalWeightFee != ''"> and additional_weight_fee = #{additionalWeightFee} </if>
+		  		  <if test="fee != null and fee != ''"> and fee = #{fee} </if>
+		  		  <if test="tsfFee != null and tsfFee != ''"> and tsf_fee = #{tsfFee} </if>
+		  		  <if test="deliveryFee != null and deliveryFee != ''"> and delivery_fee = #{deliveryFee} </if>
+		  		  <if test="deliveryAdditionalWeightFee != null and deliveryAdditionalWeightFee != ''"> and delivery_additional_weight_fee = #{deliveryAdditionalWeightFee} </if>
+		  		  <if test="deliveryBalanceFee != null and deliveryBalanceFee != ''"> and delivery_balance_fee = #{deliveryBalanceFee} </if>
+		  		  <if test="shipmentFee != null and shipmentFee != ''"> and shipment_fee = #{shipmentFee} </if>
+		  		  <if test="scanFee != null and scanFee != ''"> and scan_fee = #{scanFee} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and t2.branch_code = #{branchCode} </if>
+		  		  <if test="customerId != null and customerId != ''"> and  t2.customer_id = #{customerId} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="chargeModeFlag != null and chargeModeFlag != ''"> and charge_mode_flag = #{chargeModeFlag} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="tdAccountDt != null and tdAccountDt != ''"> and td_account_dt = #{tdAccountDt} </if>
+		  		  <if test="senderAccountDt != null and senderAccountDt != ''"> and sender_account_dt = #{senderAccountDt} </if>
+		  		  <if test="orderAccountDt != null and orderAccountDt != ''"> and order_account_dt = #{orderAccountDt} </if>
+				  <if test="senderAccount != null and senderAccount != ''"> and sender_account = #{senderAccount} </if>
+		  				  		
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                GROUP BY   t2.shipment_no order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                GROUP BY   t2.shipment_no order by shipment_no desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<insert id="groupCostExtData" >
+	insert into crmkh_costreport_cust_cost_ext		
+		select
+			null, 
+			null, 
+			#{date}, 
+			0.00, 
+			0.00, 
+			0.00, 
+			0.00, 
+			0.00, 
+			0.00, 
+			0, 
+			0.00, 
+			gs, 
+			'', 
+			concat(gs,bm), 
+			'',
+			'' 
+		from ydserver.cqkh 
+	
+	
+	</insert>
+	
+ 	<select id="count" resultType="int">
+		SELECT                                                                           
+		 	count(*)                                                                
+		 FROM                                                                             
+			 crmkh_costreport_order_cost t2  																					
+           <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  	<!--  	  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>-->
+		  	
+		  		  <if test="accountDt != null and accountDt != ''"> and t2.sender_account between DATE_FORMAT(#{accountDtStart},'%Y-%m-%d') and DATE_FORMAT(#{accountDtEnd},'%Y-%m-%d') </if>
+		  		  <if test="shipmentNo != null and shipmentNo != ''"> and t2.shipment_no = #{shipmentNo} </if>
+		  		  <if test="startCityId != null and startCityId != ''"> and t2.start_city_id = #{startCityId} </if>
+		  		  <if test="startProvinceId != null and startProvinceId != ''"> and t2.start_province_id = #{startProvinceId} </if>
+		  		  <if test="endCityId != null and endCityId != ''"> and end_city_id = #{endCityId} </if>
+		  		  <if test="endProvinceId != null and endProvinceId != ''"> and end_province_id = #{endProvinceId} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="firstWeight != null and firstWeight != ''"> and first_weight = #{firstWeight} </if>
+		  		  <if test="firstWeightFee != null and firstWeightFee != ''"> and first_weight_fee = #{firstWeightFee} </if>
+		  		  <if test="additionalWeight != null and additionalWeight != ''"> and additional_weight = #{additionalWeight} </if>
+		  		  <if test="additionalWeightFee != null and additionalWeightFee != ''"> and additional_weight_fee = #{additionalWeightFee} </if>
+		  		  <if test="fee != null and fee != ''"> and fee = #{fee} </if>
+		  		  <if test="tsfFee != null and tsfFee != ''"> and tsf_fee = #{tsfFee} </if>
+		  		  <if test="deliveryFee != null and deliveryFee != ''"> and delivery_fee = #{deliveryFee} </if>
+		  		  <if test="deliveryAdditionalWeightFee != null and deliveryAdditionalWeightFee != ''"> and delivery_additional_weight_fee = #{deliveryAdditionalWeightFee} </if>
+		  		  <if test="deliveryBalanceFee != null and deliveryBalanceFee != ''"> and delivery_balance_fee = #{deliveryBalanceFee} </if>
+		  		  <if test="shipmentFee != null and shipmentFee != ''"> and shipment_fee = #{shipmentFee} </if>
+		  		  <if test="scanFee != null and scanFee != ''"> and scan_fee = #{scanFee} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and t2.branch_code = #{branchCode} </if>
+		  		  <if test="customerId != null and customerId != ''"> and  t2.customer_id = #{customerId} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="chargeModeFlag != null and chargeModeFlag != ''"> and charge_mode_flag = #{chargeModeFlag} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="tdAccountDt != null and tdAccountDt != ''"> and td_account_dt = #{tdAccountDt} </if>
+		  		  <if test="senderAccountDt != null and senderAccountDt != ''"> and sender_account_dt = #{senderAccountDt} </if>
+		  		  <if test="orderAccountDt != null and orderAccountDt != ''"> and order_account_dt = #{orderAccountDt} </if>
+				  <if test="senderAccount != null and senderAccount != ''"> and sender_account = #{senderAccount} </if>
+		  				  		
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostExtDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkh_costreport_cust_cost_ext
+		(
+			`start_account_dt`, 
+			`end_account_dt`, 
+			`people_cost`, 
+			`materiel_cost`, 
+			`tsf_cost`, 
+			`hh_cost`, 
+			`taxes_cost`, 
+			`packing_charge`, 
+			`packing_charge_flag`, 
+			`other_cost`, 
+			`branch_code`, 
+			`branch_name`, 
+			`customer_id`, 
+			`customer_name`, 
+			`customer_source_type`
+		)
+		values
+		(
+			#{startAccountDt}, 
+			#{endAccountDt}, 
+			#{peopleCost}, 
+			#{materielCost}, 
+			#{tsfCost}, 
+			#{hhCost}, 
+			#{taxesCost}, 
+			#{packingCharge}, 
+			#{packingChargeFlag}, 
+			#{otherCost}, 
+			#{branchCode}, 
+			#{branchName}, 
+			#{customerId}, 
+			#{customerName}, 
+			#{customerSourceType}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportCustCostExtDO">
+		update crmkh_costreport_cust_cost_ext 
+		<set>
+			<if test="startAccountDt != null">`start_account_dt` = #{startAccountDt}, </if>
+			<if test="endAccountDt != null">`end_account_dt` = #{endAccountDt}, </if>
+			<if test="peopleCost != null">`people_cost` = #{peopleCost}, </if>
+			<if test="materielCost != null">`materiel_cost` = #{materielCost}, </if>
+			<if test="tsfCost != null">`tsf_cost` = #{tsfCost}, </if>
+			<if test="hhCost != null">`hh_cost` = #{hhCost}, </if>
+			<if test="taxesCost != null">`taxes_cost` = #{taxesCost}, </if>
+			<if test="packingCharge != null">`packing_charge` = #{packingCharge}, </if>
+			<if test="packingChargeFlag != null">`packing_charge_flag` = #{packingChargeFlag}, </if>
+			<if test="otherCost != null">`other_cost` = #{otherCost}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="customerSourceType != null">`customer_source_type` = #{customerSourceType}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_costreport_cust_cost_ext where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_costreport_cust_cost_ext where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

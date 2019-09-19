@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<script type="text/javascript" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+<head>
+	<style>
+		.form-control {
+			display: inline-block;
+			width: 66%;
+		}
+	</style>
+</head>
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<form id="searchUser">
+						<div class="row">
+							<input th:value="${customerDealPlanBO.organizationH}"  type="hidden" name="organizationH" id="organizationH" class="form-control" >
+							<input th:value="${customerDealPlanBO.startDate}"  type="hidden"  name="startDateH" id="startDateH" class="form-control" >
+                           	<input th:value="${customerDealPlanBO.endDate}"  type="hidden"  name="endDateH" id="endDateH" class="form-control" >
+						</div>
+						<div class="row"
+							 style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+							<div class="layui-inline" style="margin-left: -8px;">
+								<label class="control-label">上传日期：</label>
+								<!-- 默认时间是这个月的1号到昨天 -->
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="开始时间" th:value="${customerDealPlanBO.startDate}" autocomplete="off" required  lay-verify="required" class="layui-input" id="startDate" style="height:34px;border-color:#ccc;">
+								</div>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="结束时间" th:value="${customerDealPlanBO.endDate}" autocomplete="off" required  lay-verify="required" class="layui-input" id="endDate" style="height:34px;border-color:#ccc;">
+								</div>
+							</div>
+							<div class="layui-inline" style="margin-left: 24px;">
+								<label class="control-label">统计日期：</label>
+								<!-- 默认时间是这个月的1号到昨天 -->
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="开始时间" th:value="${customerDealPlanBO.startDate}" autocomplete="off" required  lay-verify="required" class="layui-input" id="tongjiStartDate" style="height:34px;border-color:#ccc;">
+								</div>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="结束时间" th:value="${customerDealPlanBO.endDate}" autocomplete="off" required  lay-verify="required" class="layui-input" id="tongjiEndDate" style="height:34px;border-color:#ccc;">
+								</div>
+							</div>
+							<div class="col-md-4" style="margin-left: -75px;">
+								<label style="margin-left: 82px;margin-top: 6px;">组织：</label> <input type="text" name="organization" style="width: 55%"
+															  id="organization" class="form-control">
+							</div>
+							<div class="col-md-9" style="width:300px; margin-left: 73px; float: right; margin-top: 15px;">
+								<input type="button" value="查询" onclick="query()" class="btn  btn-warning">
+								<input type="button" value="重置" onclick="resetForm()" class="btn  btn-success">
+								<button shiro:hasPermission="customer:customerDealPlan:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')" style="margin-right:50px;">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+							</div>
+						</div>
+					</form>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerDealPlan:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerDealPlan:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerDealPlan:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/customerDealPlan/customerDealPlan.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

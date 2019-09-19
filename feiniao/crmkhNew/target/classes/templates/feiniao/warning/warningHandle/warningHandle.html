@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-content">
+					<form id="searchExampleData" class="form-horizontal m-t">
+						<div class="form-group">
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">客户编码：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchCustomerId" id="searchCustomerId" class="form-control" placeholder="客户编码">
+							</div>
+							<!-- <label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">客户名称：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchCustomerName" id="searchCustomerName" class="form-control" placeholder="客户名称">
+							</div> -->
+							
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">网点编码：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchGs" id="searchGs" class="form-control" placeholder="网点编码">
+							</div>
+						</div>
+						<div class="form-group">	
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">客户类型：</label> 
+							<div class="col-md-2  col-sm-2">
+									<select id = "searchPriceLevel" name="searchPriceLevel" class="form-control">
+										<option value="">请选择</option>
+										<option value="b">B类</option>
+										<option value="c">C类</option>
+										<option value="d">D类</option>
+										<option value="e">E类</option>
+										<option value="f">F类</option>
+										<option value="g">G类</option>
+									</select>
+							</div>
+							
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">反馈类型：</label> 
+							<div class="col-md-2  col-sm-2">
+									<select id = "searchBranchDealType" name="searchBranchDealType" class="form-control">
+										<option value="">请选择</option>
+										<option value="A">A同行竞争(因价格、服务质量不足等造成客户流失)</option>
+										<option value="B">B客户原因(客户无货、被封店、等)</option>
+										<option value="C">C促销影响(客户促销后的短期业务量不稳定)</option>
+										<option value="D">D称重问题(称重导致流失)</option>
+										<option value="E">E其他(季节性、海关政策等)</option>
+									</select>
+							</div>
+						</div>
+						<div class="form-group">	
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">反馈状态：</label> 
+							<div class="col-md-2  col-sm-2">
+									<select id = "searchFeedbackStatus" name="searchFeedbackStatus" class="form-control">
+										<option value="">请选择</option>
+										<option value="A">网点待处理</option>
+										<option value="B">网点超时待处理</option>
+										<option value="C">省总待处理</option>
+										<option value="D">总部待处理</option>
+										<option value="E">总部已处理</option>
+									</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">预警日期：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchStartDate" id="searchStartDate" class="form-control" placeholder="开始时间">
+							</div>
+							<div style="float:left;margin-top: 6px;">—</div>
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchEndDate" id="searchEndDate" class="form-control" placeholder="结束时间">
+							</div>
+						</div>	
+						<div class="form-group">
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">大区：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchBigarea" id="searchBigarea" class="form-control" placeholder="大区">
+							</div>
+							
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">省份：</label> 
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchProvinceName" id="searchProvinceName" class="form-control" placeholder="省份">
+							</div>
+						</div>
+						<div class="form-group">	
+							<div class="group-btn" id="groop_btn">
+								<div class="col-sm-1 col-md-1 col-sm-offset-1 col-md-offset-1">
+									<input type="button" value="查询" onclick="query()" class="btn btn-warning">
+								</div>
+								<div class="col-sm-1 col-md-1">
+									<input type="button" value="重置" onclick="resetForm()" class="btn btn-success">
+								</div>
+								<button shiro:hasPermission="warning:warningHandle:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+							</div>
+							<div style="color:red; margin:20px 30px; text-align:left;">备注：<br />
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上<br />
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>	
+						</div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="warning:warningHandle:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="warning:warningHandle:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="warning:warningHandle:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="warning:warningHandle:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<!-- <button shiro:hasPermission="warning:warningHandle:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							<button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>-->
+						</div>
+						<!-- <div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="">
+						</div> -->
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var wd_edit = 'hidden';
+				var sz_edit = 'hidden';
+				var zb_edit = 'hidden';
+				var handle_record = 'hidden';
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:wdFeedback">
+			<script type="text/javascript">
+				wd_edit = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:szFeedback">
+			<script type="text/javascript">
+				sz_edit = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:zbFeedback">
+			<script type="text/javascript">
+				zb_edit = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:handleRecord">
+			<script type="text/javascript">
+				handle_record = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="warning:warningHandle:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/warning/warningHandle/warningHandle.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+</body>
+</html>

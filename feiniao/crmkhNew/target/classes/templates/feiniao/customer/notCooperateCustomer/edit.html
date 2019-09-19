@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+	<link th:href="@{/css/layui.css}" rel="stylesheet">
+	<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}" />
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/bootstrap-table.min.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}" charset="utf-8"></script>
+
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		ul {
+			list-style-type: none;
+			width:818px;
+			margin:20px auto;
+		}
+
+		ul li .form-item .label-text {
+			display: inline-block;
+			width: 110px;
+			text-align: right;
+			font-size: 15px;
+		}
+
+		.form-item {
+			display: inline-block;
+			width: 30%;
+			margin-bottom: 26px;
+			position: relative;
+		}
+		.form-textarea {
+			display: inline-block;
+			width: 100%;
+			margin-bottom: 10px;
+			position: relative;
+			margin-top:10px;
+		}
+		.form-textarea label{
+			display: inline-block;
+			width:120px;
+			margin-right:10px;
+			float: left;
+			text-align: right;
+		}
+
+		.form-item input[type='text'], select, .form-item input[type='number'] {
+			width: 51%;
+			border: 1px solid #ccc;
+			height: 32px;
+			text-indent: 10px;
+		}
+
+		.checkbox {
+			display: inline-block;
+			width: 100px;
+		}
+		.checkbox input{
+			margin-right:5px;
+			width: 15px;
+			height: 15px;
+			position: relative;
+			top: 3px;
+		}
+		table{
+			border-collapse:collapse;
+		}
+		table td,th {
+			border:1px solid #ccc;
+			text-align: center;
+			width:120px;
+			font-size: 15px;
+			height:33px;
+		}
+		table td input{
+			width:67px;
+			border:1px solid #ccc;
+			height:22px;
+			padding-left:10px;
+		}
+		textarea{
+			width:74%;
+			height:40px;
+			padding:5px;
+			border: 1px solid #ccc;
+			resize:none
+		}
+		.bottom-btn {
+			width:350px;
+			margin:20px auto;
+		}
+		.bottom-btn button{
+			width:110px;
+			height: 35px;
+			border:none;
+			color: #fff;
+			margin:0 20px;
+			border-radius: 3px;
+		}
+		.warning{
+			color: red;
+			font-size: 14px;
+			position: absolute;
+			left:114px;
+			top:39px;
+		}
+		.defaultInput{
+			position: relative;
+		}
+		.defaultInput span{
+			position: absolute;
+			right:20px;
+			top:6px;
+			font-size: 12px;
+			background: #fff;
+			z-index: 100;
+		}
+		.textarea-check{
+			color: red;
+			font-size: 14px;
+			position: absolute;
+			left:129px;
+			top:52px;
+		}
+	</style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="signupForm">
+						<div>
+							<ul>
+								<li style="width: 202%;">
+									<input name="id" type="hidden" th:value="${notCooperateCustomer.id}">
+									<input name="time" type="hidden" th:value="${notCooperateCustomer.time}">
+									<div class="form-item">
+										<label class="label-text">所属网点：</label>
+										<span id="branchName_span" th:text="${notCooperateCustomer.branchName}"></span>
+										<input name="branchName" type="hidden" th:value="${notCooperateCustomer.branchName}">
+									</div>
+									<div class="form-item">
+										<label class="label-text">网点编码：</label>
+										<span id="branchCode_span" th:text="${notCooperateCustomer.branchCode}"></span>
+										<input id="branchCodeH" name="branchCode" type="hidden" th:value="${notCooperateCustomer.branchCode}">
+									</div>
+								</li>
+								<li>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>客户名称：</label>
+										<input id="customerName" name="customerName" th:value="${notCooperateCustomer.customerName}" type="text" maxlength="30" oninput="checkLength(this)" placeholder="限定输入30个字符" required>
+									</div>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>联系人：</label>
+										<input id="contactName" name="contactName" th:value="${notCooperateCustomer.contactName}" type="text" maxlength="30" oninput="checkLength(this)" placeholder="限定输入30个字符" required>
+									</div>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>联系电话：</label>
+										<input id="customerPhone" name="customerPhone" th:value="${notCooperateCustomer.customerPhone}" type="number" placeholder="请输入电话" required>
+									</div>
+								</li>
+								<li>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>日均票件量：</label>
+										<input id="dayAverageAmount" name="dayAverageAmount" th:value="${notCooperateCustomer.dayAverageAmount}" type="number" min="0" placeholder="限定大于0的数字" required>
+									</div>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>产品类目：</label>
+										<input id="productType" name="productType" th:value="${notCooperateCustomer.productType}" type="text" maxlength="30" oninput="checkLength(this)" placeholder="限定输入30个字符" required>
+									</div>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>产品均重：</label>
+										<input id="productAverageHeavy" name="productAverageHeavy" th:value="${notCooperateCustomer.productAverageHeavy}" type="text" maxlength="30" oninput="checkLength(this)" placeholder="限定输入30个字符" required>
+									</div>
+								</li>
+								<li>
+									<div class="form-item">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>是否泡货：</label>
+										<!-- <input type="hidden" name="soak" th:value="${notCooperateCustomer.soak}"/> -->
+										<select id="soak" name="soak" required>
+											<option th:text="${notCooperateCustomer.soak}" th:value="${notCooperateCustomer.soak}">请选择是/否</option>
+											<option value="否">否</option>
+											<option value="是">是</option>
+										</select>
+									</div>
+									<div class="form-item" style="width: 65%;">
+										<label class="label-text" style="line-height: 15px"><label style="color: red;font-size: 20px">*</label>上传人员姓名及联系方式：</label>
+										<input id="uploadNamePhone" name="uploadNamePhone" th:value="${notCooperateCustomer.uploadNamePhone}" type="text" style="width: 70%;" maxlength="30" oninput="checkLength(this)" placeholder="限定输入30个字符" required>
+									</div>
+								</li>
+								<li>
+									<div class="form-item" style="width: 100%;">
+										<label class="label-text">客户所属平台：</label>
+										<input id="customerPlatformH" type="hidden"th:value="${notCooperateCustomer.customerPlatform}">
+										<div style="display: inline-block;margin-left: 20px;">
+											<label class="checkbox"><input id="taobao" name="customerPlatform" type="checkbox" value="淘宝"/>淘宝 </label>
+											<label class="checkbox"><input id="jingdong" name="customerPlatform" type="checkbox" value="京东"/>京东 </label>
+											<label class="checkbox"><input id="pinduoduo" name="customerPlatform" type="checkbox" value="拼多多"/>拼多多 </label>
+											<label class="checkbox"><input id="other" name="customerPlatform" onclick="checkboxOnclick(this)" type="checkbox" value="其他"/>其他 </label>
+											<input id="otherPlatForm" name="customerPlatform" type="text" placeholder="请注明平台" style="width:174px;margin-left:-38px;">
+										</div>
+
+									</div>
+								</li>
+								<li>
+									<div style="padding-left:150px;">
+										<input type="hidden" id="cooperatePeerCase" name="cooperatePeerCase"/>
+										<table id="table">
+											<thead>
+											<th>合作同行</th>
+											<th>同行合作比例</th>
+											<th>同行合作价格</th>
+											<th>备注</th>
+											</thead>
+											<tbody class="table-container">
+											<tr>
+												<td>中通</td>
+												<td data-name="中通"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input type="text" class="cooperatePrice"><span>元/KG</span></td>
+												<td><input type="text" class="remark"></td>
+											</tr>
+											<tr>
+												<td>圆通</td>
+												<td data-name="圆通"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input class="cooperatePrice" type="text"><span>元/KG</span></td>
+												<td><input type="text" class="remark"></td>
+											</tr>
+											<tr>
+												<td>申通</td>
+												<td data-name="申通"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input class="cooperatePrice" type="text"><span>元/KG</span></td>
+												<td><input type="text" class="remark"></td>
+											</tr>
+											<tr>
+												<td>邮政</td>
+												<td data-name="邮政"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input class="cooperatePrice" type="text"><span>元/KG</span></td>
+												<td><input type="text" class="remark"></td>
+											</tr>
+											<tr>
+												<td>顺丰</td>
+												<td data-name="顺丰"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input class="cooperatePrice" type="text"><span>元/KG</span></td>
+												<td><input type="text" class="remark"></td>
+											</tr>
+											<tr>
+												<td>其他</td>
+												<td data-name="其他"><input type="text" class="cooperateRatio"></td>
+												<td class="defaultInput"><input class="cooperatePrice" type="text"><span>元/KG</span></td>
+												<td><input type="text" class="remark" placeholder="同行名称"></td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</li>
+								<li style="margin-top: 20px;">
+									<div class="form-textarea">
+										<label class="label-text"><label style="color: red;font-size: 20px">*</label>客户发货地址：</label>
+										<textarea id="customerDeliverAddress" name="customerDeliverAddress" th:text="${notCooperateCustomer.customerDeliverAddress}" maxlength="50" oninput="checkLengthT(this,50)" placeholder="限定50个字" required></textarea>
+									</div>
+								</li>
+								<li>
+									<div class="form-textarea">
+										<label class="label-text">备注(选填)：</label>
+										<textarea id="remark" name="remark" th:text="${notCooperateCustomer.remark}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字"></textarea>
+									</div>
+								</li>
+								<li>
+									<div class="form-textarea">
+										<label class="label-text">未合作原因(选填)：</label>
+										<textarea id="notCooperateCause" name="notCooperateCause" th:text="${notCooperateCustomer.notCooperateCause}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字"></textarea>
+									</div>
+								</li>
+								<li>
+									<div class="form-textarea">
+										<label class="label-text">客户意向(选填)：</label>
+										<textarea id="customerIntention" name="customerIntention" th:text="${notCooperateCustomer.customerIntention}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字"></textarea>
+									</div>
+								</li>
+								<li>
+									<div class="form-textarea">
+										<label class="label-text">网点需求(选填)：</label>
+										<textarea id="branchNeed" name="branchNeed" th:text="${notCooperateCustomer.branchNeed}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字" ></textarea>
+									</div>
+								</li>
+								<li>
+									<div>
+										<div class="bottom-btn">
+											<button type="submit" style="background: rgb(26,166,137)">保存</button>
+											<button type="button" onclick="quitAudit()" style="background: rgb(246,164,75)">取消</button>
+										</div>
+									</div>
+								</li>
+							</ul>
+
+						</div>
+						<!--<div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>-->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/notCooperateCustomer/edit.js}"></script>
+</body>
+<script>
+    /*参数校验*/
+    function checkLength(that) {
+        if ($(that).val().length >= 30) {
+            $(that).parent().append("<span class='warning'>限定输入30个字符</span>")
+        } else {
+            $(that).parent().find('.warning').remove()
+        }
+    }
+    /*参数校验*/
+    function checkLengthT(that,count) {
+        if ($(that).val().length >= count) {
+            $(that).parent().append("<span class='textarea-check'>限定输入"+count+"个字符</span>")
+        } else {
+            $(that).parent().find('.textarea-check').remove()
+        }
+    }
+
+</script>
+</html>

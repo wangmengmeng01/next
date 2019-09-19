@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.crmapp.costReport.dao.CostreportLiangBenLiDao">
+
+
+	<!--接口9  客户单票成本  -->
+	<select id="getCustSingleCost" resultType="com.yunda.base.feiniao.crmapp.costReport.domain.CostreportLiangBenLiDO">
+		select ,`customer_id`,`account_dt`,`branch_code`,`order_sum`,`weight`,`tsf_fee`,`delivery_fee`,`delivery_additional_weight_fee`,`delivery_balance_fee`,`shipment_fee`,`scan_fee` 
+		from crmkh_costreport_cust_cost_finish
+        <where>  
+		  		  
+		  		  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		</where>
+	</select>
+	
+	<!-- 接口10 票件详情  -->
+	<select id="getCustSingleOrderDetail" resultType="com.yunda.base.feiniao.crmapp.costReport.domain.CostreportLiangBenLiDO">
+		SELECT shipment_no,customer_id,branch_code,start_province_id,start_city_id,end_province_id,end_city_id,weight,start_fb_weight,end_fb_weight,Bubble_weight,eleven_day_weight 
+		from crmkh_costreport_order_imcome_detail
+		where
+		branch_code = #{branchCode}
+		and customer_id = #{customerId}
+		and sender_account BETWEEN #{firstDayOfMonth} and #{lastDayOfMonth}
+		GROUP BY shipment_no
+		LIMIT 20
+	</select>
+	
+	
+	<!-- 接口6  月量本利信息接口  -->
+	<select id="getMonthCostAndIncome" resultType="com.yunda.base.feiniao.crmapp.costReport.domain.CostreportLiangBenLiDO">
+		from 
+		(
+			SELECT branch_code,sum(order_sum) order_sum,sum(weight) weight,sum(tsf_fee) tsf_fee,sum(delivery_fee) delivery_fee,
+					sum(delivery_additional_weight_fee) delivery_additional_weight_fee,sum(delivery_balance_fee) delivery_balance_fee,
+					sum(shipment_fee) shipment_fee,sum(scan_fee) scan_fee
+			from crmkh_costreport_cust_cost_finish
+			where account_dt = #{accountDt}
+			and branch_code = #{branchCode}
+		) a
+		LEFT JOIN
+		(
+			select branch_code,sum(fee) fee
+			from crmkh_costreport_cust_route_income_finish
+			where account_dt = #{accountDt}
+			and branch_code = #{branchCode}
+		) b on a.branch_code = b.branch_code
+	</select>
+	
+ 	<select id="count" resultType="int">
+		
+	</select>
+	 
+
+</mapper>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+
+<style>
+	.form-control {
+		display: inline-block;
+		width: 66%;
+	}
+	.col-md-9 {
+		width: 150px;
+		margin-top: 13px;
+		margin-left: 77px;
+	}
+
+	.form-control-down {
+		margin-top: 13px;
+		margin-left: 77px;
+	}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12" style="color: black">
+			<div class="ibox">
+				<div class="ibox-body">
+					<form id="searchUser">
+						<div class="row"
+							 style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+
+							<div class="col-md-4">
+								<label>客户名称：</label> <input type="text" name="customerName"
+															 id="customerName" class="form-control">
+							</div>
+							<div class="layui-inline" style="margin-left: 14px;">
+								<label class="control-label">上传日期：</label>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="开始时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="startDate" style="height:34px;border-color:#ccc;">
+								</div>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="结束时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="endDate" style="height:34px;border-color:#ccc;">
+								</div>
+							</div>
+
+							<div class="col-md-4" style="margin-left: -25px;">
+								<label>客户联系电话：</label> <input type="text" name="customerPhone"
+															id="customerPhone" class="form-control">
+							</div>
+
+							<div class="col-md-4 form-control-down" style="margin-left: 0px;">
+								<label>状态：</label>
+								<select id = "state" name="state" class="form-control" style="margin-left: 28px;">
+									<option value="">请选择</option>
+									<option value="未达成合作">未达成合作</option>
+									<option value="洽谈中">洽谈中</option>
+									<option value="已达成合作">已达成合作</option>
+									<option value="省公司待处理">省公司待处理</option>
+									<option value="总部待处理">总部待处理</option>
+								</select>
+							</div>
+							<div class="col-md-4 form-control-down" style="margin-left: -25px;">
+								<label>网点编码：</label> <input type="text" name="branchCode"
+															id="branchCode" class="form-control" style="margin-left:28px;">
+							</div>
+							
+							<div class="col-md-4 form-control-down" style="margin-left: -25px;">
+								<label style="margin-left: 24px">省：</label> 
+								<input type="text" name="provinceName" id="provinceName" class="form-control" style="margin-left:42px;">
+							</div>
+							<div class="col-md-4 form-control-down" style="margin-left: -25px;">
+								<label style="margin-left: 25px">市：</label> 
+								<input type="text" name="city" id="city" class="form-control" style="margin-left:42px;">
+							</div>
+							<div class="col-md-4 form-control-down" style="margin-left: 0px;">
+								<label>是否拜访：</label>
+								<select id = "provinceVisit" name="provinceVisit" class="form-control" style="margin-left: 28px;">
+									<option value="">请选择</option>
+									<option value="是">是</option>
+									<option value="否">否</option>
+									
+								</select>
+							</div>
+							
+							<div class="layui-inline" style="margin-left: 14px;margin-top: 10px">
+								<label class="control-label">拜访时间：</label>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="开始时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="startVisitDate" style="height:34px;border-color:#ccc;">
+								</div>
+								<div class="layui-input-inline" style="width:143px;">
+									<input type="text"  placeholder="结束时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="endVisitDate" style="height:34px;border-color:#ccc;">
+								</div>
+							</div>
+							
+							<div class="col-md-9" style="width:300px; margin-left: 73px;">
+								<input type="button" value="查询" onclick="query()" class="btn  btn-warning">
+								<input type="button" value="重置" onclick="resetForm()" class="btn  btn-success">
+								<button shiro:hasPermission="customer:notCooperateCustomer:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')" style="margin-right:50px;">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+							</div>
+						</div>
+						<div class="row"
+							 style="margin: 0; padding: 8px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+							<div class="col-md-4" style="width: 100%">
+								<div class="columns pull-left">
+									<button shiro:hasPermission="customer:notCooperateCustomer:add" type="button"
+											class="btn  btn-primary" onclick="add()" style="width: 70px;">
+										<i class="fa fa-plus hidden" aria-hidden="true"></i>新建
+									</button>
+									<span id="summary" style="margin-left: 119px;color:red;"></span>
+								</div>
+							</div>
+						</div>
+					</form>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+	<div>
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_seeReport_h = 'hidden';
+				var s_deal_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_boundVip_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:notCooperateCustomer:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:notCooperateCustomer:seeReport">
+			<script type="text/javascript">
+				s_seeReport_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:notCooperateCustomer:deal">
+			<script type="text/javascript">
+				s_deal_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:notCooperateCustomer:remove">
+			<script type="text/javascript">
+				s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:notCooperateCustomer:boundVip">
+			<script type="text/javascript">
+				s_boundVip_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/notCooperateCustomer/notCooperateCustomer.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

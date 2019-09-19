@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.OutLogDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.OutLogDO">
+		select `session_id`,`out_time` from crmkhv2_out_log where session_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.OutLogDO">
+		select `session_id`,`out_time` from crmkhv2_out_log
+        <where>  
+		  		  <if test="sessionId != null and sessionId != ''"> and session_id = #{sessionId} </if>
+		  		  <if test="outTime != null and outTime != ''"> and out_time = #{outTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by session_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_out_log
+		 <where>
+		  		  <if test="sessionId != null and sessionId != ''"> and session_id = #{sessionId} </if>
+		  		  <if test="outTime != null and outTime != ''"> and out_time = #{outTime} </if>
+		  		</where>
+	</select>
+
+	<select id="countBySessionId" resultType="int">
+		select count(*) from crmkhv2_out_log where session_id = #{sessionId}
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.OutLogDO">
+		INSERT IGNORE INTO crmkhv2_out_log
+		(
+			`session_id`, 
+			`out_time`
+		)
+		values
+		(
+			#{sessionId}, 
+			#{outTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.OutLogDO">
+		update crmkhv2_out_log 
+		<set>
+			<if test="outTime != null">`out_time` = #{outTime}</if>
+		</set>
+		where session_id = #{sessionId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_out_log where session_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_out_log where session_id in 
+		<foreach item="sessionId" collection="array" open="(" separator="," close=")">
+			#{sessionId}
+		</foreach>
+	</delete>
+
+</mapper>

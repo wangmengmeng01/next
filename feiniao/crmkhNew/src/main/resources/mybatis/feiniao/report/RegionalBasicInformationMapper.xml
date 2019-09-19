@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.RegionalBasicInformationDao">
+
+	<!-- 获取基础信息 -->
+	<select id="getBasicInformationList" resultType="com.yunda.base.feiniao.report.domain.RegionalBasicInformationDO">
+		SELECT county.CountyID,county.CountyName,county.CityID,city.CityName,county.ProvinceID_b ProvinceID,a.ProvinceName_b ProvinceName,b.bigarea
+			from ydserver.county county 
+			LEFT JOIN ydserver.city city on county.CityID = city.CityID
+			LEFT JOIN
+			(
+				SELECT county.CountyID,pb.ProvinceName_b
+				from ydserver.county county 
+				LEFT JOIN ydserver.province_business pb on county.ProvinceID_b = pb.ProvinceID_b
+			) a  on county.CountyID = a.CountyID
+			LEFT JOIN
+			(
+				SELECT county.CountyID,province.bigarea
+				from ydserver.county county 
+				LEFT JOIN sys_province province on county.ProvinceID_b = province.ProvinceID
+			) b on county.CountyID = b.CountyID
+	</select>
+	
+	<!--删除目标天基础信息数据  -->
+	<delete id="deleteDateByDate">
+		delete from crmkhv2_regional_basic_information where start_date =date_format (#{startDate},'%Y-%m-%d')
+	</delete>
+	
+	<!--保存每月基础信息  -->
+	<insert id="saveBasicalInfo" parameterType="java.util.List">
+		insert into crmkhv2_regional_basic_information
+		(
+			`CountyID`, 
+			`CountyName`, 
+			`CityID`, 
+			`CityName`, 
+			`ProvinceID`, 
+			`ProvinceName`, 
+			`start_date`, 
+			`end_date`, 
+			`bigarea`		
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.countyid,jdbcType=VARCHAR } ,#{item.countyname,jdbcType=VARCHAR } ,
+			 #{item.cityid,jdbcType=INTEGER } ,#{item.cityname,jdbcType=VARCHAR } ,
+			  #{item.provinceid,jdbcType=VARCHAR } , #{item.provincename,jdbcType=DATE }, 
+			  #{item.startDate,jdbcType=VARCHAR } , #{item.endDate,jdbcType=VARCHAR } , 
+			  #{item.bigarea,jdbcType=VARCHAR }
+			)
+		</foreach>
+	</insert>
+</mapper>

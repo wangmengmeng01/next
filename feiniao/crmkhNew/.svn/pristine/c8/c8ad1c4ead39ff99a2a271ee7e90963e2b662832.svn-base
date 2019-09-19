@@ -1,0 +1,29 @@
+package ${package}.service;
+
+import ${package}.domain.${className}DO;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Service {
+	
+	${className}DO get(${pk.attrType} ${pk.attrname});
+	
+	List<${className}DO> list(Bo_${className} boInterface,UserDO loginUser);
+	
+	int count(Bo_${className} boInterface,UserDO loginUser);
+	
+	int save(${className}DO ${classname});
+	
+	int update(${className}DO ${classname});
+	
+	int remove(${pk.attrType} ${pk.attrname});
+	
+	int batchRemove(${pk.attrType}[] ${pk.attrname}s);
+}

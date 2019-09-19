@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.market.dao.MarketKeyProvinceReportDao">
+
+	
+
+	<select id="list" resultType="com.yunda.base.feiniao.market.domain.MarketKeyProvinceReportDO">
+		select `record_id`,`bigarea`,`provinceID`,`provinceName`,`cityID`,`cityName`,`responsible_people`,`contain_city`,`report_date`,`report_status`,`audit_result`,`audit_remarks`,`region_gs`,`proportion_yd`,`proportion_yt`,`proportion_zt`,`proportion_st`,`proportion_bs`,`audit_user`,`update_time`,`month_score`,`report_nian`,`report_yue`,`order_province_yd_sum`,`order_jtzl_yd_sum` from crmkh_market_key_province_report
+        <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and provinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and cityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and cityName = #{cityname} </if>
+		  		  <if test="responsiblePeople != null and responsiblePeople != ''"> and responsible_people = #{responsiblePeople} </if>
+		  		  <if test="containCity != null and containCity != ''"> and contain_city = #{containCity} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="reportStatus != null and reportStatus != ''"> and report_status = #{reportStatus} </if>
+		  		  <if test="auditResult != null and auditResult != ''"> and audit_result = #{auditResult} </if>
+		  		  <if test="auditRemarks != null and auditRemarks != ''"> and audit_remarks = #{auditRemarks} </if>
+		  		  <if test="regionGs != null and regionGs != ''"> and region_gs = #{regionGs} </if>
+		  		  <if test="proportionYd != null and proportionYd != ''"> and proportion_yd = #{proportionYd} </if>
+		  		  <if test="proportionYt != null and proportionYt != ''"> and proportion_yt = #{proportionYt} </if>
+		  		  <if test="proportionZt != null and proportionZt != ''"> and proportion_zt = #{proportionZt} </if>
+		  		  <if test="proportionSt != null and proportionSt != ''"> and proportion_st = #{proportionSt} </if>
+		  		  <if test="proportionBs != null and proportionBs != ''"> and proportion_bs = #{proportionBs} </if>
+		  		  <if test="auditUser != null and auditUser != ''"> and audit_user = #{auditUser} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="monthScore != null and monthScore != ''"> and month_score = #{monthScore} </if>
+		  		  <if test="reportNian != null and reportNian != ''"> and report_nian = #{reportNian} </if>
+		  		  <if test="reportYue != null and reportYue != ''"> and report_yue = #{reportYue} </if>
+		  		  <if test="orderProvinceYdSum != null and orderProvinceYdSum != ''"> and order_province_yd_sum = #{orderProvinceYdSum} </if>
+		  		  <if test="orderJtzlYdSum != null and orderJtzlYdSum != ''"> and order_jtzl_yd_sum = #{orderJtzlYdSum} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_market_key_province_report
+		 <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and provinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and cityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and cityName = #{cityname} </if>
+		  		  <if test="responsiblePeople != null and responsiblePeople != ''"> and responsible_people = #{responsiblePeople} </if>
+		  		  <if test="containCity != null and containCity != ''"> and contain_city = #{containCity} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="reportStatus != null and reportStatus != ''"> and report_status = #{reportStatus} </if>
+		  		  <if test="auditResult != null and auditResult != ''"> and audit_result = #{auditResult} </if>
+		  		  <if test="auditRemarks != null and auditRemarks != ''"> and audit_remarks = #{auditRemarks} </if>
+		  		  <if test="regionGs != null and regionGs != ''"> and region_gs = #{regionGs} </if>
+		  		  <if test="proportionYd != null and proportionYd != ''"> and proportion_yd = #{proportionYd} </if>
+		  		  <if test="proportionYt != null and proportionYt != ''"> and proportion_yt = #{proportionYt} </if>
+		  		  <if test="proportionZt != null and proportionZt != ''"> and proportion_zt = #{proportionZt} </if>
+		  		  <if test="proportionSt != null and proportionSt != ''"> and proportion_st = #{proportionSt} </if>
+		  		  <if test="proportionBs != null and proportionBs != ''"> and proportion_bs = #{proportionBs} </if>
+		  		  <if test="auditUser != null and auditUser != ''"> and audit_user = #{auditUser} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="monthScore != null and monthScore != ''"> and month_score = #{monthScore} </if>
+		  		  <if test="reportNian != null and reportNian != ''"> and report_nian = #{reportNian} </if>
+		  		  <if test="reportYue != null and reportYue != ''"> and report_yue = #{reportYue} </if>
+		  		  <if test="orderProvinceYdSum != null and orderProvinceYdSum != ''"> and order_province_yd_sum = #{orderProvinceYdSum} </if>
+		  		  <if test="orderJtzlYdSum != null and orderJtzlYdSum != ''"> and order_jtzl_yd_sum = #{orderJtzlYdSum} </if>
+		  		</where>
+	</select>
+	 
+	
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.market.domain.MarketKeyProvinceReportDO">
+		update crmkh_market_key_province_report 
+		<set>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="provinceid != null">`provinceID` = #{provinceid}, </if>
+			<if test="provincename != null">`provinceName` = #{provincename}, </if>
+			<if test="cityid != null">`cityID` = #{cityid}, </if>
+			<if test="cityname != null">`cityName` = #{cityname}, </if>
+			<if test="responsiblePeople != null">`responsible_people` = #{responsiblePeople}, </if>
+			<if test="containCity != null">`contain_city` = #{containCity}, </if>
+			<if test="reportDate != null">`report_date` = #{reportDate}, </if>
+			<if test="reportStatus != null">`report_status` = #{reportStatus}, </if>
+			<if test="auditResult != null">`audit_result` = #{auditResult}, </if>
+			<if test="auditRemarks != null">`audit_remarks` = #{auditRemarks}, </if>
+			<if test="regionGs != null">`region_gs` = #{regionGs}, </if>
+			<if test="proportionYd != null">`proportion_yd` = #{proportionYd}, </if>
+			<if test="proportionYt != null">`proportion_yt` = #{proportionYt}, </if>
+			<if test="proportionZt != null">`proportion_zt` = #{proportionZt}, </if>
+			<if test="proportionSt != null">`proportion_st` = #{proportionSt}, </if>
+			<if test="proportionBs != null">`proportion_bs` = #{proportionBs}, </if>
+			<if test="auditUser != null">`audit_user` = #{auditUser}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="monthScore != null">`month_score` = #{monthScore}, </if>
+			<if test="reportNian != null">`report_nian` = #{reportNian}, </if>
+			<if test="reportYue != null">`report_yue` = #{reportYue}, </if>
+			<if test="orderProvinceYdSum != null">`order_province_yd_sum` = #{orderProvinceYdSum}, </if>
+			<if test="orderJtzlYdSum != null">`order_jtzl_yd_sum` = #{orderJtzlYdSum}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_market_key_province_report where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_market_key_province_report where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+	
+	<!-- 查询时否审核完全通过 -->
+	<select id="approveCount" resultType="int">
+		select count(*) from crmkhv2_market_occupancy_report
+		<where>
+			 <if test="reportNian != null and reportNian != ''"> and report_nian = #{reportNian} </if>
+	  		 <if test="reportYue != null and reportYue != ''"> and report_yue = #{reportYue} </if>
+	  		 and cityName = '所在省' 
+			 and (audit_result = '2' OR audit_result = '3')
+		</where>
+		
+		
+	</select>
+	
+	<!-- 不能选今天和今天之后 -->
+	<select id="dateCount" resultType="int">
+		SELECT COUNT(1) FROM crmkhv2_report_order_stats_all 
+		where  qu_date = date_format (#{quDate},'%Y-%m-%d') 
+		
+	</select>
+	
+	<!--  总合计 -->
+	<select id="allDataList" resultType="com.yunda.base.feiniao.market.domain.MarketKeyProvinceReportDO">
+		SELECT                                           
+		 SUM(t1.proportion_yd)/COUNT(t1.proportion_yd) proportion_yd,                                    
+		 SUM(t1.proportion_yt)/COUNT(t1.proportion_yt) proportion_yt,                                    
+		 SUM(t1.proportion_zt)/COUNT(t1.proportion_zt) proportion_zt,                                    
+		 SUM(t1.proportion_st)/COUNT(t1.proportion_st) proportion_st,                                    
+		 SUM(t1.proportion_bs)/COUNT(t1.proportion_bs) proportion_bs,                                    
+		 SUM(t1.month_score) month_score,                                        
+		 ifnull(SUM(t2.order_sum),0) order_sum,                                            
+		 ifnull(SUM(t2.order_sum),0)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg                                             
+		 FROM crmkhv2_market_occupancy_report t1                                   
+		 LEFT JOIN
+		 (
+		 	select                                                 
+				base4.provinceid,base4.ProvinceName,base4.bigarea,     
+				sum(base4.order_sum           ) order_sum             
+				from tmpv2_province_od_sum base4  
+				where 
+				1 = 1
+<!-- 				<if test=' TTmpField == "S" '>						
+					<if test="TProvinceID != null and TProvinceID.size>0">
+		   				and t1.provinceID in 
+		   				<foreach collection="TProvinceID" item="TProvinceID" index="index" open="(" close=")" separator=",">
+		   					${TProvinceID}
+		   				</foreach>
+		   			</if>		
+		  		</if> -->
+				and qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+				AND date_format (#{endDate},'%Y-%m-%d')
+				GROUP BY base4.provinceid,base4.ProvinceName,base4.bigarea
+		 ) t2 ON t1.provinceID = t2.provinceID 
+		 <where>
+		 	t1.CityName ='所在省'
+			 <if test="reportNian != null and reportNian != ''"> and t1.report_nian = #{reportNian} </if>
+	  		 <if test="reportYue != null and reportYue != ''"> and t1.report_yue = #{reportYue} </if>
+		</where>
+
+	</select>
+	
+	
+	<!--  大区 -->
+	<select id="bigareaDataList" resultType="com.yunda.base.feiniao.market.domain.MarketKeyProvinceReportDO">
+	
+		SELECT                                                                         
+		 t1.bigarea bigarea,t1.responsible_people,                               
+		 SUM(t1.proportion_yd)/COUNT(t1.proportion_yd) proportion_yd,                                    
+		 SUM(t1.proportion_yt)/COUNT(t1.proportion_yt) proportion_yt,                                    
+		 SUM(t1.proportion_zt)/COUNT(t1.proportion_zt) proportion_zt,                                    
+		 SUM(t1.proportion_st)/COUNT(t1.proportion_st) proportion_st,                                    
+		 SUM(t1.proportion_bs)/COUNT(t1.proportion_bs) proportion_bs,                                    
+		 SUM(t1.month_score) month_score,                                        
+		 ifnull(SUM(t2.order_sum),0) order_sum,                                            
+		 ifnull(SUM(t2.order_sum),0)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg                                             
+		  FROM crmkhv2_market_occupancy_report t1                                  
+		 LEFT JOIN 
+		 (
+		 	select                                                 
+				base4.provinceid,base4.ProvinceName,base4.bigarea,     
+				sum(base4.order_sum           ) order_sum             
+				<!-- sum(base4.order_avg           )/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,             
+				sum(base4.cainiao_order_sum   ) cainiao_order_sum,     
+				sum(base4.qrcode_order_sum    ) qrcode_order_sum,      
+				sum(base4.ordinary_order_sum  ) ordinary_order_sum,    
+				                                                       
+				sum(base4.customer_sum) customer_sum,                  
+				sum(base4.order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1)     order_avg_sum,            
+				sum(base4.dianzi_order_sum)     dianzi_order_sum,      
+				                                                       
+				sum(base4.a_customer_sum)    a_customer_sum,           
+				sum(base4.b_customer_sum)    b_customer_sum,           
+				sum(base4.c_customer_sum)    c_customer_sum,           
+				sum(base4.d_customer_sum)    d_customer_sum,           
+				sum(base4.e_customer_sum)    e_customer_sum,           
+				sum(base4.f_customer_sum)    f_customer_sum,           
+				sum(base4.g_customer_sum)    g_customer_sum,           
+				                                                       
+				sum(base4.a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    a_order_avg,                 
+				sum(base4.b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    b_order_avg,                 
+				sum(base4.c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    c_order_avg,                 
+				sum(base4.d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    d_order_avg,                 
+				sum(base4.e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    e_order_avg,                 
+				sum(base4.f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)    f_order_avg,                 
+				sum(base4.g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)   g_order_avg,                 
+				                                                       
+				sum(base4.a_order_sum) a_order_sum,                    
+				sum(base4.b_order_sum) b_order_sum,                    
+				sum(base4.c_order_sum) c_order_sum,                    
+				sum(base4.d_order_sum) d_order_sum,                    
+				sum(base4.e_order_sum) e_order_sum,                    
+				sum(base4.f_order_sum) f_order_sum,                    
+				sum(base4.g_order_sum) g_order_sum  -->                    
+				from tmpv2_province_od_sum base4  
+				where 
+				1 = 1
+							 and qu_date BETWEEN
+							date_format (#{startDate},'%Y-%m-%d')
+							AND
+							date_format (#{endDate},'%Y-%m-%d')
+				GROUP BY base4.provinceid,base4.ProvinceName,base4.bigarea
+		 ) t2 ON t1.provinceID = t2.provinceID 
+		 <where>
+		 	 t1.CityName ='所在省'
+			 <if test="reportNian != null and reportNian != ''"> and t1.report_nian = #{reportNian} </if>
+	  		 <if test="reportYue != null and reportYue != ''"> and t1.report_yue = #{reportYue} </if>
+		</where> 
+		 GROUP BY t1.bigarea                                                     
+		 ORDER BY record_id  
+	</select>
+	
+	<!--  省 -->
+	<select id="provinceDataList" resultType="com.yunda.base.feiniao.market.domain.MarketKeyProvinceReportDO">
+		SELECT                                                                       
+		  t1.bigarea,                                                             
+		  t1.provinceID,                                                          
+		  t1.provinceName,t1.responsible_people,                                  
+		  SUM(t1.proportion_yd)/COUNT(t1.proportion_yd) proportion_yd,                                    
+		  SUM(t1.proportion_yt)/COUNT(t1.proportion_yt) proportion_yt,                                    
+		  SUM(t1.proportion_zt)/COUNT(t1.proportion_zt) proportion_zt,                                    
+		  SUM(t1.proportion_st)/COUNT(t1.proportion_st) proportion_st,                                    
+		  SUM(t1.proportion_bs)/COUNT(t1.proportion_bs) proportion_bs,                                    
+		  SUM(t1.month_score) month_score,                                        
+		  ifnull(SUM(t2.order_sum),0) order_sum,                                            
+		  ifnull(SUM(t2.order_sum),0)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg                                             
+		   FROM crmkhv2_market_occupancy_report t1                                  
+		  LEFT JOIN 
+		  (
+		  	select                                                 
+				base4.provinceid,base4.ProvinceName,base4.bigarea,     
+				sum(base4.order_sum           ) order_sum                          
+				from tmpv2_province_od_sum base4  
+				where 
+				1 = 1
+				and qu_date BETWEEN
+				date_format (#{startDate},'%Y-%m-%d')
+				AND
+				date_format (#{endDate},'%Y-%m-%d')
+				GROUP BY base4.provinceid,base4.ProvinceName,base4.bigarea
+		  ) t2 ON t1.provinceID = t2.provinceID 
+		  <where>
+		 	 t1.CityName ='所在省'
+		 	 
+		 	 <if test=' TTmpField == "S" '>						
+				<if test="TProvinceID != null and TProvinceID.size>0">
+	   				and t1.provinceID in 
+	   				<foreach collection="TProvinceID" item="TProvinceID" index="index" open="(" close=")" separator=",">
+	   					${TProvinceID}
+	   				</foreach>
+	   			</if>		
+		  	</if>
+		 	 <if test="bigarea != null and bigarea != ''"> and t1.bigarea = #{bigarea} </if>
+			 <if test="reportNian != null and reportNian != ''"> and t1.report_nian = #{reportNian} </if>
+	  		 <if test="reportYue != null and reportYue != ''"> and t1.report_yue = #{reportYue} </if>
+		  </where> 
+		  GROUP BY t1.bigarea,t1.provinceID,t1.provinceName                       
+		  ORDER BY record_id
+	
+	</select>
+</mapper>

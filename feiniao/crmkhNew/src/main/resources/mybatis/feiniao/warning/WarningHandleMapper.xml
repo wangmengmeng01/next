@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.warning.dao.WarningHandleDao">
+
+<!-- 生成要查询的时间段的预警数据的sql -->
+	<insert id="saveYjByDay" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+		
+		insert into crmkhv2_warning_handle(
+			
+		  `customer_id`,
+		  `customer_name` ,
+		  `gs`,
+		  `gsmc`,
+		  `branch_code`,
+		  `branch_name`,
+		  
+		  `warn_date`,
+		  `order_avg`,
+		  `last_order_avg`,
+		  
+		  `customer_source_type`,
+		  `price_level`,
+		  `feedback_deadline`,
+		  `feedback_status`,
+		  
+		  `bigarea`,
+		  `ProvinceID`,
+		  `ProvinceName`,
+		  `CityID`,
+		  `CityName`
+		)
+		SELECT
+		 	a.customer_id,a.customer_name,a.gs,a.gsmc,a.branch_code,a.branch_name,
+		 	date_format (#{qu_date},'%Y-%m-%d'),ifnull(b.order_avg,0) order_avg, a.order_avg last_order_avg,
+            a.customer_source_type,a.price_level,date_format (#{deadline},'%Y-%m-%d'),#{feedbackStatus},
+			a.bigarea,a.ProvinceID,a.ProvinceName,a.CityID,a.CityName 
+			
+			from tmpv2_cust_od_week_sum a
+			left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id	AND a.customer_source_type = b.customer_source_type
+			and b.qu_date = date_format (#{qu_date},'%Y-%m-%d')
+			left join crmkhv2_warning_benchmark c on c.jgmc = a.ProvinceName
+		<where>
+			a.search_week =#{searchWeek} and a.ProvinceName is not null
+			and a.price_level &gt;= ifnull(c.benchmark_setting,"e") 
+		</where> 						
+		GROUP BY a.customer_id,a.branch_code,a.customer_source_type
+		having <![CDATA[ order_avg/last_order_avg <1/2]]>
+		
+	</insert>
+	
+	<delete id="removeYjByDay" parameterType="java.util.Date">
+		delete from crmkhv2_warning_handle where warn_date = date_format (#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<select id="get" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select `id`,`customer_id`,`customer_name`,`gs`,`gsmc`,`branch_code`,`branch_name`,`warn_date`,`order_avg`,`last_order_avg`,`reduced_ratio`,`reduced_order`,`customer_source_type`,`price_level`,`feedback_deadline`,`feedback_status`,`remark`,`CityID`,`CityName`,`ProvinceID`,`ProvinceName`,`bigarea`,`branch_deal_type`,`branch_deal_desc`,`barnch_deal_user`,`branch_feedback_date`,`province_deal_desc`,`province_deal_user`,`province_feedback_date`,`zb_deal_desc`,`zb_deal_user`,`zb_feedback_date`,`branch_category`,`branch_ave_weight`  from crmkhv2_warning_handle where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select `id`,`customer_id`,`customer_name`,`gs`,`gsmc`,`branch_code`,`branch_name`,`warn_date`,`order_avg`,`last_order_avg`,`reduced_ratio`,`reduced_order`,`customer_source_type`,`price_level`,`feedback_deadline`,`feedback_status`,`remark`,`CityID`,`CityName`,`ProvinceID`,`ProvinceName`,`bigarea`,`branch_deal_type`,`branch_deal_desc`,`barnch_deal_user`,`branch_feedback_date`,`province_deal_desc`,`province_deal_user`,`province_feedback_date`,`zb_deal_desc`,`zb_deal_user`,`zb_feedback_date`,`branch_category`,`branch_ave_weight`  from crmkhv2_warning_handle
+        <where>  
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="priceLevel != null and priceLevel != ''"> and price_level = #{priceLevel} </if>
+		  		  <if test="branchDealType != null and branchDealType != ''"> and branch_deal_type = #{branchDealType} </if>
+		  		  <if test="feedbackStatus != null and feedbackStatus != ''"> and feedback_status = #{feedbackStatus} </if>
+		  		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and warn_date &gt;= #{startDate} and warn_date &lt;= #{endDate} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and ProvinceName like '%${provinceName}%'</if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea like '%${bigarea}%' </if>
+		  		  
+		  		  <if test=' type == "W" '>						
+						and branch_code = #{BranchCodeQX}		
+				  </if>
+		  		  <if test=' type == "S" '>						
+						<if test="ProvinceId!=null and ProvinceId.size>0">
+				   			and ProvinceID in 
+				   			<foreach collection="ProvinceId" item="ProvinceId" index="index" open="(" close=")" separator=",">
+				   				'${ProvinceId}'
+				   			</foreach>
+				   		</if>		
+				  </if>
+				   
+		  	</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by warn_date,customer_id
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_warning_handle
+		 <where>  
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="priceLevel != null and priceLevel != ''"> and price_level = #{priceLevel} </if>
+		  		  <if test="branchDealType != null and branchDealType != ''"> and branch_deal_type = #{branchDealType} </if>
+		  		  <if test="feedbackStatus != null and feedbackStatus != ''"> and feedback_status = #{feedbackStatus} </if>
+		  		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and warn_date &gt;= #{startDate} and warn_date &lt;= #{endDate} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and ProvinceName like '%${provinceName}%'</if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea like '%${bigarea}%' </if>
+		  		  
+		  		  <if test=' type == "W" '>						
+						and branch_code = #{BranchCodeQX}		
+				  </if>
+		  		  <if test=' type == "S" '>						
+						<if test="ProvinceId!=null and ProvinceId.size>0">
+				   			and ProvinceID in 
+				   			<foreach collection="ProvinceId" item="ProvinceId" index="index" open="(" close=")" separator=",">
+				   				'${ProvinceId}'
+				   			</foreach>
+				   		</if>		
+				  </if>
+		  </where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.warning.domain.WarningHandleDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_warning_handle
+		(
+			`customer_id`, 
+			`customer_name`, 
+			`gs`, 
+			`gsmc`, 
+			`branch_code`, 
+			`branch_name`, 
+			`warn_date`, 
+			`order_avg`, 
+			`last_order_avg`, 
+			`reduced_ratio`, 
+			`reduced_order`, 
+			`customer_source_type`, 
+			`price_level`, 
+			`feedback_deadline`, 
+			`feedback_status`, 
+			`remark`, 
+			`CityID`, 
+			`CityName`, 
+			`ProvinceID`, 
+			`ProvinceName`, 
+			`bigarea`, 
+			`branch_deal_type`, 
+			`branch_deal_desc`, 
+			`barnch_deal_user`, 
+			`branch_feedback_date`, 
+			`province_deal_desc`, 
+			`province_deal_user`, 
+			`province_feedback_date`, 
+			`zb_deal_desc`, 
+			`zb_deal_user`, 
+			`zb_feedback_date`
+		)
+		values
+		(
+			#{customerId}, 
+			#{customerName}, 
+			#{gs}, 
+			#{gsmc}, 
+			#{branchCode}, 
+			#{branchName}, 
+			#{warnDate}, 
+			#{orderAvg}, 
+			#{lastOrderAvg}, 
+			#{reducedRatio}, 
+			#{reducedOrder}, 
+			#{customerSourceType}, 
+			#{priceLevel}, 
+			#{feedbackDeadline}, 
+			#{feedbackStatus}, 
+			#{remark}, 
+			#{cityid}, 
+			#{cityname}, 
+			#{provinceid}, 
+			#{provincename}, 
+			#{bigarea}, 
+			#{branchDealType}, 
+			#{branchDealDesc}, 
+			#{barnchDealUser}, 
+			#{branchFeedbackDate}, 
+			#{provinceDealDesc}, 
+			#{provinceDealUser}, 
+			#{provinceFeedbackDate}, 
+			#{zbDealDesc}, 
+			#{zbDealUser}, 
+			#{zbFeedbackDate}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		update crmkhv2_warning_handle 
+		<set>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="gs != null">`gs` = #{gs}, </if>
+			<if test="gsmc != null">`gsmc` = #{gsmc}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="warnDate != null">`warn_date` = #{warnDate}, </if>
+			<if test="orderAvg != null">`order_avg` = #{orderAvg}, </if>
+			<if test="lastOrderAvg != null">`last_order_avg` = #{lastOrderAvg}, </if>
+			<if test="reducedRatio != null">`reduced_ratio` = #{reducedRatio}, </if>
+			<if test="reducedOrder != null">`reduced_order` = #{reducedOrder}, </if>
+			<if test="customerSourceType != null">`customer_source_type` = #{customerSourceType}, </if>
+			<if test="priceLevel != null">`price_level` = #{priceLevel}, </if>
+			<if test="feedbackDeadline != null">`feedback_deadline` = #{feedbackDeadline}, </if>
+			<if test="feedbackStatus != null">`feedback_status` = #{feedbackStatus}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="cityid != null">`CityID` = #{cityid}, </if>
+			<if test="cityname != null">`CityName` = #{cityname}, </if>
+			<if test="provinceid != null">`ProvinceID` = #{provinceid}, </if>
+			<if test="provincename != null">`ProvinceName` = #{provincename}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="branchDealType != null">`branch_deal_type` = #{branchDealType}, </if>
+			<if test="branchDealDesc != null">`branch_deal_desc` = #{branchDealDesc}, </if>
+			<if test="barnchDealUser != null">`barnch_deal_user` = #{barnchDealUser}, </if>
+			<if test="showBranchFeedbackDate != null">`branch_feedback_date` = DATE_FORMAT(#{showBranchFeedbackDate},'%Y-%m-%d %H:%i:%S'), </if>
+			<if test="provinceDealDesc != null">`province_deal_desc` = #{provinceDealDesc}, </if>
+			<if test="provinceDealUser != null">`province_deal_user` = #{provinceDealUser}, </if>
+			<if test="showProvinceFeedbackDate != null">`province_feedback_date` = DATE_FORMAT(#{showProvinceFeedbackDate},'%Y-%m-%d %H:%i:%S'), </if>
+			<if test="zbDealDesc != null">`zb_deal_desc` = #{zbDealDesc}, </if>
+			<if test="zbDealUser != null">`zb_deal_user` = #{zbDealUser}, </if>
+			<if test="branchCategory != null">`branch_category` = #{branchCategory}, </if>
+			<if test="branchAveWeight != null">`branch_ave_weight` = #{branchAveWeight}, </if>
+			<if test="showZbFeedbackDate != null">`zb_feedback_date` = DATE_FORMAT(#{showZbFeedbackDate},'%Y-%m-%d %H:%i:%S')</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_warning_handle where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_warning_handle where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="provinceList" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select distinct ProvinceName,bigarea from crmkhv2_warning_handle
+        <where> 
+        	ProvinceName is not null
+        	<if test="lastOrderAvg != null and lastOrderAvg != ''"> and last_order_avg &gt;= #{lastOrderAvg} </if>
+        	<if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+        	<if test="priceLevel != null and priceLevel != ''"> and price_level &gt;= #{priceLevel} </if>
+        	<if test="warnDate != null and warnDate != ''"> and warn_date = date_format (#{warnDate},'%Y-%m-%d') </if>
+		</where>
+	</select> 
+	<select id="branchList" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select distinct branch_code,branch_name from crmkhv2_warning_handle
+        <where>
+        	ProvinceName is not null
+        	<if test="lastOrderAvg != null and lastOrderAvg != ''"> and last_order_avg &gt;= #{lastOrderAvg} </if>
+        	<if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+        	<if test="priceLevel != null and priceLevel != ''"> and price_level &gt;= #{priceLevel} </if>
+        	<if test="provinceName != null and provinceName != ''"> and ProvinceName = #{provinceName} </if>
+        	<if test="warnDate != null and warnDate != ''"> and warn_date = date_format (#{warnDate},'%Y-%m-%d') </if>
+        </where>
+	</select> 
+	<select id="customerList" resultType="int">
+		select count(1) from crmkhv2_warning_handle
+		 <where> 
+		 	ProvinceName is not null
+		 	<if test="lastOrderAvg != null and lastOrderAvg != ''"> and last_order_avg &gt;= #{lastOrderAvg} </if>
+		 	<if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		 	<if test="priceLevel != null and priceLevel != ''"> and price_level &gt;= #{priceLevel} </if>
+        	<if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+        	<if test="provinceName != null and provinceName != ''"> and ProvinceName = #{provinceName} </if>
+        	<if test="warnDate != null and warnDate != ''"> and warn_date = date_format (#{warnDate},'%Y-%m-%d') </if>
+		</where>
+	</select>
+	<select id="daquList" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select distinct bigarea from crmkhv2_warning_handle
+        <where> 
+        	bigarea is not null
+        	<if test="lastOrderAvg != null and lastOrderAvg != ''"> and last_order_avg &gt;= #{lastOrderAvg} </if>
+        	<if test="warnDate != null and warnDate != ''"> and warn_date = date_format (#{warnDate},'%Y-%m-%d') </if>
+		</where>
+	</select>  		  
+
+	<select id="getWDFeedback" resultType="com.yunda.base.feiniao.warning.domain.WarningHandleDO">
+		select `warn_date`,`customer_source_type`,`branch_deal_type`,`branch_deal_desc`,ifnull(branch_category,"") as `branch_category`,ifnull(branch_ave_weight,"") as `branch_ave_weight`,`province_deal_desc`
+		from crmkhv2_warning_handle 
+		where customer_id = #{customerId} and customer_source_type = #{customerSourceType} and warn_date = date_format (#{warnDate},'%Y-%m-%d')
+	</select>
+</mapper>

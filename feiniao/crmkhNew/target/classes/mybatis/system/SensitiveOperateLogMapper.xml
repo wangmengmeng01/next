@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.SensitiveOperateLogDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.SensitiveOperateLogDO">
+		select (@i :=@i + 1) AS `id`,a.`user_id`,a.`user_name`,b.`name`,a.`operation`,a.`operation_typ`,a.`method`,a.`params`,a.`ip`,a.`session_id`,a.`create_time` from crmkhv2_operate_log a LEFT JOIN crmkhv2_login_user b on a.user_name=b.username,,(SELECT @i := 0) AS it where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.SensitiveOperateLogDO">
+		select (@i :=@i + 1) AS `id`,a.`user_id`,a.`user_name`,b.`name`,a.`operation`,a.`operation_typ`,a.`method`,a.`params`,a.`ip`,a.`session_id`,a.`create_time` from crmkhv2_operate_log a LEFT JOIN crmkhv2_login_user b on a.user_name=b.username,(SELECT @i := 0) AS it
+        <where>
+		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  <if test="sessionId != null and sessionId != ''"> and session_id = #{sessionId} </if>
+		  <if test="userName != null and userName != ''"> and user_name = #{userName} </if>
+		  <if test="operation != null and operation != ''"> and operation like '%${operation}%' </if>
+		  <if test="method != null and method != ''"> and method = #{method} </if>
+		  <if test="params != null and params != ''"> and params = #{params} </if>
+		  <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+			<if test="startTime != null and startTime != '' and endTime != null and endTime != ''"> and create_time <![CDATA[>=]]> date_format (#{startTime},'%Y-%m-%d 00:00:00') and create_time <![CDATA[<=]]> date_format (#{endTime},'%Y-%m-%d 23:59:59')</if>
+		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_operate_log
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+				  <if test="sessionId != null and sessionId != ''"> and session_id = #{sessionId} </if>
+				  <if test="userName != null and userName != ''"> and user_name = #{userName} </if>
+		  		  <if test="operation != null and operation != ''"> and operation like '%${operation}%' </if>
+		  		  <if test="method != null and method != ''"> and method = #{method} </if>
+		  		  <if test="params != null and params != ''"> and params = #{params} </if>
+		  		  <if test="ip != null and ip != ''"> and ip = #{ip} </if>
+			 <if test="startTime != null and startTime != '' and endTime != null and endTime != ''"> and create_time <![CDATA[>=]]> date_format (#{startTime},'%Y-%m-%d 00:00:00') and create_time <![CDATA[<=]]> date_format (#{endTime},'%Y-%m-%d 23:59:59')</if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.SensitiveOperateLogDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_operate_log
+		(
+			`user_id`, 
+			`user_name`,
+			`operation`,
+			`operation_typ`,
+			`method`, 
+			`params`, 
+			`ip`,
+			`session_id`,
+			`create_time`
+		)
+		values
+		(
+			#{userId}, 
+			#{userName},
+			#{operation},
+			#{operationTyp},
+			#{method},
+			#{params}, 
+			#{ip},
+			#{sessionId},
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.SensitiveOperateLogDO">
+		update crmkhv2_operate_log
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="userName != null">`user_name` = #{userName}, </if>
+			<if test="operation != null">`operation` = #{operation}, </if>
+			<if test="method != null">`method` = #{method}, </if>
+			<if test="params != null">`params` = #{params}, </if>
+			<if test="ip != null">`ip` = #{ip}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="remove">
+		delete from crmkhv2_operate_log where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_operate_log where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

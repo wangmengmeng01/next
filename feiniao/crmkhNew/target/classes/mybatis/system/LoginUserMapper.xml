@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.LoginUserDao">
+
+	<!--&lt;!&ndash; 统一授权  &ndash;&gt;-->
+	<!--<select id="getUserId" resultType="java.lang.Long">-->
+		<!--select `user_id` from bootdo_sys_user where username = #{userId}-->
+	<!--</select>-->
+	<!--<select id="getRoleId" resultType="java.lang.String">-->
+		<!--select `role_id` from bootdo_sys_role where role_name = #{userRole1}-->
+	<!--</select>-->
+	<!--<select id="getUserRole" resultType="java.lang.String">-->
+		<!--select `role_id` from bootdo_sys_user_role where user_id = #{long1}-->
+	<!--</select>-->
+	<!--<select id="isExist" resultType="boolean">-->
+		  <!--<![CDATA[ select count(username) -->
+        <!--from crmkhv2_login_user where username=#{userId}]]>-->
+	<!--</select>-->
+	
+	<insert id="insertPasswordAndUser">  
+		insert into crmkhv2_login_user
+		(
+			`username`, 
+			`password`,
+			`name`,
+			`status`,
+			`org_code`
+		)
+		values
+		(
+			#{userId}, 
+		    #{passwordOrgin},
+		    #{name},
+		    #{status},
+		    #{companycode}
+		)
+	</insert>
+	<update id="updatePasswordAndUser">
+		update crmkhv2_login_user
+		<set>
+			<if test="userId != null">`username` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="passwordOrgin != null">`password` = #{passwordOrgin}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="companycode != null">`org_code` = #{companycode} </if>
+		</set>
+		where `username` = #{userId}
+	</update>
+	<select id="getName" resultType="java.lang.String">
+		select `name` from bootdo_sys_user where username = #{username}
+	</select>
+	
+	
+	
+	
+	<select id="queryLoginInfo" resultType="com.yunda.base.system.domain.LoginUserDO">
+		select `user_id`,`username`,`name`,`role`,`institution`,`password`,`dept_id`,`email`,`mobile`,`status`,`user_id_create`,`gmt_create`,`gmt_modified`,`sex`,`birth`,`org_code`,`org_name`,`org_type`,	`idcd_no` ,
+			`mac_adress` ,
+			`update_name` from bootdo_sys_user where username = #{username}
+	</select>
+	
+	<select id="get" resultType="com.yunda.base.system.domain.LoginUserDO">
+		select `user_id`,`username`,`name`,`role`,`institution`,`mobile`,`status`,`gmt_modified`,`idcd_no` ,`superior_role`,
+			`mac_adress` ,wireless_mac_adress,
+			`update_name` from crmkhv2_login_user where user_id = #{value}
+	</select>
+
+	<select id="listUsers" resultType="com.yunda.base.system.domain.LoginUserDO">
+		select (@i :=@i + 1) AS `user_id`,`username`,`name`,`role`,`institution`,`mobile`,`status`,`gmt_modified`,`idcd_no` ,`superior_role`,
+		`mac_adress` ,wireless_mac_adress,
+		`update_name` AS updatename  from crmkhv2_login_user ,(SELECT @i := 0) AS it
+        <where>  
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and update_name = #{name} </if>
+		  		  <if test="role != null and role != ''"> and role = #{role} </if>
+		  		  <if test="institution != null and institution != ''"> and institution like concat(concat('%',#{institution}),'%') </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+			      <if test="updateName != null and updateName != ''">and `update_name` = #{updateName} </if>
+		  		  <!--<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>-->
+			<if test="startupdateTime != null and startupdateTime != '' and endupdateTime != null and endupdateTime != ''"> and gmt_modified &gt;= date_format (#{startupdateTime},'%Y-%m-%d 00:00:00') and gmt_modified &lt;= date_format (#{endupdateTime},'%Y-%m-%d 23:59:59')</if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by user_id ASC
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.LoginUserDO">
+		select `user_id`,`username`,`name`,`role`,`institution`,`mobile`,`status`,`gmt_modified`,`idcd_no` ,`superior_role`,
+		`mac_adress` ,`sms_type` ,
+		`update_name` AS updatename from crmkhv2_login_user
+        <where>  
+		  		  <if test="smsType != null and smsType != ''"> and locate(#{smsType},sms_type) </if> 
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+				  <if test="role != null and role != ''"> and role = #{role} </if>
+				  <if test="institution != null and institution != ''"> and institution like concat(concat('%',#{institution}),'%') </if>
+				  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="superiorRole !=null and superiorRole !=''">and superior_role = #{superiorRole}</if>
+
+		  		  <!--<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>-->
+		      	<if test="startupdateTime != null and startupdateTime != '' and endupdateTime != null and endupdateTime != ''"> and gmt_modified &gt;= date_format (#{startupdateTime},'%Y-%m-%d 00:00:00') and gmt_modified &lt;= date_format (#{endupdateTime},'%Y-%m-%d 23:59:59')</if>
+
+
+				  <if test="idcdNo != null">`idcd_no` = #{idcdNo} </if>
+			      <if test="macAdress != null">`mac_adress` = #{macAdress} </if>
+			      <if test="updateName != null">`update_name` = #{updateName} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by user_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_login_user
+		 <where>  
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and update_name = #{name} </if>
+			   	  <if test="role != null and role != ''"> and role = #{role} </if>
+				  <if test="institution != null and institution != ''"> and institution like concat(concat('%',#{institution}),'%') </if>
+				  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+                  <if test="superiorRole !=null and superiorRole !=''">and superior_role = #{superiorRole}</if>
+
+		  		  <!--<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>-->
+			 <if test="startupdateTime != null and startupdateTime != '' and endupdateTime != null and endupdateTime != ''"> and gmt_modified &gt;= date_format (#{startupdateTime},'%Y-%m-%d 00:00:00') and gmt_modified &lt;= date_format (#{endupdateTime},'%Y-%m-%d 23:59:59')</if>
+
+
+				 <if test="idcdNo != null">`idcd_no` = #{idcdNo} </if>
+				 <if test="macAdress != null">`mac_adress` = #{macAdress} </if>
+				 <if test="updateName != null">`update_name` = #{updateName} </if>
+		  		</where>
+	</select>
+
+	<select id="countByUserName" resultType="int">
+		select count(*) from crmkhv2_login_user where `username` = #{username}
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.UserDO" useGeneratedKeys="true" keyProperty="userId">
+		insert into crmkhv2_login_user
+		(
+			`username`, 
+			`name`, 
+			`role`,
+			`institution`,
+			`mobile`, 
+			`sms_type`,
+			`status`,
+            `superior_role`,
+			`gmt_modified`, 
+
+			`idcd_no` ,
+			`mac_adress` ,
+			wireless_mac_adress,
+			`update_name`
+		)
+		values
+		(
+			#{username}, 
+			#{name}, 
+			#{role},
+			#{institution},
+
+			#{mobile}, 
+			#{smsType},
+			#{status},
+            #{superiorRole},
+			now(),
+
+		    #{idcdNo} ,
+		    #{macAdress} ,
+		    #{wirelessMacAdress},
+		    #{updateName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.LoginUserDO">
+		update crmkhv2_login_user
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="role != null">`role` = #{role}, </if>
+			<if test="institution != null">`institution` = #{institution}, </if>
+
+
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+            <if test="superiorRole !=null">`superior_role` =#{superiorRole},</if>
+
+
+			<!--<if test="gmtModified = null">`gmt_modified` = #{gmtModified}, </if>-->
+			<if test="gmtModified ==null">`gmt_modified` =now(), </if>
+
+			<if test="smsType != null">`sms_type` = #{smsType} ,</if>
+			<if test="idcdNo != null">`idcd_no` = #{idcdNo} ,</if>
+			<if test="macAdress != null">`mac_adress` = #{macAdress} ,</if>
+			<if test="wirelessMacAdress != null">`wireless_mac_adress` = #{wirelessMacAdress} ,</if>
+			<if test="faceImage != null">`face_image` = #{faceImage} ,</if>
+			<if test="updateName != null">`update_name` = #{updateName} </if>
+		</set>
+		where username = #{username}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_login_user where username = #{userName}
+	</delete>
+	<!-- <update id="remove"> -->
+	<!-- 	update  crmkhv2_login_user -->
+	<!-- 	<set><if test="status != null">`status` = #{status} </if></set> -->
+	<!--  where user_id = #{userId} -->
+	<!-- </update> -->
+	
+	<!-- 通过登录账号获取用户信息 -->
+    <select id="getUserByName" resultType="com.yunda.base.system.domain.LoginUserDO">
+		select `user_id`,`username`,`name`,`mobile`,`status`,`gmt_modified`,`idcd_no`,`sms_type`,`superior_role`,`role`,`institution`,
+		`mac_adress` ,wireless_mac_adress,`update_name` from crmkhv2_login_user where `username` = #{userName}
+	</select>
+
+	
+    <select id="getFaceimageByUsername" resultType="java.lang.String">
+		select `face_image` from crmkhv2_login_user where `username` = #{userName}
+	</select>
+
+
+	<!-- 获取关注机构大区名称 -->
+	<select id="getBigareaData" resultType="java.lang.String">
+		SELECT bigarea as bigarea_name from sys_province
+		where bigarea != null or bigarea != ''
+		GROUP BY bigarea
+	</select>
+	<!-- 获取业务省名称 -->
+	<select id="getProvinceData" resultType="java.lang.String">
+		SELECT ProvinceName as province_name from sys_province
+		where ProvinceName != null or ProvinceName != ''
+		GROUP BY ProvinceName
+	</select>
+
+</mapper>

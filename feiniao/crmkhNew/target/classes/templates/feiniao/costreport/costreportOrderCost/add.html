@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">结算日期：</label>
+								<div class="col-sm-8">
+									<input id="accountDt" name="accountDt" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">运单号：</label>
+								<div class="col-sm-8">
+									<input id="shipmentNo" name="shipmentNo" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">始发城市ID：</label>
+								<div class="col-sm-8">
+									<input id="startCityId" name="startCityId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">始发省ID：</label>
+								<div class="col-sm-8">
+									<input id="startProvinceId" name="startProvinceId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">目的城市ID：</label>
+								<div class="col-sm-8">
+									<input id="endCityId" name="endCityId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">目的省ID：</label>
+								<div class="col-sm-8">
+									<input id="endProvinceId" name="endProvinceId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">重量：</label>
+								<div class="col-sm-8">
+									<input id="weight" name="weight" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">首重：</label>
+								<div class="col-sm-8">
+									<input id="firstWeight" name="firstWeight" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">首重费：</label>
+								<div class="col-sm-8">
+									<input id="firstWeightFee" name="firstWeightFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">续重：</label>
+								<div class="col-sm-8">
+									<input id="additionalWeight" name="additionalWeight" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">续重费：</label>
+								<div class="col-sm-8">
+									<input id="additionalWeightFee" name="additionalWeightFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">运费：</label>
+								<div class="col-sm-8">
+									<input id="fee" name="fee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">中转费：</label>
+								<div class="col-sm-8">
+									<input id="tsfFee" name="tsfFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">派费：</label>
+								<div class="col-sm-8">
+									<input id="deliveryFee" name="deliveryFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">续重派费：</label>
+								<div class="col-sm-8">
+									<input id="deliveryAdditionalWeightFee" name="deliveryAdditionalWeightFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平衡派费：</label>
+								<div class="col-sm-8">
+									<input id="deliveryBalanceFee" name="deliveryBalanceFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">面单费：</label>
+								<div class="col-sm-8">
+									<input id="shipmentFee" name="shipmentFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">扫描费73：</label>
+								<div class="col-sm-8">
+									<input id="scanFee" name="scanFee" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点编码：</label>
+								<div class="col-sm-8">
+									<input id="branchCode" name="branchCode" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户编码：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户来源：</label>
+								<div class="col-sm-8">
+									<input id="customerSourceType" name="customerSourceType" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">结算费用计费方式：</label>
+								<div class="col-sm-8">
+									<input id="chargeModeFlag" name="chargeModeFlag" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">TD结算日期：</label>
+								<div class="col-sm-8">
+									<input id="tdAccountDt" name="tdAccountDt" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">揽件日期：</label>
+								<div class="col-sm-8">
+									<input id="senderAccountDt" name="senderAccountDt" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">下单日期：</label>
+								<div class="col-sm-8">
+									<input id="orderAccountDt" name="orderAccountDt" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/costreport/costreportOrderCost/add.js}">
+	</script>
+</body>
+</html>

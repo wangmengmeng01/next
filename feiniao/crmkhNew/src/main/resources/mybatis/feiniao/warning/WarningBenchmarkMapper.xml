@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.warning.dao.WarningBenchmarkDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.warning.domain.WarningBenchmarkDO">
+		select `id`,`ProvinceID`,`ProvinceName`,`jgmc`,`benchmark_setting`,`bigarea`,`update_date`,`update_id`,`update_name` from crmkhv2_warning_benchmark where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.warning.domain.WarningBenchmarkDO">
+		select `id`,`ProvinceID`,`ProvinceName`,`jgmc`,`benchmark_setting`,`bigarea`,`update_date`,`update_id`,`update_name` from crmkhv2_warning_benchmark
+        <where>  
+		  		  <if test="jgmc != null and jgmc != ''"> and jgmc like '%${jgmc}%'</if>
+		  		  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="benchmarkSetting != null and benchmarkSetting != ''"> and benchmark_setting = #{benchmarkSetting} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="updateDate != null and updateDate != ''"> and update_date = #{updateDate} </if>
+		  		  <if test="updateId != null and updateId != ''"> and update_id = #{updateId} </if>
+		  		  <if test="updateName != null and updateName != ''"> and update_name = #{updateName} </if>
+		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by jgmc desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_warning_benchmark
+		 <where>  
+		  		  <if test="jgmc != null and jgmc != ''"> and jgmc like '%${jgmc}%'</if>
+		  		  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="benchmarkSetting != null and benchmarkSetting != ''"> and benchmark_setting = #{benchmarkSetting} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="updateDate != null and updateDate != ''"> and update_date = #{updateDate} </if>
+		  		  <if test="updateId != null and updateId != ''"> and update_id = #{updateId} </if>
+		  		  <if test="updateName != null and updateName != ''"> and update_name = #{updateName} </if>
+		  		</where>
+	</select>
+	 
+	 <select id="countByJGMC" resultType="int">
+		select count(*) from crmkhv2_warning_benchmark
+		 <where>  
+		  		<if test="jgmc != null and jgmc != ''"> and jgmc = #{jgmc} </if>
+		 </where>
+	</select>
+	<insert id="save" parameterType="com.yunda.base.feiniao.warning.domain.WarningBenchmarkDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_warning_benchmark
+		(
+			`ProvinceID`, 
+			`ProvinceName`, 
+			`jgmc`, 
+			`benchmark_setting`, 
+			`bigarea`, 
+			`update_date`, 
+			`update_id`, 
+			`update_name`
+		)
+		values
+		(
+			#{provinceid}, 
+			#{provincename}, 
+			#{jgmc}, 
+			#{benchmarkSetting}, 
+			#{bigarea}, 
+			now(),
+			#{updateId}, 
+			#{updateName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.warning.domain.WarningBenchmarkDO">
+		update crmkhv2_warning_benchmark 
+		<set>
+			<if test="provinceid != null">`ProvinceID` = #{provinceid}, </if>
+			<if test="provincename != null">`ProvinceName` = #{provincename}, </if>
+			<if test="jgmc != null">`jgmc` = #{jgmc}, </if>
+			<if test="benchmarkSetting != null">`benchmark_setting` = #{benchmarkSetting}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="updateDate == null">`update_date` = now(), </if>
+			<if test="updateId != null">`update_id` = #{updateId}, </if>
+			<if test="updateName != null">`update_name` = #{updateName}</if>
+		</set>
+		<where>
+			<if test="id != null">`id` = #{id}</if>
+			<if test="id == null">`jgmc` = #{jgmc} </if>
+		</where> 
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_warning_benchmark where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_warning_benchmark where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

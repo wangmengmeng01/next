@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="bigarea" name="bigarea" th:value="${reportTotaldata.bigarea}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">省ID：</label>
+								<div class="col-sm-8">
+									<input id="provinceid" name="provinceid" th:value="${reportTotaldata.provinceid}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省名称：</label>
+								<div class="col-sm-8">
+									<input id="provincename" name="provincename" th:value="${reportTotaldata.provincename}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市ID：</label>
+								<div class="col-sm-8">
+									<input id="cityid" name="cityid" th:value="${reportTotaldata.cityid}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市名称：</label>
+								<div class="col-sm-8">
+									<input id="cityname" name="cityname" th:value="${reportTotaldata.cityname}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点编码：</label>
+								<div class="col-sm-8">
+									<input id="branchCode" name="branchCode" th:value="${reportTotaldata.branchCode}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点名称：</label>
+								<div class="col-sm-8">
+									<input id="branchName" name="branchName" th:value="${reportTotaldata.branchName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户编码：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" th:value="${reportTotaldata.customerId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户名称：</label>
+								<div class="col-sm-8">
+									<input id="customerName" name="customerName" th:value="${reportTotaldata.customerName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">一级网点编码：</label>
+								<div class="col-sm-8">
+									<input id="yjbm" name="yjbm" th:value="${reportTotaldata.yjbm}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">一级网点名称：</label>
+								<div class="col-sm-8">
+									<input id="yjmc" name="yjmc" th:value="${reportTotaldata.yjmc}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户来源：</label>
+								<div class="col-sm-8">
+									<input id="customerSourceType" name="customerSourceType" th:value="${reportTotaldata.customerSourceType}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">面单量：</label>
+								<div class="col-sm-8">
+									<input id="orderSum" name="orderSum" th:value="${reportTotaldata.orderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">二维码面单量：</label>
+								<div class="col-sm-8">
+									<input id="qrcodeOrderSum" name="qrcodeOrderSum" th:value="${reportTotaldata.qrcodeOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">菜鸟面单量：</label>
+								<div class="col-sm-8">
+									<input id="cainiaoOrderSum" name="cainiaoOrderSum" th:value="${reportTotaldata.cainiaoOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单量：</label>
+								<div class="col-sm-8">
+									<input id="ordinaryOrderSum" name="ordinaryOrderSum" th:value="${reportTotaldata.ordinaryOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">日均单量：</label>
+								<div class="col-sm-8">
+									<input id="orderAvg" name="orderAvg" th:value="${reportTotaldata.orderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">面单量返利金额：</label>
+								<div class="col-sm-8">
+									<input id="priceSum" name="priceSum" th:value="${reportTotaldata.priceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单返利金额：</label>
+								<div class="col-sm-8">
+									<input id="dianziOrderSum" name="dianziOrderSum" th:value="${reportTotaldata.dianziOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单占比：</label>
+								<div class="col-sm-8">
+									<input id="dianziNumPercent" name="dianziNumPercent" th:value="${reportTotaldata.dianziNumPercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建日期：</label>
+								<div class="col-sm-8">
+									<input id="createDate" name="createDate" th:value="${reportTotaldata.createDate}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">订单日期：</label>
+								<div class="col-sm-8">
+									<input id="reportDate" name="reportDate" th:value="${reportTotaldata.reportDate}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单百分比：</label>
+								<div class="col-sm-8">
+									<input id="dianziPercent" name="dianziPercent" th:value="${reportTotaldata.dianziPercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="aCustomerSum" name="aCustomerSum" th:value="${reportTotaldata.aCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="bCustomerSum" name="bCustomerSum" th:value="${reportTotaldata.bCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="cCustomerSum" name="cCustomerSum" th:value="${reportTotaldata.cCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="dCustomerSum" name="dCustomerSum" th:value="${reportTotaldata.dCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="eCustomerSum" name="eCustomerSum" th:value="${reportTotaldata.eCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="fCustomerSum" name="fCustomerSum" th:value="${reportTotaldata.fCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="gCustomerSum" name="gCustomerSum" th:value="${reportTotaldata.gCustomerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="aOrderAvg" name="aOrderAvg" th:value="${reportTotaldata.aOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="bOrderAvg" name="bOrderAvg" th:value="${reportTotaldata.bOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="cOrderAvg" name="cOrderAvg" th:value="${reportTotaldata.cOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="dOrderAvg" name="dOrderAvg" th:value="${reportTotaldata.dOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="eOrderAvg" name="eOrderAvg" th:value="${reportTotaldata.eOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="fOrderAvg" name="fOrderAvg" th:value="${reportTotaldata.fOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="gOrderAvg" name="gOrderAvg" th:value="${reportTotaldata.gOrderAvg}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类面单量：</label>
+								<div class="col-sm-8">
+									<input id="aOrderSum" name="aOrderSum" th:value="${reportTotaldata.aOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类面单量：</label>
+								<div class="col-sm-8">
+									<input id="bOrderSum" name="bOrderSum" th:value="${reportTotaldata.bOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类面单量：</label>
+								<div class="col-sm-8">
+									<input id="cOrderSum" name="cOrderSum" th:value="${reportTotaldata.cOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类面单量：</label>
+								<div class="col-sm-8">
+									<input id="dOrderSum" name="dOrderSum" th:value="${reportTotaldata.dOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类面单量：</label>
+								<div class="col-sm-8">
+									<input id="eOrderSum" name="eOrderSum" th:value="${reportTotaldata.eOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类面单量：</label>
+								<div class="col-sm-8">
+									<input id="fOrderSum" name="fOrderSum" th:value="${reportTotaldata.fOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类面单量：</label>
+								<div class="col-sm-8">
+									<input id="gOrderSum" name="gOrderSum" th:value="${reportTotaldata.gOrderSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="aPriceSum" name="aPriceSum" th:value="${reportTotaldata.aPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="bPriceSum" name="bPriceSum" th:value="${reportTotaldata.bPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="cPriceSum" name="cPriceSum" th:value="${reportTotaldata.cPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="dPriceSum" name="dPriceSum" th:value="${reportTotaldata.dPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="ePriceSum" name="ePriceSum" th:value="${reportTotaldata.ePriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="fPriceSum" name="fPriceSum" th:value="${reportTotaldata.fPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="gPriceSum" name="gPriceSum" th:value="${reportTotaldata.gPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="aAllPriceSum" name="aAllPriceSum" th:value="${reportTotaldata.aAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="bAllPriceSum" name="bAllPriceSum" th:value="${reportTotaldata.bAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="cAllPriceSum" name="cAllPriceSum" th:value="${reportTotaldata.cAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="dAllPriceSum" name="dAllPriceSum" th:value="${reportTotaldata.dAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="eAllPriceSum" name="eAllPriceSum" th:value="${reportTotaldata.eAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="fAllPriceSum" name="fAllPriceSum" th:value="${reportTotaldata.fAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="gAllPriceSum" name="gAllPriceSum" th:value="${reportTotaldata.gAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="aPricePercent" name="aPricePercent" th:value="${reportTotaldata.aPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="bPricePercent" name="bPricePercent" th:value="${reportTotaldata.bPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="cPricePercent" name="cPricePercent" th:value="${reportTotaldata.cPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="dPricePercent" name="dPricePercent" th:value="${reportTotaldata.dPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="ePricePercent" name="ePricePercent" th:value="${reportTotaldata.ePricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="fPricePercent" name="fPricePercent" th:value="${reportTotaldata.fPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="gPricePercent" name="gPricePercent" th:value="${reportTotaldata.gPricePercent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户订单量：</label>
+								<div class="col-sm-8">
+									<input id="customerSum" name="customerSum" th:value="${reportTotaldata.customerSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户平均单量：</label>
+								<div class="col-sm-8">
+									<input id="customerAvgSum" name="customerAvgSum" th:value="${reportTotaldata.customerAvgSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户返利单量：</label>
+								<div class="col-sm-8">
+									<input id="customerPriceSum" name="customerPriceSum" th:value="${reportTotaldata.customerPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户返利单量：</label>
+								<div class="col-sm-8">
+									<input id="customerAllPriceSum" name="customerAllPriceSum" th:value="${reportTotaldata.customerAllPriceSum}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportTotaldata/edit.js}">
+	</script>
+</body>
+</html>

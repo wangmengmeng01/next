@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<style>
+    .form-control {
+    	display: inline-block;
+    	width: 70%;
+    }
+    .col-md-9 {
+	    width: 150px;
+	    margin-top: 11px;
+	    margin-left: 390px;
+	}
+	.col-md-4 {
+		width: 31.33333333%;
+	}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		
+        <br>
+		<div class="row">
+			<div class="col-sm-3" style="display: none">
+				<div class="ibox ibox-body">
+					<div class="ibox-title">
+						<h5>选择部门</h5>
+					</div>
+					<div class="ibox-content">
+						<div id="jstree"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="ibox">
+					<div class="ibox-body">
+						<form id="searchUser">
+							<div class="row"
+							style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+
+								<div class="col-md-4">
+									<label>登录人账号：</label> <input type="text" name="searchUserName"
+										id="searchUserName" class="form-control">
+								</div>
+								<div class="layui-inline">
+									<label class="control-label" style="margin-right:17px;">修改时间：</label>
+									<div class="layui-input-inline" style="width:143px;">
+										<input type="text"  placeholder="开始时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="start_date" style="height:34px;border-color:#ccc;margin-left: -20px">
+									</div>
+									<div class="layui-input-inline" style="width:143px;">
+										<input type="text"  placeholder="结束时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="end_date" style="height:34px;border-color:#ccc;margin-left: -23px">
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<label>电话号码：</label> <input type="text" name="mobile"
+															  id="mobile" class="form-control">
+								</div>
+
+								<div class="col-md-4">
+									<label style="margin-right: 14px;	">所属角色：</label>
+										<select id = "role" name="role" class="form-control">
+											<option value="">请选择</option>
+											<option value="总部">总部</option>
+											<option value="区总">区总</option>
+											<option value="区总协助人">区总协助人</option>
+											<option value="省总">省总</option>
+											<option value="网点">网点</option>
+										</select>
+								</div>
+								<div class="col-md-4">
+									<label>所属机构：</label> <input type="text" name="institution"
+																id="institution" class="form-control">
+								</div>
+
+							</div>
+							<div class="row"
+								 style="margin: 0; background-color: #fff; border: 1px solid #e4dce4;">
+								<div class="col-md-4" style="float: right;
+    margin-top: -55px;margin-right: 89px;">
+								<label>使用状态：</label>
+
+									<select  id="useType" style="margin-left:-3px;height: 34px;">
+										<option value="">请选择</option>
+										<option value="1">使用中</option>
+										<option value="0">已停用</option>
+									</select>
+
+								</div>
+							</div>
+
+
+						</form>
+						<div class="fixed-table-toolbar">
+							<div class="columns pull-left">
+								<button shiro:hasPermission="sys:loginuser:add" type="button"
+									class="btn  btn-primary" onclick="add()">
+									<i class="fa fa-plus hidden" aria-hidden="true"></i>新增账号
+								</button>
+								<button shiro:hasPermission="sys:loginuser:batchRemove" type="button"
+									class="btn  btn-danger" onclick="batchRemove()">
+									<i class="fa fa-trash hidden" aria-hidden="true"></i>删除
+								</button>
+							</div>
+							<div class="col-md-9" style="width:300px;">
+								<input type="button" value="查询" onclick="query()" class="btn  btn-warning">
+								 <input type="button" value="重置" onclick="resetForm()" class="btn  btn-success">
+								<button shiro:hasPermission="sys:loginuser:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')" style="margin-right:50px;">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+							</div>
+						</div>
+						<table id="exampleTable" data-mobile-responsive="true">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_editProvince_h = 'hidden';
+				var s_editBigarea_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:loginuser:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:loginuser:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:loginuser:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:loginuser:editProvince">
+			<script type="text/javascript">
+				var s_editProvince_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:loginuser:editBigarea">
+			<script type="text/javascript">
+				var s_editBigarea_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/sys/user/loginUser.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

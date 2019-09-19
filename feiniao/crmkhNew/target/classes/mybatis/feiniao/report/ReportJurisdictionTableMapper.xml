@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ReportJurisdictionTableDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.ReportJurisdictionTableDO">
+		select `job_number`,`applicant_name`,`phone_number`,`bqq`,`permission_type`,`application_reasons`,`approval_state`,`bigarea`,`province`,`applicant_time`,`is_asles` from crmkhv2_report_jurisdiction_table where job_number = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.ReportJurisdictionTableDO">
+		select `job_number`,`applicant_name`,`phone_number`,`bqq`,`permission_type`,`application_reasons`,`approval_state`,`bigarea`,`province`,`is_asles` from crmkhv2_report_jurisdiction_table
+        <where>  
+		  		  <if test="jobNumber != null and jobNumber != ''"> and job_number = #{jobNumber} </if>
+		  		  <if test="applicantName != null and applicantName != ''"> and applicant_name = #{applicantName} </if>
+		  		  <if test="phoneNumber != null and phoneNumber != ''"> and phone_number = #{phoneNumber} </if>
+		  		  <if test="bqq != null and bqq != ''"> and bqq = #{bqq} </if>
+		  		  <if test="permissionType != null and permissionType != ''"> and permission_type = #{permissionType} </if>
+		  		  <if test="applicationReasons != null and applicationReasons != ''"> and application_reasons = #{applicationReasons} </if>
+		  		  <if test="approvalState != null and approvalState != ''"> and approval_state = #{approvalState} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="province != null and province != ''"> and province = #{province} </if>
+		  		  <if test="applicantTime != null and applicantTime != ''"> and applicant_time = #{applicantTime} </if>
+		  		  <if test="isAsles != null and isAsles != ''"> and is_asles = #{isAsles} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by job_number desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_report_jurisdiction_table
+		 <where>  
+		  		  <if test="jobNumber != null and jobNumber != ''"> and job_number = #{jobNumber} </if>
+		  		  <if test="applicantName != null and applicantName != ''"> and applicant_name = #{applicantName} </if>
+		  		  <if test="phoneNumber != null and phoneNumber != ''"> and phone_number = #{phoneNumber} </if>
+		  		  <if test="bqq != null and bqq != ''"> and bqq = #{bqq} </if>
+		  		  <if test="permissionType != null and permissionType != ''"> and permission_type = #{permissionType} </if>
+		  		  <if test="applicationReasons != null and applicationReasons != ''"> and application_reasons = #{applicationReasons} </if>
+		  		  <if test="approvalState != null and approvalState != ''"> and approval_state = #{approvalState} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="province != null and province != ''"> and province = #{province} </if>
+		  		  <if test="applicantTime != null and applicantTime != ''"> and applicant_time = #{applicantTime} </if>
+		  		  <if test="isAsles != null and isAsles != ''"> and is_asles = #{isAsles} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.ReportJurisdictionTableDO">
+		insert into crmkhv2_report_jurisdiction_table
+		(
+			`job_number`, 
+			`applicant_name`, 
+			`phone_number`, 
+			`bqq`, 
+			`permission_type`, 
+			`application_reasons`, 
+			`approval_state`, 
+			`bigarea`, 
+			`province`, 
+			`applicant_time`, 
+			`is_asles`
+		)
+		values
+		(
+			#{jobNumber}, 
+			#{applicantName}, 
+			#{phoneNumber}, 
+			#{bqq}, 
+			#{permissionType}, 
+			#{applicationReasons}, 
+			#{approvalState}, 
+			#{bigarea}, 
+			#{province}, 
+			#{applicantTime}, 
+			#{isAsles}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.ReportJurisdictionTableDO">
+		update crmkhv2_report_jurisdiction_table 
+		<set>
+			<if test="applicantName != null">`applicant_name` = #{applicantName}, </if>
+			<if test="phoneNumber != null">`phone_number` = #{phoneNumber}, </if>
+			<if test="bqq != null">`bqq` = #{bqq}, </if>
+			<if test="permissionType != null">`permission_type` = #{permissionType}, </if>
+			<if test="applicationReasons != null">`application_reasons` = #{applicationReasons}, </if>
+			<if test="approvalState != null">`approval_state` = #{approvalState}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="applicantTime != null">`applicant_time` = #{applicantTime}, </if>
+			<if test="isAsles != null">`is_asles` = #{isAsles}</if>
+		</set>
+		where job_number = #{jobNumber}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_report_jurisdiction_table where job_number = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_report_jurisdiction_table where job_number in 
+		<foreach item="jobNumber" collection="array" open="(" separator="," close=")">
+			#{jobNumber}
+		</foreach>
+	</delete>
+	<select id="getReportJurisdictionTableDO" resultType="com.yunda.base.feiniao.report.domain.ReportJurisdictionTableDO">
+	select `job_number`,`applicant_name`,`phone_number`,`bqq`,`permission_type`,`application_reasons`,`approval_state`,`bigarea`,`province`,`is_asles` 
+	from crmkhv2_report_jurisdiction_table
+	where job_number = #{jobNumber}
+	and approval_state = #{approvalState}
+	</select>
+</mapper>

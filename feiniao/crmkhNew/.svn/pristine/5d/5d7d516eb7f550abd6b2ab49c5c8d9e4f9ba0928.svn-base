@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.VideoDownloadDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.VideoDownloadDO">
+		select `id`,`date`,`username`,`file_path` from crmkh_video_download where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.VideoDownloadDO">
+		select `id`,`date`,`username`,`file_path` from crmkh_video_download
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="date != null and date != ''"> and date = #{date} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="filePath != null and filePath != ''"> and file_path = #{filePath} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_video_download
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="date != null and date != ''"> and date = #{date} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="filePath != null and filePath != ''"> and file_path = #{filePath} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.VideoDownloadDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkh_video_download
+		(
+			`date`, 
+			`username`, 
+			`file_path`
+		)
+		values
+		(
+			#{date}, 
+			#{username}, 
+			#{filePath}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.VideoDownloadDO">
+		update crmkh_video_download 
+		<set>
+			<if test="date != null">`date` = #{date}, </if>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="filePath != null">`file_path` = #{filePath}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_video_download where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_video_download where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

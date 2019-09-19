@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ReportOrderStatsAllDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.ReportOrderStatsAllDO">
+		select `customer_id`,`customer_name`,`branch_code`,`customer_source_type`,`daily_order_num`,`cre_date`,`qu_date`,`customer_addtime`,`gs` from crmkhv2_report_order_stats_all where customer_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.ReportOrderStatsAllDO">
+		select `customer_id`,`customer_name`,`branch_code`,`customer_source_type`,`daily_order_num`,`cre_date`,`qu_date`,`customer_addtime`,`gs` from crmkhv2_report_order_stats_all
+        <where>  
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="dailyOrderNum != null and dailyOrderNum != ''"> and daily_order_num = #{dailyOrderNum} </if>
+		  		  <if test="creDate != null and creDate != ''"> and cre_date = #{creDate} </if>
+		  		  <if test="quDate != null and quDate != ''"> and qu_date = #{quDate} </if>
+		  		  <if test="customerAddtime != null and customerAddtime != ''"> and customer_addtime = #{customerAddtime} </if>
+		  		  <if test="gs != null and gs != ''"> and gs = #{gs} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by customer_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_report_order_stats_all
+		 <where>  
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="dailyOrderNum != null and dailyOrderNum != ''"> and daily_order_num = #{dailyOrderNum} </if>
+		  		  <if test="creDate != null and creDate != ''"> and cre_date = #{creDate} </if>
+		  		  <if test="quDate != null and quDate != ''"> and qu_date = #{quDate} </if>
+		  		  <if test="customerAddtime != null and customerAddtime != ''"> and customer_addtime = #{customerAddtime} </if>
+		  		  <if test="gs != null and gs != ''"> and gs = #{gs} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.ReportOrderStatsAllDO">
+		insert into crmkhv2_report_order_stats_all
+		(
+			`customer_id`, 
+			`customer_name`, 
+			`branch_code`, 
+			`customer_source_type`, 
+			`daily_order_num`, 
+			`cre_date`, 
+			`qu_date`, 
+			`customer_addtime`, 
+			`gs`
+		)
+		values
+		(
+			#{customerId}, 
+			#{customerName}, 
+			#{branchCode}, 
+			#{customerSourceType}, 
+			#{dailyOrderNum}, 
+			#{creDate}, 
+			#{quDate}, 
+			#{customerAddtime}, 
+			#{gs}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.ReportOrderStatsAllDO">
+		update crmkhv2_report_order_stats_all 
+		<set>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="customerSourceType != null">`customer_source_type` = #{customerSourceType}, </if>
+			<if test="dailyOrderNum != null">`daily_order_num` = #{dailyOrderNum}, </if>
+			<if test="creDate != null">`cre_date` = #{creDate}, </if>
+			<if test="quDate != null">`qu_date` = #{quDate}, </if>
+			<if test="customerAddtime != null">`customer_addtime` = #{customerAddtime}, </if>
+			<if test="gs != null">`gs` = #{gs}</if>
+		</set>
+		where customer_id = #{customerId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_report_order_stats_all where customer_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_report_order_stats_all where customer_id in 
+		<foreach item="customerId" collection="array" open="(" separator="," close=")">
+			#{customerId}
+		</foreach>
+	</delete>
+
+</mapper>

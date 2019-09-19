@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+<head>
+  <title>index</title>
+</head>
+<body style="margin:0px auto;width:510px;height:200px;">
+<div style="margin-top: 80px">
+  <div>
+    <img border="1px" height="220px" width="160px" src="../img/tochrome.png ">
+  </div>
+  <div style="margin-top: -111px; margin-left: 177px;">
+    <font style="font-size: 40px; margin-top: 143px;">飞鸟系统温馨提示</font>
+  </div>
+  <div style="margin-top: 70px;"><span style="margin-left: 32px;"><p style="width: 135%;">尊敬的客户，为了优化您的体验，暂无法通过该页面获取更多的信息，请切换为<font color="red">谷歌浏览器</font></p>
+    <p style="margin-top: -10px">以方便更好地浏览飞鸟系统数据，对您造成的不便我们深表歉意</p>
+    </span>
+  </div>
+  <div style="color: red;margin-top: 0px;width: 135%;">下载文件: <a href="./ie.bat" download="ie.bat">ie.bat</a>  (下载完成后请双击打开,再执行下列操作)</div>
+  <div style="color: red;margin-top: 8px">谷歌浏览器下载地址: <a  href="https://www.google.cn/chrome/">https://www.google.cn/chrome/</a></div>
+  <div style="color: red;margin-top: 8px">飞鸟系统页面地址: <a id="a_address" href="#" onclick="test()">https://crmkhnew.yundasys.com:37093/crmkh/login</a></div>
+  <!--<button type="button" style="margin-top: 10px;height: 35px;margin-left: 200px" onclick="test()">点击用谷歌打开</button>-->
+</div>
+<script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    /* var toChromeAddress="";
+     $.ajax({
+         type: "GET",
+         url: "/crmkh/tochrome",
+         success: function (address) {
+             toChromeAddress=address;
+             $("#a_address").attr("href",address);
+             $("#a_address").text(address);
+         }
+     });*/
+
+    function test() {
+        /*
+        创建ActiveXObject实例，只在IE下有效，才可以创建
+        */
+        try {
+          var objShell= new ActiveXObject("WScript.Shell");
+            /*
+          命令参数说明
+          cmd.exe /c dir 是执行完dir命令后关闭命令窗口。
+          cmd.exe /k dir 是执行完dir命令后不关闭命令窗口。
+          cmd.exe /c start dir 会打开一个新窗口后执行dir指令，原窗口会关闭。
+          cmd.exe /k start dir 会打开一个新窗口后执行dir指令，原窗口不会关闭。
+          这里的dir是start chrome www.baidu.com//用谷歌浏览器打开百度
+          */
+            objShell.Run("cmd.exe /c start chrome https://crmkhnew.yundasys.com:37093/crmkh/login",0,true);
+        }catch (e) {
+            alert("请将地址复制到谷歌浏览器中打开!");
+        }
+
+    }
+</script>
+</body>
+</html>

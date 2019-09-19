@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${marketOccupancyTaoxi.id}"  type="hidden">
+							
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">总计(单位:万)：</label>
+								<div class="col-sm-8">
+									<input id="totalSum" name="totalSum" th:value="${marketOccupancyTaoxi.totalSum}"
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}"  type="number" min="0">
+								</div>
+							</div>
+							
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">韵达占比(%)：</label>
+								<div class="col-sm-8">
+									<input id="yd Ratio" name="ydRatio" th:value="${marketOccupancyTaoxi.ydRatio}" 
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}"  type="number" min="0">
+								</div>
+							</div>
+							
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">中通占比(%)：</label>
+								<div class="col-sm-8">
+									<input id="ztoRatio" name="ztoRatio" th:value="${marketOccupancyTaoxi.ztoRatio}"
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}"  type="number" min="0">
+								</div>
+							</div>
+							
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">圆通占比(%)：</label>
+								<div class="col-sm-8">
+									<input id="ytoRatio" name="ytoRatio" th:value="${marketOccupancyTaoxi.ytoRatio}" 
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}" type="number" min="0">
+								</div>
+							</div>
+							
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">申通占比(%)：</label>
+								<div class="col-sm-8">
+									<input id="stoRatio" name="stoRatio" th:value="${marketOccupancyTaoxi.stoRatio}" 
+									onkeyup= "if( ! /^-?\d+\.?\d{0,2}$/.test(this.value)){ var s = this.value;this.value=s.substring(0,s.indexOf('.')+3)}"  type="number" min="0">
+								</div>
+							</div>
+							<!-- 							<div class="form-group">	
+								<label class="col-sm-3 control-label">百世-揽件量(万)：</label>
+								<div class="col-sm-8">
+									<input id="bestexSum" name="bestexSum" th:value="${marketOccupancyTaoxi.bestexSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">百世占比(%)：</label>
+								<div class="col-sm-8">
+									<input id="bestexRatio" name="bestexRatio" th:value="${marketOccupancyTaoxi.bestexRatio}" class="form-control" type="text">
+								</div>
+							</div> -->
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/market/marketOccupancyTaoxi/edit.js}">
+	</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿该项目为脚手架项目，取自 bootbo，www.bootdo.com
+
+##################基于bootbase开发项目约定##################
+1.数据库名
+采用项目名，例如： jjm
+
+2.代码的目录需要独立，在com.yunda.base这层建立目录，并在改目录下建立controller、dao、domain等
+例如：com.yunda.base.jjm 
+
+3.数据库的表名字都以项目为前缀
+例如： jjm_hdcode_detail
+
+4.类名与表名，对应关系
+例如：
+类 com.yunda.base.domain.HdcodeDetailDo -》表 jjm_hdcode_detail
+类 com.yunda.base.domain.XxxDo -》表 jjm_xxx
+
+5.bootbase中不用的功能例如oa等，可在系统权限中去除即可
+
+6.数据库操作一律遵循 dao，mybaties.xml 。禁止直接jdbc拼接sql，不要用注释写mybaties查询
+
+7.常量定义写在枚举中，代码中禁止出现==1 ;==2 之类的代码，要取用枚举定义值
+
+8.如果使用本地内存缓存数据库的值，那么一定要提供自动更新或者手动更新数据的途径，避免运行过程在重启服务才能变更设置
+
+ 
+
+##################版本记录##################
+#刘慧明团队修改
+
+
+#龚毅修改
+=====20180428
+1.index和loging页面head，title中的文字动态化
+2.配置参数从数据库加载，定时更新
+3.主界面布局左上角图标点击收缩左侧
+4.增加pushwebsocket的msgutil封装
+
+=====20180429
+1.定时任务集群互斥，自动争夺主位
+2.统一异常
+3.慢方法监控
+4.修改指定类的日志等级
+
+============20180430
+1.websocket在线显示日志
+2.登录增加图形码
+
+============20180501
+1.增加了bo自定义validater(身份证，手机号码，新旧参数一致，座机号码，黑名单，人民币，枚举判断)
+
+
+百度ai地址
+https://ai.baidu.com/docs#/Face-API/top
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.CityDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.CityDO">
+		select `CityID`,`CityName`,`ProvinceID`,`AreaCode` from sys_city where CityID = #{value}
+	</select>
+
+	<select id="list" resultType="long">
+		select `CityID` from sys_city
+        <where>  
+		  		  <if test="cityid != null and cityid != ''"> and CityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and CityName = #{cityname} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="areacode != null and areacode != ''"> and AreaCode = #{areacode} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by CityID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="getAllCitylist" resultType="com.yunda.base.system.domain.CityDO">
+		select `CityID`,`CityName`,`ProvinceID`,`AreaCode` from sys_city
+     	where ProvinceID like #{provinceid}
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_city
+		 <where>  
+		  		  <if test="cityid != null and cityid != ''"> and CityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and CityName = #{cityname} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and ProvinceID = #{provinceid} </if>
+		  		  <if test="areacode != null and areacode != ''"> and AreaCode = #{areacode} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.CityDO">
+		insert into sys_city
+		(
+			`CityID`, 
+			`CityName`, 
+			`ProvinceID`, 
+			`AreaCode`
+		)
+		values
+		(
+			#{cityid}, 
+			#{cityname}, 
+			#{provinceid}, 
+			#{areacode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.CityDO">
+		update sys_city 
+		<set>
+			<if test="cityname != null">`CityName` = #{cityname}, </if>
+			<if test="provinceid != null">`ProvinceID` = #{provinceid}, </if>
+			<if test="areacode != null">`AreaCode` = #{areacode}</if>
+		</set>
+		where CityID = #{cityid}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_city where CityID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_city where CityID in 
+		<foreach item="cityid" collection="array" open="(" separator="," close=")">
+			#{cityid}
+		</foreach>
+	</delete>
+	
+	<update id="batchUpdateCity">
+		update sys_city 
+		set
+			ProvinceID = #{provinceId}
+		where CityID in 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach> 
+	</update>
+	
+	<update id="updateCity" parameterType="java.util.Map" >
+		update sys_city 
+		set ProvinceID = #{provinceid}
+		where CityID = #{cityid}
+	</update>
+
+</mapper>

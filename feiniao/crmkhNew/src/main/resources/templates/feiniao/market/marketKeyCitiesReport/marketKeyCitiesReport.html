@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<form class="form-horizontal m-t" id="signupForm">
+						<div class="form-group group-query" id="group_query">
+							<!--<label class="group-date col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-1" id="group_month">月份:</label>-->
+							<label class="col-sm-2 col-md-2 control-label label-time" id="group_month">月份:</label>
+							<div class="group-date col-sm-3 col-md-2 " id="group_month" >
+								<input type="text" class="form-control" id="searchDate" name="searchDate"  placeholder="">
+							</div>
+
+							<div class="group-querybtn" id="group-querybtn" style="text-align:right;">
+								<input type="button" value="查询" onclick="query()" class="btn btn-success" style="margin-right:20px;background-color:#1E9FFF;border:1px solid #1E9FFF;">
+							    <input type="button" value="重置" onclick="resetForm()" style="margin-right:20px;" class="btn  btn-success">
+							    <button shiro:hasPermission="market:marketKeyCitiesReport:exportExcel" style="margin-right:50px;" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+								<div style="color:red; margin:20px 30px;  text-align:left;">注：红色单元格部分表示市场份额居第一位             A表示各省韵达月总量  B表示全国韵达月总量    C表示各省业快递行业务总量  D表示全国快递行业业务总量</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="market:marketKeyCitiesReport:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="market:marketKeyCitiesReport:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="market:marketKeyCitiesReport:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="market:marketKeyCitiesReport:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+
+							<!-- <button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button> -->
+						</div>
+					</div>
+					<div style="float:left;">
+						<label  >单位：万件</label>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketKeyCitiesReport:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketKeyCitiesReport:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketKeyCitiesReport:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/market/marketKeyCitiesReport/marketKeyCitiesReport.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+	<script th:src="@{/js/plugins/magicsuggest/magicsuggest-min.js}"></script>
+	<script th:src="@{/js/bootstrap3-editable/js/bootstrap-editable.js}"></script>
+</body>
+</html>

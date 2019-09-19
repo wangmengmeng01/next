@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.market.dao.MarketOccupancyTaoxiDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyTaoxiDO">
+		select `id`,`qu_date`,`total_sum`,`yd_sum`,`yd_ratio`,`zto_sum`,`zto_ratio`,`yto_sum`,`yto_ratio`,`sto_sum`,`sto_ratio`,`bestex_sum`,`bestex_ratio` from crmkhv2_market_occupancy_taoxi where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyTaoxiDO">
+		select `id`,`qu_date`,`total_sum`,`yd_sum`,`yd_ratio`,`zto_sum`,`zto_ratio`,`yto_sum`,`yto_ratio`,`sto_sum`,`sto_ratio`,`bestex_sum`,`bestex_ratio` from crmkhv2_market_occupancy_taoxi
+        <where>  
+		  	qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+		    AND date_format (#{endDate},'%Y-%m-%d')
+		</where>
+		order by qu_date DESC 
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="listRangeSum" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyTaoxiDO">
+		select 
+			cast(sum(ifnull(total_sum,0)) as decimal(18,2)) 
+			 as total_sum,
+			cast(sum(ifnull(yd_sum,0)) as decimal(18,2))
+			 as yd_sum,
+			
+			cast(sum(ifnull(zto_sum,0)) as decimal(18,2))
+			 as zto_sum,
+			
+			cast(sum(ifnull(yto_sum,0)) as decimal(18,2))
+			 as yto_sum,
+			
+			cast(sum(ifnull(sto_sum,0)) as decimal(18,2))
+			 as sto_sum
+			
+		from crmkhv2_market_occupancy_taoxi
+        <where>  
+		  	qu_date BETWEEN date_format(#{startDate},'%Y-%m-%d')
+		    AND date_format(#{endDate},'%Y-%m-%d')
+		</where>
+		
+	</select>
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_market_occupancy_taoxi
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> 
+		  		  	and qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+		    	  AND date_format (#{endDate},'%Y-%m-%d') </if>
+		  		  <if test="totalSum != null and totalSum != ''"> and total_sum = #{totalSum} </if>
+		  		  <if test="ydSum != null and ydSum != ''"> and yd_sum = #{ydSum} </if>
+		  		  <if test="ydRatio != null and ydRatio != ''"> and yd_ratio = #{ydRatio} </if>
+		  		  <if test="ztoSum != null and ztoSum != ''"> and zto_sum = #{ztoSum} </if>
+		  		  <if test="ztoRatio != null and ztoRatio != ''"> and zto_ratio = #{ztoRatio} </if>
+		  		  <if test="ytoSum != null and ytoSum != ''"> and yto_sum = #{ytoSum} </if>
+		  		  <if test="ytoRatio != null and ytoRatio != ''"> and yto_ratio = #{ytoRatio} </if>
+		  		  <if test="stoSum != null and stoSum != ''"> and sto_sum = #{stoSum} </if>
+		  		  <if test="stoRatio != null and stoRatio != ''"> and sto_ratio = #{stoRatio} </if>
+		  		  <if test="bestexSum != null and bestexSum != ''"> and bestex_sum = #{bestexSum} </if>
+		  		  <if test="bestexRatio != null and bestexRatio != ''"> and bestex_ratio = #{bestexRatio} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyTaoxiDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_market_occupancy_taoxi
+		(
+			`qu_date`, 
+			`total_sum`, 
+			`yd_sum`, 
+			`yd_ratio`, 
+			`zto_sum`, 
+			`zto_ratio`, 
+			`yto_sum`, 
+			`yto_ratio`, 
+			`sto_sum`, 
+			`sto_ratio`, 
+			`bestex_sum`, 
+			`bestex_ratio`
+		)
+		values
+		(
+			date_format(#{showQuDate},'%Y-%m-%d'), 
+			#{totalSum}, 
+			#{ydSum}, 
+			#{ydRatio}, 
+			#{ztoSum}, 
+			#{ztoRatio}, 
+			#{ytoSum}, 
+			#{ytoRatio}, 
+			#{stoSum}, 
+			#{stoRatio}, 
+			#{bestexSum}, 
+			#{bestexRatio}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyTaoxiDO">
+		update crmkhv2_market_occupancy_taoxi 
+		<set>
+			<if test="quDate != null">`qu_date` = #{quDate}, </if>
+			<if test="totalSum != null">`total_sum` = #{totalSum}, </if>
+			<if test="ydSum != null">`yd_sum` = #{ydSum}, </if>
+			<if test="ydRatio != null">`yd_ratio` = #{ydRatio}, </if>
+			<if test="ztoSum != null">`zto_sum` = #{ztoSum}, </if>
+			<if test="ztoRatio != null">`zto_ratio` = #{ztoRatio}, </if>
+			<if test="ytoSum != null">`yto_sum` = #{ytoSum}, </if>
+			<if test="ytoRatio != null">`yto_ratio` = #{ytoRatio}, </if>
+			<if test="stoSum != null">`sto_sum` = #{stoSum}, </if>
+			<if test="stoRatio != null">`sto_ratio` = #{stoRatio}, </if>
+			<if test="bestexSum != null">`bestex_sum` = #{bestexSum}, </if>
+			<if test="bestexRatio != null">`bestex_ratio` = #{bestexRatio}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_market_occupancy_taoxi where id = #{value}
+	</delete>
+	
+	<delete id="removeByDate">
+		delete from crmkhv2_market_occupancy_taoxi where qu_date = date_format(#{quDate},'%Y-%m-%d')
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_market_occupancy_taoxi where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

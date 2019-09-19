@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ReportCustRewardDetailsDao">
+
+	<!--业务返利金额老逻辑（2019-01-01之前） -->
+	<select id="getCustRewardDetailsList" resultType="com.yunda.base.feiniao.report.domain.ReportCustRewardDetailsDO">
+		select (@i :=@i + 1) AS `recordId`,`bigarea`,`provinceID`,`provinceName`,`branch_code`,`gs`,`mc`,`CityID`,`CityName`,`customer_id`,`customer_name`,`customer_source_type`,`order_sum`,
+		cast(order_avg as decimal(10,2))   order_avg,
+		cast(all_price_sum as decimal(10,2))   all_price_sum,
+		`cust_level` 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt; 50 then 'a'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 50   and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  200  then 'b'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 200  and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  1000 then 'c'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 1000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  2000 then 'd'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 2000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  3000 then 'e'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 3000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  5000 then 'f'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 5000 then 'g'
+				 else '' end as price_level 
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				 SELECT                                                               
+				 customer_id,                                                        
+				 customer_name,                                                       
+				 branch_code,  
+                 gs ,
+                 customer_source_type,
+				 SUM(price_num) price_num,                                           
+				 SUM(all_price_sum) all_price_sum                 
+				                                                                      
+				 FROM
+                 (
+                    select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum 
+					from 
+                        (
+                            select customer_id,qu_date,customer_name,branch_code,gs,	
+                            sum(daily_order_num) order_sum,	
+                            sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+                            customer_source_type, 
+                            case 
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;50 then 'a'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=50   and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;200  then 'b'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=200  and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;1000 then 'c'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=1000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;2000 then 'd'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=2000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;3000 then 'e'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=3000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;5000 then 'f'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=5000 then 'g'
+                            else '' end as price_level 
+                            from crmkhv2_report_order_stats_all a 
+                            where a.qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+                            AND
+                            date_format (#{endDate},'%Y-%m-%d')
+                            GROUP BY customer_id,branch_code,a.customer_source_type,gs
+                        ) a 
+                    LEFT JOIN crmkhv2_config_report_price_table b on a.price_level = b.price_level 
+                     WHERE b.price_type=#{priceType}
+                 )he                                                    
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date
+			<where> 
+				t1.branch_code IS NOT NULL 
+				<if test = "startOrderSum != null and startOrderSum != ''" > AND t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > AND t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > AND t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > AND t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > AND t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+			 
+			 <if test="offset != null and limit != null">
+			 	  limit #{offset}, #{limit}
+			 </if>
+	  		
+		) a,(SELECT @i := 0) AS it order by customer_id
+	</select>
+	
+	<!--业务返利金额老逻辑（2019-01-01之前） 网点权限账号不显示返利金额  -->
+	<select id="getBranchCustRewardDetailsList" resultType="com.yunda.base.feiniao.report.domain.ReportCustRewardDetailsDO">
+		select (@i :=@i + 1) AS `recordId`,`bigarea`,`provinceID`,`provinceName`,`branch_code`,`gs`,`mc`,`CityID`,`CityName`,`customer_id`,`customer_name`,`customer_source_type`,`order_sum`,
+		cast(order_avg as decimal(10,2))   order_avg,
+		`cust_level` 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt; 50 then 'a'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 50   and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  200  then 'b'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 200  and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  1000 then 'c'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 1000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  2000 then 'd'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 2000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  3000 then 'e'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 3000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  5000 then 'f'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 5000 then 'g'
+				 else '' end as price_level 
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				 SELECT                                                               
+				 customer_id,                                                        
+				 customer_name,                                                       
+				 branch_code,  
+                 gs ,
+                 customer_source_type,
+				 SUM(price_num) price_num,                                           
+				 SUM(all_price_sum) all_price_sum                 
+				                                                                      
+				 FROM
+                 (
+                    select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum 
+					from 
+                        (
+                            select customer_id,qu_date,customer_name,branch_code,gs,	
+                            sum(daily_order_num) order_sum,	
+                            sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+                            customer_source_type, 
+                            case 
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;50 then 'a'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=50   and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;200  then 'b'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=200  and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;1000 then 'c'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=1000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;2000 then 'd'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=2000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;3000 then 'e'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=3000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;5000 then 'f'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=5000 then 'g'
+                            else '' end as price_level 
+                            from crmkhv2_report_order_stats_all a 
+                            where a.qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+                            AND
+                            date_format (#{endDate},'%Y-%m-%d')
+                            GROUP BY customer_id,branch_code,a.customer_source_type,gs
+                        ) a 
+                    LEFT JOIN crmkhv2_config_report_price_table b on a.price_level = b.price_level 
+                     WHERE b.price_type=#{priceType}
+                 )he                                                    
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date
+			<where> 
+				t1.branch_code IS NOT NULL 
+				<if test = "startOrderSum != null and startOrderSum != ''" > AND t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > AND t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > AND t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > AND t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > AND t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+			 <if test="offset != null and limit != null">
+			 	  limit #{offset}, #{limit}
+			 </if>
+	  		
+		) a,(SELECT @i := 0) AS it  order by customer_id
+	</select>
+	
+	<!--1019-01-01开始执行新的返利逻辑  -->
+	<select id="getCustRewardDetailsListNew" resultType="com.yunda.base.feiniao.report.domain.ReportCustRewardDetailsDO">
+		select (@i :=@i + 1) AS `recordId`,`bigarea`,`provinceID`,`provinceName`,`branch_code`,`gs`,`mc`,`CityID`,`CityName`,`customer_id`,`customer_name`,`customer_source_type`,`order_sum`,
+		cast(order_avg as decimal(10,2))   order_avg,
+		cast(all_price_sum as decimal(10,2))   all_price_sum,
+		`cust_level` 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 50   and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  100  then 'b'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 100  and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  500 then 'c'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 500 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  1000 then 'd'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 1000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  3000 then 'e'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 3000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  5000 then 'f'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 5000 then 'g'
+				 else '' end as price_level 
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				select a.customer_id,a.branch_code,a.gs,a.order_sum,
+						a.order_avg,a.customer_source_type,a.price_level,
+						CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,
+						CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum
+						from 
+						(
+							SELECT g.*,
+								bp.ProvinceID,
+								case
+								when bp.ProvinceID in (${firstProvinceids}) then 'X' 
+								when bp.ProvinceID is null then 'X' 
+								else 'Y' 
+								end as price_type
+							from 
+							(
+									select a.customer_id,
+										a.qu_date,
+										a.customer_name,
+										a.branch_code,
+										a.gs,	
+										a.customer_source_type,
+										sum(a.order_sum) order_sum,
+										sum(a.order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+										case 
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;	 50   and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 100  then 'b'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  100  and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 500 then 'c'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  500 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 1000 then 'd'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  1000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 3000 then 'e'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  3000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 5000 then 'f'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  5000 then 'g' 
+										else '' end as price_level
+										from tmpv2_cust_price_sum a 
+										where a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY customer_id,branch_code,customer_source_type,gs
+							 ) g 
+							left join 
+							(
+									SELECT 	a.branch_code,
+										b.ProvinceID
+										from tmpv2_cust_price_sum a                                            
+										LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm                                 
+										LEFT JOIN crmkhv2_regional_basic_information b ON gs.szd = b.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN b.start_date AND b.end_date  
+										where  a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY a.branch_code,b.ProvinceID
+							) bp on g.branch_code = bp.branch_code   
+							GROUP BY customer_id,branch_code,customer_source_type,gs
+		
+						)a
+						LEFT JOIN crmkhv2_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date 
+			<where> 
+				t1.branch_code IS NOT NULL 
+				<if test = "startOrderSum != null and startOrderSum != ''" > AND t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > AND t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > AND t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > AND t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > AND t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+			 <if test="offset != null and limit != null">
+			 	  limit #{offset}, #{limit}
+			 </if>
+	  		
+		) a,(SELECT @i := 0) AS it  order by customer_id
+	</select>
+	
+	<!--2019-01-01开始执行新的返利逻辑  账号是网点权限的不显示返利金额 -->
+	<select id="getBranchCustRewardDetailsListNew" resultType="com.yunda.base.feiniao.report.domain.ReportCustRewardDetailsDO">
+		select (@i :=@i + 1) AS `recordId`,`bigarea`,`provinceID`,`provinceName`,`branch_code`,`gs`,`mc`,`CityID`,`CityName`,`customer_id`,`customer_name`,`customer_source_type`,`order_sum`,
+		cast(order_avg as decimal(10,2))   order_avg,
+		`cust_level` 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 50   and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  100  then 'b'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 100  and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  500 then 'c'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 500 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  1000 then 'd'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 1000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  3000 then 'e'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 3000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  5000 then 'f'
+				 when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 5000 then 'g'
+				 else '' end as price_level 
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				select a.customer_id,a.branch_code,a.gs,a.order_sum,
+						a.order_avg,a.customer_source_type,a.price_level,
+						CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,
+						CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum
+						from 
+						(
+							SELECT g.*,
+								bp.ProvinceID,
+								case
+								when bp.ProvinceID in (${firstProvinceids}) then 'X' 
+								when bp.ProvinceID is null then 'X' 
+								else 'Y' 
+								end as price_type
+							from 
+							(
+									select a.customer_id,
+										a.qu_date,
+										a.customer_name,
+										a.branch_code,
+										a.gs,	
+										a.customer_source_type,
+										sum(a.order_sum) order_sum,
+										sum(a.order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+										case 
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;	 50   and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 100  then 'b'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  100  and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 500 then 'c'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  500 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 1000 then 'd'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  1000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 3000 then 'e'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  3000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 5000 then 'f'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  5000 then 'g' 
+										else '' end as price_level
+										from tmpv2_cust_price_sum a 
+										where a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY customer_id,branch_code,customer_source_type,gs
+							 ) g 
+							left join 
+							(
+									SELECT 	a.branch_code,
+										b.ProvinceID
+										from tmpv2_cust_price_sum a                                            
+										LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm                                 
+										LEFT JOIN crmkhv2_regional_basic_information b ON gs.szd = b.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN b.start_date AND b.end_date  										where  a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY a.branch_code,b.ProvinceID
+							) bp on g.branch_code = bp.branch_code   
+							GROUP BY customer_id,branch_code,customer_source_type,gs
+		
+						)a
+						LEFT JOIN crmkhv2_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date 
+			<where> 
+				t1.branch_code IS NOT NULL 
+				<if test = "startOrderSum != null and startOrderSum != ''" > AND t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > AND t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > AND t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > AND t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > AND t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+			 <if test="offset != null and limit != null">
+			 	  limit #{offset}, #{limit}
+			 </if>
+	  		
+		) a,(SELECT @i := 0) AS it  order by customer_id
+	</select>
+	
+		<!--1019-01-01开始执行新的返利逻辑  -->
+	<select id="getCustRewardDetailsCountNew" resultType="int">
+		select count(1) 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 50   and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  100  then 'b'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 100  and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  500 then 'c'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 500 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  1000 then 'd'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 1000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;=  3000 then 'e'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt; 5000 then 'g'
+				 else '' end as price_level  
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				select a.customer_id,a.branch_code,a.gs,a.order_sum,
+						a.order_avg,a.customer_source_type,a.price_level,
+						CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,
+						CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum
+						from 
+						(
+							SELECT g.*,
+								bp.ProvinceID,
+								case
+								when bp.ProvinceID in (${firstProvinceids}) then 'X' 
+								when bp.ProvinceID is null then 'X' 
+								else 'Y' 
+								end as price_type
+							from 
+							(
+									select a.customer_id,
+										a.qu_date,
+										a.customer_name,
+										a.branch_code,
+										a.gs,	
+										a.customer_source_type,
+										sum(a.order_sum) order_sum,
+										sum(a.order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+										case 
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 50 then 'a'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;	 50   and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 100  then 'b'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  100  and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 500 then 'c'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  500 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 1000 then 'd'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  1000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 3000 then 'e'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  3000 and sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;= 5000 then 'f'
+										when sum(order_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;  5000 then 'g' 
+										else '' end as price_level
+										from tmpv2_cust_price_sum a 
+										where a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY customer_id,branch_code,customer_source_type,gs
+							 ) g 
+							left join 
+							(
+									SELECT 	a.branch_code,
+										b.ProvinceID
+										from tmpv2_cust_price_sum a                                            
+										LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm                                 
+										LEFT JOIN crmkhv2_regional_basic_information b ON gs.szd = b.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN b.start_date AND b.end_date   
+										where  a.qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d') 
+										GROUP BY a.branch_code,b.ProvinceID
+							) bp on g.branch_code = bp.branch_code   
+							GROUP BY customer_id,branch_code,customer_source_type,gs
+		
+						)a
+						LEFT JOIN crmkhv2_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date 
+			<where> 
+				t1.branch_code IS NOT NULL
+				<if test = "startOrderSum != null and startOrderSum != ''" > and t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > and t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > and t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > and t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > and t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+	  		
+		) a
+	</select>
+	
+	<select id="getCustRewardDetailsCount" resultType="int">
+		select count(1) 
+		from 
+		(
+			SELECT
+			t4.bigarea bigarea,
+			t4.ProvinceID provinceID,
+			t4.ProvinceName provinceName,
+			t1.branch_code,
+			t1.gs,
+			t3.mc,
+			t4.CityID,
+			t4.CityName,
+			t1.customer_id customer_id,
+			t1.customer_name,
+			t1.customer_source_type,
+			t1.order_sum,
+			t1.order_avg,
+			ifnull(t8.all_price_sum, 0) all_price_sum,
+			t1.price_level cust_level
+			FROM
+			(
+				select                                                                                         
+				 customer_id,customer_name,branch_code,customer_source_type,gs, 
+				 sum(order_sum) order_sum,                                                                
+				 sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,                     
+				 case 
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt; 50 then 'a'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 50   and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  200  then 'b'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 200  and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  1000 then 'c'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 1000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  2000 then 'd'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 2000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  3000 then 'e'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 3000 and sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;  5000 then 'f'
+				 when sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;= 5000 then 'g'
+				 else '' end as price_level  
+				 from tmpv2_cust_od_sum                                                             
+				 where qu_date BETWEEN
+													date_format (#{startDate},'%Y-%m-%d')
+													AND
+													date_format (#{endDate},'%Y-%m-%d')
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t1
+			LEFT JOIN 
+			(
+				 SELECT                                                               
+				 customer_id,                                                        
+				 customer_name,                                                       
+				 branch_code,  
+                 gs ,
+                 customer_source_type,
+				 SUM(price_num) price_num,                                           
+				 SUM(all_price_sum) all_price_sum                 
+				                                                                      
+				 FROM
+                 (
+                    select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum 
+					from 
+                        (
+                            select customer_id,qu_date,customer_name,branch_code,gs,	
+                            sum(daily_order_num) order_sum,	
+                            sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) order_avg,
+                            customer_source_type, 
+                            case 
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;50 then 'a'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=50   and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;200  then 'b'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=200  and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;1000 then 'c'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=1000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;2000 then 'd'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=2000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;3000 then 'e'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=3000 and sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &lt;5000 then 'f'
+                            when sum(daily_order_num)/(DATEDIFF(#{endDate}, #{startDate})+1) &gt;=5000 then 'g'
+                            else '' end as price_level 
+                            from crmkhv2_report_order_stats_all a 
+                            where a.qu_date BETWEEN date_format (#{startDate},'%Y-%m-%d')
+                            AND
+                            date_format (#{endDate},'%Y-%m-%d')
+                            GROUP BY customer_id,branch_code,a.customer_source_type,gs
+                        ) a 
+                    LEFT JOIN crmkhv2_config_report_price_table b on a.price_level = b.price_level 
+                     WHERE b.price_type=#{priceType}
+                 )he                                                    
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+			) t8 ON t1.customer_id = t8.customer_id
+			AND t1.customer_source_type = t8.customer_source_type
+			AND t1.gs = t8.gs
+			AND t1.branch_code = t8.branch_code
+			LEFT JOIN ydserver.gs t3 ON t1.branch_code = t3.bm
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON t3.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date 
+			<where> 
+				t1.branch_code IS NOT NULL
+				<if test = "startOrderSum != null and startOrderSum != ''" > and t1.order_sum &gt;= #{startOrderSum} </if>
+				<if test = "endOrderSum != null and endOrderSum != ''" > and t1.order_sum &lt;= #{endOrderSum} </if>
+				<if test = "gs != null and gs != ''" > and t1.gs = #{gs} </if>
+				<if test = "customerId != null and customerId != ''" > and t1.customer_id = #{customerId} </if>
+				<if test = "customerSourceType != null and customerSourceType != ''" > and t1.customer_source_type = #{customerSourceType} </if>
+				
+				<if test="TTmpField == &quot;D&quot; ">
+					AND t4.bigarea in
+					<foreach collection="TRegionId" item="TRegionId" index="index"  open="(" close=")" separator=",">
+			           '${TRegionId}'
+			       	</foreach>
+		    	</if>
+				
+				<if test="TTmpField == &quot;S&quot;">
+                	and t4.ProvinceID in 
+                	<foreach collection="TProvinceID" item="TProvinceID"  index="index" open="(" close=")" separator=",">
+			           '${TProvinceID}'
+			       	</foreach>	
+       			</if>
+				<if test="TTmpField == &quot;wd&quot;">
+                	and t1.branch_code = #{TBranchCode}	
+       			</if>
+			</where> 
+	  		
+		) a
+	</select>
+	
+	
+	
+	<select id="searchLbByGsInfo" parameterType="java.lang.String" resultType="java.util.Map">
+			SELECT lb FROM `ydserver`.`gs` WHERE bm = #{orgCode}					
+	</select>
+	
+	<select id="searchCustBraData"  resultType="java.util.Map">
+			SELECT  concat(mc,'(',`bm`,')') mc,bm FROM `ydserver`.`gs`  WHERE 1=1 
+		<if test="queryString != null and queryString != ''">
+				and (gs.bm LIKE concat(concat('%',#{queryString}),'%') or gs.mc LIKE concat(concat('%',#{queryString}),'%'))
+		</if>
+		<if test="orgType != 1 and orgType != 50">
+				 and gs.bm = #{orgCode}
+		</if>
+			  limit 20 					
+	</select>
+</mapper>

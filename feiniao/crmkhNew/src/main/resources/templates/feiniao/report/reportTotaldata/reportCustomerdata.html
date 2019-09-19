@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+		
+		<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group group-query" id="group_query">															
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">
+								                            客户编码                       
+								</label>                        
+								<div class="col-md-4 col-sm-4 col-xs-12">										
+										<div id="customerCode" class="form-control" ></div>
+								</div>									
+								<div class="group-querybtn col-sm-offset-1" id="group-querybtn">
+									<input type="button" value="查询" onclick="query()" class="btn btn-warning" style="margin-left:20px;">
+								<button shiro:hasPermission="report:reportTotaldata:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+								 <div style="color:red; margin:20px 30px; text-align:left;">备注：
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>
+								</div>
+								
+							</div>	
+						</form>
+					</div>
+				</div>
+		
+		
+			<div class="ibox">
+				<div class="ibox-body">
+				<form id="searchTotalData" >
+							<div class="row">
+									<input th:value="${reportTotaldata.date_style}"  type="hidden" name="date_style" id="dateStyle" class="form-control" >
+									<input th:value="${reportTotaldata.qu_date}"  type="hidden"  name="qu_date" id="quDate" class="form-control" >
+ 									<input th:value="${reportTotaldata.month_year}"  type="hidden"  name="month_year" id="monthYear" class="form-control" >
+									<input th:value="${reportTotaldata.quarter_year}"  type="hidden"  name="quarter_year" id="quarterYear" class="form-control" >
+								
+									<input th:value="${reportTotaldata.quarter_date}"  type="hidden" name="quarter_date" id="quarterDate" class="form-control" >
+									<input th:value="${reportTotaldata.year}"  type="hidden"  name="year" id="year" class="form-control" >
+ 									<input th:value="${reportTotaldata.start_date}"  type="hidden"  name="start_date" id="startDate" class="form-control" >
+									<input th:value="${reportTotaldata.end_date}"  type="hidden"  name="end_date" id="endDate" class="form-control" >
+									
+									<input th:value="${reportTotaldata.tmp_field}"  type="hidden"  name="tmp_field" id="tmpField" class="form-control" >
+									<input th:value="${reportTotaldata.branch_code}"  type="hidden"  name="branch_code" id="branchCode" class="form-control" >
+								
+							</div>
+					</form>
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="report:reportCustomerdata:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="report:reportCustomerdata:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="report:reportCustomerdata:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="report:reportCustomerdata:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<!--  <button shiro:hasPermission="report:reportTotaldata:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							-->
+							<button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustomerdata:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustomerdata:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustomerdata:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportTotaldata/reportCustomerdata.js?v=3}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+	<script th:src="@{/js/plugins/magicsuggest/magicsuggest-min.js}"></script>
+	
+</body>
+</html>
