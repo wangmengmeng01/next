@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.costreport.dao.CostreportOrderCostChangeDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostChangeDO">
+		select `record_id`,`account_dt`,`customer_id`,`branch_code`,`order_sum`,`weight_all`,`income`,`change_income`,`actual_income`,`finish_income`,`is_finish`,`creater`,`creater_branch`,`create_time`,`editer`,`editer_branch`,`edit_time`,`sender_weight`,`T3_weight` from crmkhv2_costreport_order_cost_change where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostChangeDO">
+		select `record_id`,`account_dt`,`customer_id`,`branch_code`,`order_sum`,`weight_all`,`income`,`change_income`,`actual_income`,`finish_income`,`is_finish`,`creater`,`creater_branch`,`create_time`,`editer`,`editer_branch`,`edit_time`,`sender_weight`,`T3_weight` from crmkhv2_costreport_order_cost_change
+        <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="weightAll != null and weightAll != ''"> and weight_all = #{weightAll} </if>
+		  		  <if test="income != null and income != ''"> and income = #{income} </if>
+		  		  <if test="changeIncome != null and changeIncome != ''"> and change_income = #{changeIncome} </if>
+		  		  <if test="actualIncome != null and actualIncome != ''"> and actual_income = #{actualIncome} </if>
+		  		  <if test="finishIncome != null and finishIncome != ''"> and finish_income = #{finishIncome} </if>
+		  		  <if test="isFinish != null and isFinish != ''"> and is_finish = #{isFinish} </if>
+		  		  <if test="creater != null and creater != ''"> and creater = #{creater} </if>
+		  		  <if test="createrBranch != null and createrBranch != ''"> and creater_branch = #{createrBranch} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="editer != null and editer != ''"> and editer = #{editer} </if>
+		  		  <if test="editerBranch != null and editerBranch != ''"> and editer_branch = #{editerBranch} </if>
+		  		  <if test="editTime != null and editTime != ''"> and edit_time = #{editTime} </if>
+		  		  <if test="senderWeight != null and senderWeight != ''"> and sender_weight = #{senderWeight} </if>
+		  		  <if test="t3Weight != null and t3Weight != ''"> and T3_weight = #{t3Weight} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_costreport_order_cost_change
+		 <where>  
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="accountDt != null and accountDt != ''"> and account_dt = #{accountDt} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="weightAll != null and weightAll != ''"> and weight_all = #{weightAll} </if>
+		  		  <if test="income != null and income != ''"> and income = #{income} </if>
+		  		  <if test="changeIncome != null and changeIncome != ''"> and change_income = #{changeIncome} </if>
+		  		  <if test="actualIncome != null and actualIncome != ''"> and actual_income = #{actualIncome} </if>
+		  		  <if test="finishIncome != null and finishIncome != ''"> and finish_income = #{finishIncome} </if>
+		  		  <if test="isFinish != null and isFinish != ''"> and is_finish = #{isFinish} </if>
+		  		  <if test="creater != null and creater != ''"> and creater = #{creater} </if>
+		  		  <if test="createrBranch != null and createrBranch != ''"> and creater_branch = #{createrBranch} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="editer != null and editer != ''"> and editer = #{editer} </if>
+		  		  <if test="editerBranch != null and editerBranch != ''"> and editer_branch = #{editerBranch} </if>
+		  		  <if test="editTime != null and editTime != ''"> and edit_time = #{editTime} </if>
+		  		  <if test="senderWeight != null and senderWeight != ''"> and sender_weight = #{senderWeight} </if>
+		  		  <if test="t3Weight != null and t3Weight != ''"> and T3_weight = #{t3Weight} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostChangeDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkhv2_costreport_order_cost_change
+		(
+			`account_dt`, 
+			`customer_id`, 
+			`branch_code`, 
+			`order_sum`, 
+			`weight_all`, 
+			`income`, 
+			`change_income`, 
+			`actual_income`, 
+			`finish_income`, 
+			`is_finish`, 
+			`creater`, 
+			`creater_branch`, 
+			`create_time`, 
+			`editer`, 
+			`editer_branch`, 
+			`edit_time`, 
+			`sender_weight`, 
+			`T3_weight`
+		)
+		values
+		(
+			#{accountDt}, 
+			#{customerId}, 
+			#{branchCode}, 
+			#{orderSum}, 
+			#{weightAll}, 
+			#{income}, 
+			#{changeIncome}, 
+			#{actualIncome}, 
+			#{finishIncome}, 
+			#{isFinish}, 
+			#{creater}, 
+			#{createrBranch}, 
+			#{createTime}, 
+			#{editer}, 
+			#{editerBranch}, 
+			#{editTime}, 
+			#{senderWeight}, 
+			#{t3Weight}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.costreport.domain.CostreportOrderCostChangeDO">
+		update crmkhv2_costreport_order_cost_change 
+		<set>
+			<if test="accountDt != null">`account_dt` = #{accountDt}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="weightAll != null">`weight_all` = #{weightAll}, </if>
+			<if test="income != null">`income` = #{income}, </if>
+			<if test="changeIncome != null">`change_income` = #{changeIncome}, </if>
+			<if test="actualIncome != null">`actual_income` = #{actualIncome}, </if>
+			<if test="finishIncome != null">`finish_income` = #{finishIncome}, </if>
+			<if test="isFinish != null">`is_finish` = #{isFinish}, </if>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createrBranch != null">`creater_branch` = #{createrBranch}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="editer != null">`editer` = #{editer}, </if>
+			<if test="editerBranch != null">`editer_branch` = #{editerBranch}, </if>
+			<if test="editTime != null">`edit_time` = #{editTime}, </if>
+			<if test="senderWeight != null">`sender_weight` = #{senderWeight}, </if>
+			<if test="t3Weight != null">`T3_weight` = #{t3Weight}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_costreport_order_cost_change where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_costreport_order_cost_change where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+	
+   <select id="getYdserverOrgCodeByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT gs FROM ydserver.ry WHERE gh_oa = #{userId}
+	 	
+	</select>
+	
+	<select id="queryZzzByOrgCode" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT w.zzz AS zzz FROM ydserver.wdzzzbd AS w LEFT JOIN ydserver.gs AS g ON w.wdbm = g.sjdw WHERE w.lb = 1 AND g.bm = #{orgCode}	 	
+	</select>
+	
+	<select id="queryWdByOrgCode" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT g.sjdw AS wd FROM ydserver.gs AS g WHERE g.bm = #{orgCode}
+	</select>
+	
+    <select id="getYdserverOrgTypeByOrgCode" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT lb FROM ydserver.gs WHERE bm = #{orgCode}	 	
+	</select>
+	
+	<select id="getCitysByProvinceExcel" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT code, name,type FROM CRMKH_BASIC_CITYS where parent = #{parent}  ORDER BY `code` ASC	 	
+	</select>
+	
+	<select id="queryForzzf" parameterType="java.lang.String" resultType="java.util.Map">
+		select * from jgsz where shi1 = #{provinanceKey} and  shi2 = #{destinationKey} and gsvip='0' and category = 1
+	</select>
+	
+	<select id="queryForwlgm" parameterType="java.lang.String" resultType="java.util.Map">
+	   select fl from wdjbjg a inner join wljgjb b on a.jgjbid=b.jgjbid 
+	   <where>  
+  		  <if test="orgType == '0' "> and b.wllbid = 277 </if>
+ 		  <if test="orgType == '1' "> and b.wllbid = 537 </if>
+		  <if test="branchCode != null and branchCode != ''"> and a.gs= #{branchCode} </if>
+		  		  
+	   </where>
+	</select>
+</mapper>

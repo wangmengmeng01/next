@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox ibox-content">
+				<form class="layui-form" id="searchRewardDetail">
+					<div class="layui-form-item" style="display: inline-block;">
+						<div class="layui-inline">
+						    <label class="layui-form-label" style="width:100px; padding: 9px 0px;">客户编码：</label>
+						    <div class="layui-input-inline">
+					      		<input type="text"  class="layui-input" id="searchCustomerId" style="width:220px;">
+						    </div>
+						 </div>
+					</div>
+					<div class="layui-form-item" style="display: inline-block;">
+					 	 <div class="layui-inline">
+						    <label class="layui-form-label" style="width:100px; padding: 9px 0 9px 9px;">查询时间：</label>
+						    <div class="layui-input-inline" style="width:120px;">
+						    	<input type="text"  placeholder="开始时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="searchStartDate">
+						    </div>
+						    <div class="layui-form-mid">—</div>
+						    <div class="layui-input-inline" style="width:100px;">
+						    	<input type="text"  placeholder="结束时间" autocomplete="off" required  lay-verify="required" class="layui-input" id="searchEndDate">
+						    </div>
+						</div>
+					</div>
+					<div class="layui-form-item" style="display: inline-block;">
+						<div class="layui-inline">
+							<label class="layui-form-label" style="width:100px; padding: 9px 0px;">揽件量区间：</label>
+							<div class="layui-input-inline" style="width:120px;">
+						    	<input type="text" autocomplete="off" class="layui-input" id="searchStartOrderSum" onkeyup="if(!/^-?\d*$/.test(this.value)){this.value='';}">
+						    </div>
+						    <div class="layui-form-mid">—</div>
+						    <div class="layui-input-inline" style="width:100px;">
+						    	<input type="text"  autocomplete="off" class="layui-input" id="searchEndOrderSum" onkeyup="if(!/^-?\d*$/.test(this.value)){this.value='';}">
+						    </div>
+						</div>
+					</div>
+					<div class="layui-form-item" style="display: inline-block;">
+						<div class="layui-inline">
+						    <label class="layui-form-label" style="width:100px; padding: 9px 0px;">网点编码：</label>
+						    <div class="layui-input-inline">
+					      		<input type="text"  style="width:220px;" class="layui-input" id="searchGs">
+						    </div>
+						 </div>
+					</div>
+					<div class="layui-form-item" style="display: inline-block;">
+						 <div class="layui-inline">
+						    <label class="layui-form-label" style="width:100px; padding: 9px 0px;">客户来源：</label>
+						    <div class="layui-input-inline" style="width:120px;">
+							    <select  id="searchCustomerSourceType">
+								  <option value="">请选择</option>
+								  <option value="1">菜鸟</option>
+								  <option value="2">二维码</option>
+								  <option value="4">京东</option>
+								  <option value="5">拼多多</option>
+								</select>
+						    </div>
+						 </div>
+					</div>
+					<div class="layui-form-item">
+					    <div class="layui-col-md-offset5 layui-col-sm-offset5" style="text-align:right;">
+					      	 <button type="button" class="layui-btn layui-btn-normal" id="query" style="margin-right:20px;height:34px;line-height:34px;">查询</button>
+					      	<input type="button" value="重置" onclick="resetForm()" class="btn btn-success" style="margin-right:20px;">
+					      	<button shiro:hasPermission="report:reportCustRewardDetails:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')" style="margin-right:50px;">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+
+					    </div>
+					    <div style="color:red; margin:20px 30px; text-align:left;">备注：<br />
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上<br />
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>
+					  </div>
+				</form>
+			</div>
+			<div class="ibox ibox-body">
+				<div class="fixed-table-toolbar">
+					<div class="columns pull-left">
+						<button shiro:hasPermission="report:reportCustRewardDetails:add" type="button" class="btn  btn-primary" onclick="add()">
+							<i class="fa fa-plus" aria-hidden="true"></i>添加
+						</button>
+						<button shiro:hasPermission="report:reportCustRewardDetails:batchRemove" type="button" class="btn  btn-danger"
+							onclick="batchRemove()">
+							<i class="fa fa-trash" aria-hidden="true"></i>删除
+						</button>
+						<button shiro:hasPermission="report:reportCustRewardDetails:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                           	<i class="fa fa-file-excel-o"></i>导入Excel
+                       	</button>
+                       	<button shiro:hasPermission="report:reportCustRewardDetails:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                           	<i class="fa fa-file-code-o"></i>下载模版
+                       	</button>
+
+						<!-- <button id="refresh" type="button" class="btn btn-primary">
+							<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+						</button> -->
+					</div>
+					<!-- <div class="columns pull-right">
+						<button class="btn btn-success" onclick="reLoad()">查询</button>
+					</div>
+					<div class="columns pull-right col-md-2 nopadding">
+						<input id="searchName" type="text" class="form-control"
+							placeholder="">
+					</div> -->
+				</div>
+				<table id="exampleTable" data-mobile-responsive="true"></table>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustRewardDetails:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustRewardDetails:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportCustRewardDetails:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+	<script th:src="@{/js/plugins/magicsuggest/magicsuggest-min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportCustRewardDetails/reportBranchCustRewardDetails.js}"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+info:   
+  app:  
+    name: bigCustomer #从pom.xml中获取
+    description: 大客户工作台
+      
+##############logging################    
+logging:
+  level:
+    ROOT: info
+        
+server:
+    context-path: /vipkf
+    session-timeout: 1800
+    tomcat:
+       max-threads: 1000
+       min-spare-threads: 30
+       basedir: /u02/temp
+    port: 8083
+    uri-encoding: utf-8
+
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  profiles: 
+    active: dev
+  http:
+    multipart:
+      max-file-size: 30Mb
+      max-request-size: 30Mb
+  devtools:
+    restart:
+      enabled: true 
+         
+mybatis: 
+  configuration:
+    map-underscore-to-camel-case: true
+  typeAliasesPackage: com.yunda.base.**.domain
+  
+#配置缓存和session存储方式，默认ehcache,可选redis
+#cacheType: redis
+cacheType: false
+
+################权限保护################
+security:
+  basic:
+    enabled: true
+    path: /swagger-ui.html,/druid/*
+  user:
+    name: kfyf
+    password: 1qaz2wsx3edc   
+  headers:
+    frame: false  
+     
+################指定本台服务器的task是否开启######     
+taskAbs:
+  url:
+    ymlTaskCheck: open
+     
+#security.basic.authorize-mode=role # Security authorize mode to apply.安全授权模式应用
+#security.basic.enabled=true # Enable basic authentication.启用basic身份验证
+#security.basic.path=/** # Comma-separated list of paths to secure.以逗号分隔的路径列表保护
+#security.basic.realm=Spring # HTTP basic realm name.HTTP基础域名
+#security.enable-csrf=false # Enable Cross Site Request Forgery support.启用跨站点请求伪造支持
+#security.filter-order=0 # Security filter chain order.安全过滤器链顺序
+#security.filter-dispatcher-types=ASYNC, FORWARD, INCLUDE, REQUEST # Security filter chain dispatcher types.安全过滤器链调度器类型
+#security.headers.cache=true # Enable cache control HTTP headers.启用缓存控制HTTP头
+#security.headers.content-security-policy= # Value for content security policy header.内容安全策略头值
+#security.headers.content-security-policy-mode=default # Content security policy mode.内容安全策略模式
+#security.headers.content-type=true # Enable "X-Content-Type-Options" header.启用"X-Content-Type-Options"头
+#security.headers.frame=true # Enable "X-Frame-Options" header.启用 "X-Frame-Options" 头。
+#security.headers.hsts=all # HTTP Strict Transport Security (HSTS) mode (none, domain, all).HTTP严格传输安全(HSTS)模式(none, domain, all)
+#security.headers.xss=true # Enable cross site scripting (XSS) protection.启用跨站脚本攻击(XSS)保护
+#security.ignored= # Comma-separated list of paths to exclude from the default secured paths.从默认的安全路径排除以逗号分隔的路径
+#security.require-ssl=false # Enable secure channel for all requests.为所有请求启用安全通道
+#security.sessions=stateless # Session creation policy (always, never, if_required, stateless).Session创建策略（always, never, if_required, stateless）
+#security.user.name=user # Default user name.默认的用户名
+#security.user.password= # Password for the default user name. A random password is logged on startup by default.默认用户名的密码，启动时默认登录使用随机密码。
+#security.user.role=USER # Granted roles for the default user name.授予默认用户名的角色     

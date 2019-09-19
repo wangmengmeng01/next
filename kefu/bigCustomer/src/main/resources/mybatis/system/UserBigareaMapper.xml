@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.UserBigareaDao">
+
+	<select id="queryUP"  resultType="string">
+		select `bigarea_name` from bootdo_sys_user_bigarea
+		<where>user_id = #{userId}</where>
+	</select>
+	<select id="get" resultType="com.yunda.base.system.domain.UserBigareaDO">
+		select `id`,`user_id`,`bigarea_name` from bootdo_sys_user_bigarea where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.UserBigareaDO">
+		select `id`,`user_id`,`bigarea_name` from bootdo_sys_user_bigarea
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="bigareaName != null and bigareaName != ''"> and bigarea_name = #{bigareaName} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from bootdo_sys_user_bigarea
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="bigareaName != null and bigareaName != ''"> and bigarea_name = #{bigareaName} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.UserBigareaDO" useGeneratedKeys="true" keyProperty="id">
+		insert into bootdo_sys_user_bigarea
+		(
+			`user_id`, 
+			`bigarea_name`
+		)
+		values
+		(
+			#{userId}, 
+			#{bigareaName}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.UserBigareaDO">
+		update bootdo_sys_user_bigarea 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="bigareaName != null">`bigarea_name` = #{bigareaName}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from bootdo_sys_user_bigarea where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from bootdo_sys_user_bigarea where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="listBigareaNameByUserId" resultType="String">
+		select bigarea_name from bootdo_sys_user_bigarea
+		<where>user_id = #{id}</where>
+	</select>
+	
+	<delete id="removeByUserId">
+		delete from bootdo_sys_user_bigarea where user_id=#{userId}
+	</delete>
+	
+	<insert id="batchSave">
+		INSERT INTO bootdo_sys_user_bigarea(user_id, bigarea_name) values
+		<foreach item="item" index="index" collection="list"
+			separator=",">
+			(#{item.userId},#{item.bigareaName})
+		</foreach>
+	</insert>
+</mapper>

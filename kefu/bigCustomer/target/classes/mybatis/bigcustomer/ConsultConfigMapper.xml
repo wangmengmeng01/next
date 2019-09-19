@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.bigcustomer.dao.ConsultConfigDao">
+
+	<select id="get" resultType="com.yunda.base.bigcustomer.domain.ConsultConfigDO">
+		select `id`,`consult_source`,`consult_type`,`deal_shi_xiao`,`state`,`yujing_time` from consult_config where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.bigcustomer.domain.ConsultConfigDO">
+		select `id`,`consult_source`,`consult_type`,`deal_shi_xiao`,`state` from consult_config
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="consultSource != null and consultSource != ''"> and consult_source = #{consultSource} </if>
+		  		  <if test="consultType != null and consultType != ''"> and consult_type = #{consultType} </if>
+		  		  <if test="dealShiXiao != null and dealShiXiao != ''"> and deal_shi_xiao = #{dealShiXiao} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from consult_config
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="consultSource != null and consultSource != ''"> and consult_source = #{consultSource} </if>
+		  		  <if test="consultType != null and consultType != ''"> and consult_type = #{consultType} </if>
+		  		  <if test="dealShiXiao != null and dealShiXiao != ''"> and deal_shi_xiao = #{dealShiXiao} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.bigcustomer.domain.ConsultConfigDO" useGeneratedKeys="true" keyProperty="id">
+		insert into consult_config
+		(
+			`consult_source`, 
+			`consult_type`, 
+			`deal_shi_xiao`, 
+			`state`,
+			`type`,
+			`order_after_hours_t1`,
+			`order_after_day_t2`,
+			`order_after_time_t2`,
+			`today_order_before_time_t31`,
+			`order_after_day_t31`,
+			`order_after_time_t31`,
+			`today_order_after_time32`,
+			`order_before_day_t32`,
+			`order_before_time_t32`
+		)
+		values
+		(
+			#{consultSource}, 
+			#{consultType}, 
+			#{dealShiXiao}, 
+			#{state},
+			#{type},
+			#{orderAfterHoursT1},
+			#{orderAfterDayT2},
+			#{orderAfterTimeT2},
+			#{todayOrderBeforeTimeT31},
+			#{orderAfterDayT31},
+			#{orderAfterTimeT31},
+			#{todayOrderAfterTime32},
+			#{orderBeforeDayT32},
+			#{orderBeforeTimeT32}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.bigcustomer.domain.ConsultConfigDO">
+		update consult_config 
+		<set>
+			<if test="consultSource != null">`consult_source` = #{consultSource}, </if>
+			<if test="consultType != null">`consult_type` = #{consultType}, </if>
+			<if test="dealShiXiao != null">`deal_shi_xiao` = #{dealShiXiao}, </if>
+			<if test="state != null">`state` = #{state},</if>
+			<if test="type != null">`type` = #{type},</if>
+			<if test="yujingTime != null">`yujing_time` = #{yujingTime},</if>
+			<if test="orderAfterHoursT1 != null">`order_after_hours_t1` = #{orderAfterHoursT1},</if>
+			<if test="orderAfterDayT2 != null">`order_after_day_t2` = #{orderAfterDayT2},</if>
+			<if test="orderAfterTimeT2 != null">`order_after_time_t2` = #{orderAfterTimeT2},</if>
+			<if test="orderAfterDayT2 != null">`today_order_before_time_t31` = #{todayOrderBeforeTimeT31},</if>
+			<if test="orderAfterDayT31 != null">`order_after_day_t31` = #{orderAfterDayT31},</if>
+			<if test="orderAfterTimeT31 != null">`order_after_time_t31` = #{orderAfterTimeT31},</if>
+			<if test="todayOrderAfterTime32 != null">`today_order_after_time32` = #{todayOrderAfterTime32},</if>
+			<if test="orderBeforeDayT32 != null">`order_before_day_t32` = #{orderBeforeDayT32},</if>
+			<if test="orderBeforeTimeT32 != null">`order_before_time_t32` = #{orderBeforeTimeT32}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from consult_config where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from consult_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<update id="stateUpdate">
+		update consult_config
+		<set>
+			`state` = #{state}
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="searchConsultType" resultType="java.lang.String">
+		select distinct consult_type from consult_config
+
+	</select>
+</mapper>

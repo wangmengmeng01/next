@@ -1,0 +1,2827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ReportTotaldataDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		select `bigarea`,`provinceid`,`ProvinceName`,`CityID`,`CityName`,`branch_code`,`branch_name`,`customer_id`,`customer_name`,`yjbm`,`yjmc`,`customer_source_type`,`order_sum`,`qrcode_order_sum`,`cainiao_order_sum`,`ordinary_order_sum`,`order_avg`,`price_sum`,`dianzi_order_sum`,`dianzi_num_percent`,`create_date`,`report_date`,`dianzi_percent`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`,`a_price_percent`,`b_price_percent`,`c_price_percent`,`d_price_percent`,`e_price_percent`,`f_price_percent`,`g_price_percent`,`customer_sum`,`customer_avg_sum`,`customer_price_sum`,`customer_all_price_sum` from crmkhv2_report_totaldata where bigarea = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		select `bigarea`,`provinceid`,`ProvinceName`,`CityID`,`CityName`,`branch_code`,`branch_name`,`customer_id`,`customer_name`,`yjbm`,`yjmc`,`customer_source_type`,`order_sum`,`qrcode_order_sum`,`cainiao_order_sum`,`ordinary_order_sum`,`order_avg`,`price_sum`,`dianzi_order_sum`,`dianzi_num_percent`,`create_date`,`report_date`,`dianzi_percent`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`,`a_price_percent`,`b_price_percent`,`c_price_percent`,`d_price_percent`,`e_price_percent`,`f_price_percent`,`g_price_percent`,`customer_sum`,`customer_avg_sum`,`customer_price_sum`,`customer_all_price_sum` from crmkhv2_report_totaldata
+        <where>  
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceid = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and CityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and CityName = #{cityname} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="yjbm != null and yjbm != ''"> and yjbm = #{yjbm} </if>
+		  		  <if test="yjmc != null and yjmc != ''"> and yjmc = #{yjmc} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="qrcodeOrderSum != null and qrcodeOrderSum != ''"> and qrcode_order_sum = #{qrcodeOrderSum} </if>
+		  		  <if test="cainiaoOrderSum != null and cainiaoOrderSum != ''"> and cainiao_order_sum = #{cainiaoOrderSum} </if>
+		  		  <if test="ordinaryOrderSum != null and ordinaryOrderSum != ''"> and ordinary_order_sum = #{ordinaryOrderSum} </if>
+		  		  <if test="orderAvg != null and orderAvg != ''"> and order_avg = #{orderAvg} </if>
+		  		  <if test="priceSum != null and priceSum != ''"> and price_sum = #{priceSum} </if>
+		  		  <if test="dianziOrderSum != null and dianziOrderSum != ''"> and dianzi_order_sum = #{dianziOrderSum} </if>
+		  		  <if test="dianziNumPercent != null and dianziNumPercent != ''"> and dianzi_num_percent = #{dianziNumPercent} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="dianziPercent != null and dianziPercent != ''"> and dianzi_percent = #{dianziPercent} </if>
+		  		  <if test="aCustomerSum != null and aCustomerSum != ''"> and a_customer_sum = #{aCustomerSum} </if>
+		  		  <if test="bCustomerSum != null and bCustomerSum != ''"> and b_customer_sum = #{bCustomerSum} </if>
+		  		  <if test="cCustomerSum != null and cCustomerSum != ''"> and c_customer_sum = #{cCustomerSum} </if>
+		  		  <if test="dCustomerSum != null and dCustomerSum != ''"> and d_customer_sum = #{dCustomerSum} </if>
+		  		  <if test="eCustomerSum != null and eCustomerSum != ''"> and e_customer_sum = #{eCustomerSum} </if>
+		  		  <if test="fCustomerSum != null and fCustomerSum != ''"> and f_customer_sum = #{fCustomerSum} </if>
+		  		  <if test="gCustomerSum != null and gCustomerSum != ''"> and g_customer_sum = #{gCustomerSum} </if>
+		  		  <if test="aOrderAvg != null and aOrderAvg != ''"> and a_order_avg = #{aOrderAvg} </if>
+		  		  <if test="bOrderAvg != null and bOrderAvg != ''"> and b_order_avg = #{bOrderAvg} </if>
+		  		  <if test="cOrderAvg != null and cOrderAvg != ''"> and c_order_avg = #{cOrderAvg} </if>
+		  		  <if test="dOrderAvg != null and dOrderAvg != ''"> and d_order_avg = #{dOrderAvg} </if>
+		  		  <if test="eOrderAvg != null and eOrderAvg != ''"> and e_order_avg = #{eOrderAvg} </if>
+		  		  <if test="fOrderAvg != null and fOrderAvg != ''"> and f_order_avg = #{fOrderAvg} </if>
+		  		  <if test="gOrderAvg != null and gOrderAvg != ''"> and g_order_avg = #{gOrderAvg} </if>
+		  		  <if test="aOrderSum != null and aOrderSum != ''"> and a_order_sum = #{aOrderSum} </if>
+		  		  <if test="bOrderSum != null and bOrderSum != ''"> and b_order_sum = #{bOrderSum} </if>
+		  		  <if test="cOrderSum != null and cOrderSum != ''"> and c_order_sum = #{cOrderSum} </if>
+		  		  <if test="dOrderSum != null and dOrderSum != ''"> and d_order_sum = #{dOrderSum} </if>
+		  		  <if test="eOrderSum != null and eOrderSum != ''"> and e_order_sum = #{eOrderSum} </if>
+		  		  <if test="fOrderSum != null and fOrderSum != ''"> and f_order_sum = #{fOrderSum} </if>
+		  		  <if test="gOrderSum != null and gOrderSum != ''"> and g_order_sum = #{gOrderSum} </if>
+		  		  <if test="aPriceSum != null and aPriceSum != ''"> and a_price_sum = #{aPriceSum} </if>
+		  		  <if test="bPriceSum != null and bPriceSum != ''"> and b_price_sum = #{bPriceSum} </if>
+		  		  <if test="cPriceSum != null and cPriceSum != ''"> and c_price_sum = #{cPriceSum} </if>
+		  		  <if test="dPriceSum != null and dPriceSum != ''"> and d_price_sum = #{dPriceSum} </if>
+		  		  <if test="ePriceSum != null and ePriceSum != ''"> and e_price_sum = #{ePriceSum} </if>
+		  		  <if test="fPriceSum != null and fPriceSum != ''"> and f_price_sum = #{fPriceSum} </if>
+		  		  <if test="gPriceSum != null and gPriceSum != ''"> and g_price_sum = #{gPriceSum} </if>
+		  		  <if test="aAllPriceSum != null and aAllPriceSum != ''"> and a_all_price_sum = #{aAllPriceSum} </if>
+		  		  <if test="bAllPriceSum != null and bAllPriceSum != ''"> and b_all_price_sum = #{bAllPriceSum} </if>
+		  		  <if test="cAllPriceSum != null and cAllPriceSum != ''"> and c_all_price_sum = #{cAllPriceSum} </if>
+		  		  <if test="dAllPriceSum != null and dAllPriceSum != ''"> and d_all_price_sum = #{dAllPriceSum} </if>
+		  		  <if test="eAllPriceSum != null and eAllPriceSum != ''"> and e_all_price_sum = #{eAllPriceSum} </if>
+		  		  <if test="fAllPriceSum != null and fAllPriceSum != ''"> and f_all_price_sum = #{fAllPriceSum} </if>
+		  		  <if test="gAllPriceSum != null and gAllPriceSum != ''"> and g_all_price_sum = #{gAllPriceSum} </if>
+		  		  <if test="aPricePercent != null and aPricePercent != ''"> and a_price_percent = #{aPricePercent} </if>
+		  		  <if test="bPricePercent != null and bPricePercent != ''"> and b_price_percent = #{bPricePercent} </if>
+		  		  <if test="cPricePercent != null and cPricePercent != ''"> and c_price_percent = #{cPricePercent} </if>
+		  		  <if test="dPricePercent != null and dPricePercent != ''"> and d_price_percent = #{dPricePercent} </if>
+		  		  <if test="ePricePercent != null and ePricePercent != ''"> and e_price_percent = #{ePricePercent} </if>
+		  		  <if test="fPricePercent != null and fPricePercent != ''"> and f_price_percent = #{fPricePercent} </if>
+		  		  <if test="gPricePercent != null and gPricePercent != ''"> and g_price_percent = #{gPricePercent} </if>
+		  		  <if test="customerSum != null and customerSum != ''"> and customer_sum = #{customerSum} </if>
+		  		  <if test="customerAvgSum != null and customerAvgSum != ''"> and customer_avg_sum = #{customerAvgSum} </if>
+		  		  <if test="customerPriceSum != null and customerPriceSum != ''"> and customer_price_sum = #{customerPriceSum} </if>
+		  		  <if test="customerAllPriceSum != null and customerAllPriceSum != ''"> and customer_all_price_sum = #{customerAllPriceSum} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by bigarea desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	 <select id="findIfHasDate" parameterType="java.lang.String" resultType="int">
+	 	select count(1) from crmkhv2_report_order_stats_all
+	 	 <where>  
+		  		  <if test="endDate != null and endDate != ''"> and qu_date  = #{endDate} </if>
+	 	
+	 		</where>
+	 	
+	</select>
+	
+	<select id="countSearchData" parameterType="java.util.Map" resultType="int">
+	 	select count(1) from (select count(1)
+				 from tmpv2_cust_od_sum a  
+				 LEFT JOIN ydserver.gs gs ON a.branch_code = gs.bm                                                                                                          
+				 LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm   
+				 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{end_date},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                                                                                                                    
+				 LEFT JOIN tmpv2_cust_price_stats b ON b.customer_id = a.customer_id AND a.customer_source_type = b.customer_source_type  AND a.gs = b.gs                  
+				 WHERE 1=1
+		  		  <if test="branch_code != null and branch_code != ''"> and a.branch_code = #{branch_code} </if>
+		  		  <if test="customer_id != null and customer_id != ''"> and a.customer_id = #{customer_id} </if>
+				  <if test="customer_name != null and customer_name != ''"> and a.customer_name = #{customer_name} </if>
+		  		 and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+					
+					<choose>
+           <!--  <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when> -->
+			<otherwise>
+                group by a.customer_id,a.customer_source_type,b.customer_id,b.customer_source_type
+			</otherwise>
+        </choose>
+			)as a
+	 	
+	</select>
+	
+	<select id="countSearchDataSJD" parameterType="java.util.Map" resultType="int">
+	 	select count(1) from (select count(1)
+				 from tmpv2_cust_od_sum a  
+				 LEFT JOIN ydserver.gs gs ON a.branch_code = gs.bm                                                                                                          
+				 LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm       
+				 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{end_date},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                                                                                                                    
+				 LEFT JOIN tmpv2_cust_price_stats_sjd2 b ON b.customer_id = a.customer_id AND a.customer_source_type = b.customer_source_type  AND a.gs = b.gs                  
+				 WHERE 1=1
+		  		  <if test="branch_code != null and branch_code != ''"> and a.branch_code = #{branch_code} </if>
+		  		  <if test="customer_id != null and customer_id != ''"> and a.customer_id = #{customer_id} </if>
+				  <if test="customer_name != null and customer_name != ''"> and a.customer_name = #{customer_name} </if>
+		  		 and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+					
+					<choose>
+           <!--  <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when> -->
+			<otherwise>
+                group by a.customer_id,a.customer_source_type,b.customer_id,b.customer_source_type
+			</otherwise>
+        </choose>
+			)as a
+	 	
+	</select>
+	
+	<select id="searchBigAreaCode" resultType="java.util.HashMap">
+		select provinceid as province from crmkhv2_regional_basic_information where 1 = 1 and 
+		date_format (
+					#{startDay},
+					'%Y-%m-%d'
+					)  BETWEEN start_date AND end_date	        
+			and bigarea in
+			<foreach collection="bigAreaName" item="bigAreaName" index="index" open="(" close=")" separator=",">
+					 '${bigAreaName}'
+			</foreach>	
+		GROUP BY province
+	</select>
+	
+    <select id="queryProvinceTotalInfo" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select a.provinceid as provinceid ,a.ProvinceName as ProvinceName,a.bigarea as bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+       			 ,sum(IFNULL(all_price_sum,0))  all_price_sum
+			
+				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum b on a.provinceid=b.provinceid  where 1=1 
+		  	 <if test="province_id != null and province_id != ''"> and a.provinceID in ( #{province_id}) </if>
+	 		 <if test="big_area != null and big_area != ''"> and a.bigArea  = #{big_area} </if>
+	 		
+	 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 
+	 		 <if test=' tmp_field == "S" '>						
+					<if test="provinceIdsqx!=null and provinceIdsqx.size>0">
+			   			and a.ProvinceID in 
+			   			<foreach collection="provinceIdsqx" item="provinceIdsqx" index="index" open="(" close=")" separator=",">
+			   				${provinceIdsqx}
+			   			</foreach>
+			   		</if>		
+				   </if>
+	 		
+				 and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+	 			group by a.provinceid,b.provinceid
+	 		
+	 	
+	</select>
+	
+	 <select id="queryProvinceTotalInfoSJD" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select a.provinceid as provinceid ,a.ProvinceName as ProvinceName,a.bigarea as bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))  as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+       			 ,sum(IFNULL(all_price_sum,0))  all_price_sum
+			
+				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum_sjd2 b on a.provinceid=b.provinceid  where 1=1 
+		  	 <if test="province_id != null and province_id != ''"> and a.provinceID in ( #{province_id}) </if>
+	 		 <if test="big_area != null and big_area != ''"> and a.bigArea  = #{big_area} </if>
+	 		
+	 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 
+	 		 <if test=' tmp_field == "S" '>						
+					<if test="provinceIdsqx!=null and provinceIdsqx.size>0">
+			   			and a.ProvinceID in 
+			   			<foreach collection="provinceIdsqx" item="provinceIdsqx" index="index" open="(" close=")" separator=",">
+			   				${provinceIdsqx}
+			   			</foreach>
+			   		</if>		
+				   </if>
+	 		
+				 and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+	 			group by a.provinceid,b.provinceid
+	 		
+	 	
+	</select>
+	
+	
+	
+	   <select id="queryMultiProvinceTotalInfo" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+           select                                              
+				IFNULL(sum(base4.order_sum           ),0) order_sum,                     
+				IFNULL(sum(base4.order_avg           ),0) order_avg,                     
+				IFNULL(sum(base4.cainiao_order_sum   ),0) cainiao_order_sum,             
+				IFNULL(sum(base4.qrcode_order_sum    ),0) qrcode_order_sum,              
+				IFNULL(sum(base4.ordinary_order_sum  ),0) ordinary_order_sum,            
+																		
+				IFNULL(sum(base4.customer_sum),0) customer_sum,                      
+				IFNULL(sum(base4.order_avg_sum),0)     order_avg_sum,                
+				IFNULL(sum(base4.dianzi_order_sum),0)     dianzi_order_sum,          
+																		
+				IFNULL(sum(base4.a_customer_sum),0)    a_customer_sum,               
+				IFNULL(sum(base4.b_customer_sum),0)    b_customer_sum,               
+				IFNULL(sum(base4.c_customer_sum),0)    c_customer_sum,               
+				IFNULL(sum(base4.d_customer_sum),0)    d_customer_sum,               
+				IFNULL(sum(base4.e_customer_sum),0)    e_customer_sum,               
+				IFNULL(sum(base4.f_customer_sum),0)    f_customer_sum,               
+				IFNULL(sum(base4.g_customer_sum),0)    g_customer_sum,               
+																	
+				IFNULL(sum(base4.a_order_avg),0)    a_order_avg,                     
+				IFNULL(sum(base4.b_order_avg),0)    b_order_avg,                     
+				IFNULL(sum(base4.c_order_avg),0)    c_order_avg,                     
+				IFNULL(sum(base4.d_order_avg),0)    d_order_avg,                     
+				IFNULL(sum(base4.e_order_avg),0)    e_order_avg,                     
+				IFNULL(sum(base4.f_order_avg),0)    f_order_avg,                     
+				IFNULL(sum(base4.g_order_avg),0)    g_order_avg,                     
+																		
+				IFNULL(sum(base4.a_order_sum),0) a_order_sum,                        
+				IFNULL(sum(base4.b_order_sum),0) b_order_sum,                        
+				IFNULL(sum(base4.c_order_sum),0) c_order_sum,                            
+				IFNULL(sum(base4.d_order_sum),0) d_order_sum,                            
+				IFNULL(sum(base4.e_order_sum),0) e_order_sum,                            
+				IFNULL(sum(base4.f_order_sum),0) f_order_sum,                            
+				IFNULL(sum(base4.g_order_sum),0) g_order_sum,                 
+				
+				IFNULL(sum(base4.b_price_sum),0) b_price_sum,                 
+				IFNULL(sum(base4.c_price_sum),0) c_price_sum,                 
+				IFNULL(sum(base4.d_price_sum),0) d_price_sum,                 
+				IFNULL(sum(base4.e_price_sum),0) e_price_sum,                 
+				IFNULL(sum(base4.f_price_sum),0) f_price_sum,                 
+				IFNULL(sum(base4.g_price_sum),0) g_price_sum                  
+				from ( 
+			select a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+      			  ,sum(IFNULL(all_price_sum,0))  all_price_sum
+        				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum b on a.provinceid=b.provinceid   where 1=1
+			   and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+			  
+			  	<if test="province_id != null and province_id != ''"> and a.provinceid  = #{province_id} </if>
+			     group by a.provinceid,b.provinceid
+			<!--  <where>  -->
+		 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 		   		
+		   		<if test="provinceIds != null and provinceIds != ''"> 
+                <foreach collection="provinceIds" item="provinceIds" index="1">
+                <choose>
+                <when test="provinceIds != null and provinceIds != ''">
+                UNION ALL select 
+ 			a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) /(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+      			  ,sum(IFNULL(all_price_sum,0)) all_price_sum
+        				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum b on a.provinceid=b.provinceid where 1=1
+                 and a.provinceid  = #{provinceIds} 
+		 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 		   		
+                      and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+				 group by a.provinceid,b.provinceid
+					 
+                 </when>
+                 </choose>
+                 </foreach>
+ 
+
+            </if>	) as base4
+	 		
+			<!--  </where>  -->
+	 	
+	</select>
+	
+	
+   <select id="queryMultiProvinceTotalInfoSJD" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+           select                                              
+				IFNULL(sum(base4.order_sum           ),0) order_sum,                     
+				IFNULL(sum(base4.order_avg           ),0) order_avg,                     
+				IFNULL(sum(base4.cainiao_order_sum   ),0) cainiao_order_sum,             
+				IFNULL(sum(base4.qrcode_order_sum    ),0) qrcode_order_sum,              
+				IFNULL(sum(base4.ordinary_order_sum  ),0) ordinary_order_sum,            
+																		
+				IFNULL(sum(base4.customer_sum),0) customer_sum,                      
+				IFNULL(sum(base4.order_avg_sum),0)     order_avg_sum,                
+				IFNULL(sum(base4.dianzi_order_sum),0)     dianzi_order_sum,          
+																		
+				IFNULL(sum(base4.a_customer_sum),0)    a_customer_sum,               
+				IFNULL(sum(base4.b_customer_sum),0)    b_customer_sum,               
+				IFNULL(sum(base4.c_customer_sum),0)    c_customer_sum,               
+				IFNULL(sum(base4.d_customer_sum),0)    d_customer_sum,               
+				IFNULL(sum(base4.e_customer_sum),0)    e_customer_sum,               
+				IFNULL(sum(base4.f_customer_sum),0)    f_customer_sum,               
+				IFNULL(sum(base4.g_customer_sum),0)    g_customer_sum,               
+																	
+				IFNULL(sum(base4.a_order_avg),0)    a_order_avg,                     
+				IFNULL(sum(base4.b_order_avg),0)    b_order_avg,                     
+				IFNULL(sum(base4.c_order_avg),0)    c_order_avg,                     
+				IFNULL(sum(base4.d_order_avg),0)    d_order_avg,                     
+				IFNULL(sum(base4.e_order_avg),0)    e_order_avg,                     
+				IFNULL(sum(base4.f_order_avg),0)    f_order_avg,                     
+				IFNULL(sum(base4.g_order_avg),0)    g_order_avg,                     
+																		
+				IFNULL(sum(base4.a_order_sum),0) a_order_sum,                        
+				IFNULL(sum(base4.b_order_sum),0) b_order_sum,                        
+				IFNULL(sum(base4.c_order_sum),0) c_order_sum,                            
+				IFNULL(sum(base4.d_order_sum),0) d_order_sum,                            
+				IFNULL(sum(base4.e_order_sum),0) e_order_sum,                            
+				IFNULL(sum(base4.f_order_sum),0) f_order_sum,                            
+				IFNULL(sum(base4.g_order_sum),0) g_order_sum,                 
+				
+				IFNULL(sum(base4.b_price_sum),0) b_price_sum,                 
+				IFNULL(sum(base4.c_price_sum),0) c_price_sum,                 
+				IFNULL(sum(base4.d_price_sum),0) d_price_sum,                 
+				IFNULL(sum(base4.e_price_sum),0) e_price_sum,                 
+				IFNULL(sum(base4.f_price_sum),0) f_price_sum,                 
+				IFNULL(sum(base4.g_price_sum),0) g_price_sum                  
+				from ( 
+		select a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+      			  ,sum(IFNULL(all_price_sum,0))  all_price_sum
+      			  
+        				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum_sjd2 b on a.provinceid=b.provinceid   where 1=1
+			   and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		  and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+			  
+			  	<if test="province_id != null and province_id != ''"> and a.provinceid  = #{province_id} </if>
+			     group by a.provinceid,b.provinceid
+			<!--  <where>  -->
+		 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 		   		
+		   		<if test="provinceIds != null and provinceIds != ''"> 
+                <foreach collection="provinceIds" item="provinceIds" index="1">
+                <choose>
+                <when test="provinceIds != null and provinceIds != ''">
+                UNION ALL select 
+ 			a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+      			  ,sum(IFNULL(all_price_sum,0)) all_price_sum
+        				from tmpv2_province_od_sum  a left join tmpv2_province_price_sum_sjd2 b on a.provinceid=b.provinceid where 1=1
+                 and a.provinceid  = #{provinceIds} 
+		 		<!-- <if test="start_date != null and start_date != ''"> and a.qu_date  = #{start_date} and  b.qu_date = #{start_date}</if> --> 		   		
+                      and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 	and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+				 group by a.provinceid,b.provinceid
+					 
+                 </when>
+                 </choose>
+                 </foreach>
+ 
+
+            </if>	) as base4
+	 		
+			<!--  </where>  -->
+	 	
+	</select>
+	
+	
+	 <select id="queryCityTotalInfo" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select  a.CityID,a.CityName,a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2)) b_price_sum,cast(sum(ifnull(c_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1)  as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+    			    ,sum(IFNULL(all_price_sum,0))  all_price_sum 
+        				from tmpv2_city_od_sum  a left join tmpv2_city_price_sum b on a.CityID=b.CityID where 1=1			 and  b.qu_date  BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					)
+			
+		  	 <if test="provinceId != null and provinceId != ''"> and a.provinceID  = #{provinceId} </if>
+	 		<!-- <if test="dataTime != null and dataTime != ''"> and a.qu_date  = #{dataTime} and  b.qu_date = #{dataTime}</if> --> 
+	 		 <if test="cityId != null and cityId != ''"> and a.cityID  = #{cityId} </if>
+	 			group by a.CityID,b.CityID	
+	</select>
+	
+		 <select id="queryCityTotalInfoSJD" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select  a.CityID,a.CityName,a.provinceid,a.ProvinceName,a.bigarea ,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0))  as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2)) b_price_sum,cast(sum(ifnull(c_price_sum,0))  as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0))  as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))  as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0))  as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+    			    ,sum(IFNULL(all_price_sum,0))  all_price_sum
+        				from tmpv2_city_od_sum  a left join tmpv2_city_price_sum_sjd2 b on a.CityID=b.CityID where 1=1			 
+       				and  b.start_date =
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					)
+			
+		  	 <if test="provinceId != null and provinceId != ''"> and a.provinceID  = #{provinceId} </if>
+	 		<!-- <if test="dataTime != null and dataTime != ''"> and a.qu_date  = #{dataTime} and  b.qu_date = #{dataTime}</if> --> 
+	 		 <if test="cityId != null and cityId != ''"> and a.cityID  = #{cityId} </if>
+	 			group by a.CityID,b.CityID	
+	</select>
+	
+	<select id="queryBranchTotalInfo" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+	select a.branch_code ,gs.mc branch_name,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  b_price_sum,cast(sum(ifnull(c_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum,cast(sum(ifnull(price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))  price_sum
+       			 ,sum(IFNULL(all_price_sum,0))  all_price_sum
+				from tmpv2_gs_od_sum a 
+				LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm 
+				LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+				left join tmpv2_gs_price_sum b on a.branch_code=b.branch_code  where 1=1
+			and  b.qu_date  BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					)
+			
+	 		<!-- <if test="dataTime != null and dataTime != ''"> and a.qu_date  = #{dataTime} and  b.qu_date = #{dataTime}</if> --> 
+	 	     <if test="cityId != null and cityId != ''"> and t4.cityID  = #{cityId} </if>
+	 		group by a.branch_code,b.branch_code
+	 	 
+	</select>
+	
+	<select id="queryBranchTotalInfoSJD" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		select a.branch_code ,gs.mc branch_name,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum, cast(sum(ifnull(a_price_sum,0)) as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2))  b_price_sum,cast(sum(ifnull(c_price_sum,0)) as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0)) as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0)) as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum,cast(sum(ifnull(price_sum,0)) as decimal(10,2))  price_sum
+       			 ,sum(IFNULL(all_price_sum,0))  all_price_sum
+				from tmpv2_gs_od_sum a LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm 
+				LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{endDate},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+				left join tmpv2_gs_price_sum_sjd2 b on a.branch_code=b.branch_code  where 1=1
+			and  b.start_date =
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					)
+			
+	 		<!-- <if test="dataTime != null and dataTime != ''"> and a.qu_date  = #{dataTime} and  b.qu_date = #{dataTime}</if> --> 
+	 	     <if test="cityId != null and cityId != ''"> and t4.cityID  = #{cityId} </if>
+	 		group by a.branch_code,b.branch_code
+	 	 
+	</select>
+	
+	<select id="queryCompanyTotalInfo" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		select sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,sum(qrcode_order_sum) as qrcode_order_sum,
+			sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum , cast(sum(ifnull(a_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0))/(DATEDIFF(#{endDate}, #{startDate})+1) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+        		,sum(IFNULL(all_price_sum,0))  all_price_sum   from tmpv2_all_od_sum a,tmpv2_all_price_sum b  where 1=1
+                 and a.qu_date=b.qu_date  and  b.qu_date  BETWEEN					
+					#{startDate}
+					AND					
+					#{endDate}
+	 		 and a.qu_date BETWEEN					
+					#{startDate}
+					AND
+					#{endDate}
+	 		
+	</select>
+	
+		<select id="queryCompanyTotalInfoSJD" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,sum(qrcode_order_sum) as qrcode_order_sum,
+			sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{endDate}, #{startDate})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{endDate}, #{startDate})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum , cast(sum(ifnull(a_price_sum,0)) as decimal(10,2))   a_price_sum,cast(sum(ifnull(b_price_sum,0)) as decimal(10,2))   b_price_sum,cast(sum(ifnull(c_price_sum,0)) as decimal(10,2))   c_price_sum,cast(sum(ifnull(d_price_sum,0)) as decimal(10,2))   d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) as decimal(10,2))   e_price_sum,cast(sum(ifnull(f_price_sum,0)) as decimal(10,2))   f_price_sum,cast(sum(ifnull(g_price_sum,0)) as decimal(10,2))   g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+        		,sum(IFNULL(all_price_sum,0))  all_price_sum   from tmpv2_all_od_sum a,tmpv2_all_price_sum_sjd2 b  where 1=1
+                 and   a.qu_date BETWEEN
+					date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					)
+                  and  b.start_date =					
+					#{startDate}
+		 		 and b.end_date =	
+					#{endDate}	 		
+		</select>
+	
+		<select id="queryBigareaTotalInfo" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			SELECT a.bigarea as bigarea,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum ,  cast(sum(ifnull(a_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  b_price_sum,cast(sum(ifnull(c_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0))/(DATEDIFF(#{end_date}, #{start_date})+1)  as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+        		,sum(IFNULL(all_price_sum,0))  all_price_sum
+				FROM tmpv2_bigarea_od_sum a left join tmpv2_bigarea_price_sum b on a.bigarea=b.bigarea where 1=1  
+			       <if test=' tmp_field == "D" '>						
+					<if test="regionIds!=null and regionIds.size>0">
+			   			and a.bigarea in 
+			   			<foreach collection="regionIds" item="regionIds" index="index" open="(" close=")" separator=",">
+			   				'${regionIds}'
+			   			</foreach>
+			   		</if>		
+				   </if>
+				   
+				  <!-- 	<if test="start_date!=null and start_date!='' and end_date!=null and end_date!='' ">
+			   			 and a.qu_date = #{start_date}  and b.qu_date = #{start_date} 		   			 
+			   		</if>  --> 
+				   
+				
+				 and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+				group by  a.bigarea,b.bigarea				
+				ORDER BY case when a.bigarea='广东大区' then 1 when a.bigarea='上海大区' then 2 when a.bigarea='北京大区' then 3 when a.bigarea='江苏大区' then 4 when a.bigarea='浙江大区' then 5 when a.bigarea='华中西南大区' then 6 else 7 end 
+				 	
+	</select>
+	
+	<select id="queryBigareaTotalInfoSJD" parameterType="com.yunda.base.feiniao.report.bo.Bo_ReportTotaldata" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			SELECT a.bigarea as bigarea,sum(order_sum) as order_sum, sum(order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1)  as  order_avg,sum(cainiao_order_sum) as cainiao_order_sum,
+			sum(qrcode_order_sum) as qrcode_order_sum,sum(ordinary_order_sum) as ordinary_order_sum,sum(customer_sum) as customer_sum,sum(order_avg_sum)/(DATEDIFF(#{end_date}, #{start_date})+1) as order_avg_sum,sum(dianzi_order_sum) as dianzi_order_sum,sum(a_customer_sum) as a_customer_sum
+			,sum(b_customer_sum) as b_customer_sum ,sum(c_customer_sum) as c_customer_sum ,sum(d_customer_sum) as d_customer_sum,sum(e_customer_sum) as e_customer_sum,sum(f_customer_sum) as f_customer_sum
+			,sum(g_customer_sum) as g_customer_sum,sum(a_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as a_order_avg ,sum(b_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as b_order_avg ,sum(c_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as c_order_avg  ,sum(d_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as d_order_avg ,sum(e_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as e_order_avg
+			 ,sum(f_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as f_order_avg  ,sum(g_order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as g_order_avg   ,sum(a_order_sum) as a_order_sum  ,sum(b_order_sum) as b_order_sum  ,sum(c_order_sum) as c_order_sum  ,sum(d_order_sum) as d_order_sum 
+			  ,sum(e_order_sum) as e_order_sum   ,sum(f_order_sum) as f_order_sum   ,sum(g_order_sum) as g_order_sum ,  cast(sum(ifnull(a_price_sum,0))  as decimal(10,2))  a_price_sum,cast(sum(ifnull(b_price_sum,0))  as decimal(10,2))  b_price_sum,cast(sum(ifnull(c_price_sum,0))  as decimal(10,2))  c_price_sum,cast(sum(ifnull(d_price_sum,0))  as decimal(10,2))  d_price_sum,  
+				cast(sum(ifnull(e_price_sum,0)) as decimal(10,2))  e_price_sum,cast(sum(ifnull(f_price_sum,0))  as decimal(10,2))  f_price_sum,cast(sum(ifnull(g_price_sum,0))  as decimal(10,2))  g_price_sum,  
+				sum(IFNULL(a_all_price_sum,0))  a_all_price_sum,sum(IFNULL(b_all_price_sum,0))  b_all_price_sum,sum(IFNULL(c_all_price_sum,0))  c_all_price_sum,sum(IFNULL(d_all_price_sum,0))  d_all_price_sum,   
+				sum(IFNULL(e_all_price_sum,0))  e_all_price_sum,sum(IFNULL(f_all_price_sum,0))  f_all_price_sum,sum(IFNULL(g_all_price_sum,0))  g_all_price_sum
+        		,sum(IFNULL(all_price_sum,0))  all_price_sum
+				FROM tmpv2_bigarea_od_sum a left join tmpv2_bigarea_price_sum_sjd b on a.bigarea=b.bigarea where 1=1  
+			       <if test=' tmp_field == "D" '>						
+					<if test="regionIds!=null and regionIds.size>0">
+			   			and a.bigarea in 
+			   			<foreach collection="regionIds" item="regionIds" index="index" open="(" close=")" separator=",">
+			   				'${regionIds}'
+			   			</foreach>
+			   		</if>		
+				   </if>
+				 and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 			 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+				group by  a.bigarea,b.bigarea				
+				ORDER BY case when a.bigarea='广东大区' then 1 when a.bigarea='上海大区' then 2 when a.bigarea='北京大区' then 3 when a.bigarea='江苏大区' then 4 when a.bigarea='浙江大区' then 5 when a.bigarea='华中西南大区' then 6 else 7 end 
+				 	
+	</select>
+	
+	<select id="searchData" parameterType="java.util.Map" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select sum(a.order_sum) order_sum,cast(sum(a.order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,0)) order_avg,
+			cast(sum(ifnull(b.price_num,0))/(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2)) price_sum,
+			'-' customer_name,a.customer_id,t4.bigarea,t4.ProvinceName,t4.CityName,gs.mc branch_name,
+			a.branch_code branch_code,yjwd.mc yjmc,a.gs yjbm,cast(sum(ifnull(b.all_price_sum,0)) as decimal(10,2)) dianzi_order_sum,
+			CASE a.customer_source_type WHEN 1 THEN '菜鸟' WHEN 2 THEN '二维码' WHEN 4 THEN '京东' ELSE '拼多多' 
+			END customer_source_type 
+				 from tmpv2_cust_od_sum a  
+				 LEFT JOIN ydserver.gs gs ON a.branch_code = gs.bm                                                                                                          
+				 LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm
+				 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{end_date},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              				                                                                                     
+				 LEFT JOIN tmpv2_cust_price_stats b ON b.customer_id = a.customer_id AND a.customer_source_type = b.customer_source_type  AND a.gs = b.gs                  
+				 WHERE 1=1
+		  		  <if test="branch_code != null and branch_code != ''"> and a.branch_code = #{branch_code} </if>
+		  		  <if test="customer_id != null and customer_id != ''"> and a.customer_id = #{customer_id} </if>
+				  <if test="customer_name != null and customer_name != ''"> and a.customer_name = #{customer_name} </if>
+		  		 and  b.qu_date  BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 		 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+		  		
+        <choose>
+			<otherwise>
+                group by a.customer_id,a.customer_source_type,b.customer_id,b.customer_source_type
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="searchDataSJD" parameterType="java.util.Map" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select sum(a.order_sum) order_sum,cast(sum(a.order_avg)/(DATEDIFF(#{end_date}, #{start_date})+1) as decimal(10,2)) order_avg,
+				cast(sum(ifnull(b.price_num,0)) as decimal(10,2)) price_sum,'-' customer_name,a.customer_id,t4.bigarea,
+				t4.ProvinceName,t4.CityName,gs.mc branch_name,a.branch_code branch_code,yjwd.mc yjmc,a.gs yjbm,
+				cast(sum(ifnull(b.all_price_sum,0)) as decimal(10,2)) dianzi_order_sum,CASE a.customer_source_type 
+				WHEN 1 THEN '菜鸟' WHEN 2 THEN '二维码' WHEN 4 THEN '京东' ELSE '拼多多' END customer_source_type 
+				 from tmpv2_cust_od_sum a  
+				 LEFT JOIN ydserver.gs gs ON a.branch_code = gs.bm                                                                                                          
+				 LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm                                                                                                               
+				 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{end_date},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                                                                                                                     
+				 LEFT JOIN tmpv2_cust_price_stats_sjd2 b ON b.customer_id = a.customer_id AND a.customer_source_type = b.customer_source_type  AND a.gs = b.gs                  
+				 WHERE 1=1
+		  		  <if test="branch_code != null and branch_code != ''"> and a.branch_code = #{branch_code} </if>
+		  		  <if test="customer_id != null and customer_id != ''"> and a.customer_id = #{customer_id} </if>
+				  <if test="customer_name != null and customer_name != ''"> and a.customer_name = #{customer_name} </if>
+		  		 and  b.start_date =
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND b.end_date =
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					) 		
+	 			 and a.qu_date BETWEEN
+					date_format (
+					#{start_date},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{end_date},
+					'%Y-%m-%d'
+					)
+		  		
+        <choose>
+           <!--  <when test="sort != null and sort.trim() != ''">
+                order by #{sort} #{order}
+            </when> -->
+			<otherwise>
+                group by a.customer_id,a.customer_source_type,b.customer_id,b.customer_source_type
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+		
+	
+	<select id="searchCqkhCustomerData" parameterType="java.util.HashMap"  resultType="java.util.Map">
+			select cqkh.khmc,cqkh.mobile,cqkh.gsaddr,cqkh.adddatetime,cqkh.bm,cqkh.gs,cqkh.adddatetime,gs.mc,
+			t4.CountyName countyname,t4.CityName cityname, t4.ProvinceName provinceName, t4.bigarea bigarea ,t4.CountyID CountyID,
+			t4.CityID CityID,t4.ProvinceID ProvinceID ,fb.bm fb_id, fb.mc fb_name 
+			from ydserver.cqkh cqkh 
+			left join ydserver.gs gs on cqkh.gs = gs.bm 
+			LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+			LEFT JOIN ydserver.wdzzzbd wdzzzbd on gs.bm = wdzzzbd.wdbm AND wdzzzbd.lb=1 
+			LEFT JOIN ydserver.gs fb on fb.bm = wdzzzbd.zzz 
+		<if test="skip != null and limit != null">
+			<!--limit #{pageSize} offset #{startRow}  -->
+			limit #{skip},  #{limit}
+		</if>
+	</select>
+
+	<select id="queryBranchMapReport" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+			select bigarea,IFNULL(branch_name,'未查询到名称 ')branch_name,order_sum 
+			from 
+			(
+				select t4.ProvinceID provinceid,t4.bigarea,g.mc branch_name,a.order_sum,a.branch_code 
+				from 
+				(
+					select branch_code,order_sum from 
+					tmpv2_gs_od_sum 
+					where branch_code is not null 
+					ORDER BY order_sum desc 
+				)a 
+				LEFT JOIN  ydserver.gs g on a.branch_code=g.bm  
+				LEFT JOIN crmkhv2_regional_basic_information t4 ON g.szd = t4.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+			)a
+			WHERE 1=1
+	 		 <if test=' tmp_field == "D" '>						
+					<if test="regionIds !=null and regionIds.size>0 ">
+			   			and a.bigarea in 
+			   			<foreach collection="regionIds" item="regionIds" index="index" open="(" close=")" separator=",">
+			   				'${regionIds}'
+			   			</foreach>
+			   		</if>		
+				   </if>
+			 <if test=' tmp_field == "S" '>						
+					<if test="provinceIdsqx !=null and provinceIdsqx.size>0 ">
+			   			and a.Province_id in 
+			   			<foreach collection="provinceIdsqx" item="provinceIdsqx" index="index" open="(" close=")" separator=",">
+			   				${provinceIdsqx}
+			   			</foreach>
+			   		</if>		
+				   </if>
+		    <if test="start_date!=null and start_date!='' ">
+	   			 and a.qu_date = #{start_date}		   			 
+	   		</if>
+	 		order by a.order_sum desc limit 100	 	
+	</select>
+	
+	
+	
+	
+		<select id="queryTotalMapReport" parameterType="java.lang.String" resultType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		  select order_sum,round(order_avg,2) order_avg,dianzi_order_sum,round(dianzi_order_sum/order_sum,2) dianzi_num_percent,customer_sum,
+			(a_all_price_sum+b_all_price_sum+c_all_price_sum+d_all_price_sum+e_all_price_sum+f_all_price_sum+g_all_price_sum) a_all_price_sum 
+			from tmpv2_all_od_sum a,tmpv2_all_price_sum b
+			<where>  
+	 		
+		    <if test="start_date!=null and start_date!='' ">
+	   			 and a.qu_date = #{start_date}		   			 
+	   		</if>
+	 		</where>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_report_totaldata
+		 <where>  
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceid = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and CityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and CityName = #{cityname} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="yjbm != null and yjbm != ''"> and yjbm = #{yjbm} </if>
+		  		  <if test="yjmc != null and yjmc != ''"> and yjmc = #{yjmc} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="qrcodeOrderSum != null and qrcodeOrderSum != ''"> and qrcode_order_sum = #{qrcodeOrderSum} </if>
+		  		  <if test="cainiaoOrderSum != null and cainiaoOrderSum != ''"> and cainiao_order_sum = #{cainiaoOrderSum} </if>
+		  		  <if test="ordinaryOrderSum != null and ordinaryOrderSum != ''"> and ordinary_order_sum = #{ordinaryOrderSum} </if>
+		  		  <if test="orderAvg != null and orderAvg != ''"> and order_avg = #{orderAvg} </if>
+		  		  <if test="priceSum != null and priceSum != ''"> and price_sum = #{priceSum} </if>
+		  		  <if test="dianziOrderSum != null and dianziOrderSum != ''"> and dianzi_order_sum = #{dianziOrderSum} </if>
+		  		  <if test="dianziNumPercent != null and dianziNumPercent != ''"> and dianzi_num_percent = #{dianziNumPercent} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>
+		  		  <if test="dianziPercent != null and dianziPercent != ''"> and dianzi_percent = #{dianziPercent} </if>
+		  		  <if test="aCustomerSum != null and aCustomerSum != ''"> and a_customer_sum = #{aCustomerSum} </if>
+		  		  <if test="bCustomerSum != null and bCustomerSum != ''"> and b_customer_sum = #{bCustomerSum} </if>
+		  		  <if test="cCustomerSum != null and cCustomerSum != ''"> and c_customer_sum = #{cCustomerSum} </if>
+		  		  <if test="dCustomerSum != null and dCustomerSum != ''"> and d_customer_sum = #{dCustomerSum} </if>
+		  		  <if test="eCustomerSum != null and eCustomerSum != ''"> and e_customer_sum = #{eCustomerSum} </if>
+		  		  <if test="fCustomerSum != null and fCustomerSum != ''"> and f_customer_sum = #{fCustomerSum} </if>
+		  		  <if test="gCustomerSum != null and gCustomerSum != ''"> and g_customer_sum = #{gCustomerSum} </if>
+		  		  <if test="aOrderAvg != null and aOrderAvg != ''"> and a_order_avg = #{aOrderAvg} </if>
+		  		  <if test="bOrderAvg != null and bOrderAvg != ''"> and b_order_avg = #{bOrderAvg} </if>
+		  		  <if test="cOrderAvg != null and cOrderAvg != ''"> and c_order_avg = #{cOrderAvg} </if>
+		  		  <if test="dOrderAvg != null and dOrderAvg != ''"> and d_order_avg = #{dOrderAvg} </if>
+		  		  <if test="eOrderAvg != null and eOrderAvg != ''"> and e_order_avg = #{eOrderAvg} </if>
+		  		  <if test="fOrderAvg != null and fOrderAvg != ''"> and f_order_avg = #{fOrderAvg} </if>
+		  		  <if test="gOrderAvg != null and gOrderAvg != ''"> and g_order_avg = #{gOrderAvg} </if>
+		  		  <if test="aOrderSum != null and aOrderSum != ''"> and a_order_sum = #{aOrderSum} </if>
+		  		  <if test="bOrderSum != null and bOrderSum != ''"> and b_order_sum = #{bOrderSum} </if>
+		  		  <if test="cOrderSum != null and cOrderSum != ''"> and c_order_sum = #{cOrderSum} </if>
+		  		  <if test="dOrderSum != null and dOrderSum != ''"> and d_order_sum = #{dOrderSum} </if>
+		  		  <if test="eOrderSum != null and eOrderSum != ''"> and e_order_sum = #{eOrderSum} </if>
+		  		  <if test="fOrderSum != null and fOrderSum != ''"> and f_order_sum = #{fOrderSum} </if>
+		  		  <if test="gOrderSum != null and gOrderSum != ''"> and g_order_sum = #{gOrderSum} </if>
+		  		  <if test="aPriceSum != null and aPriceSum != ''"> and a_price_sum = #{aPriceSum} </if>
+		  		  <if test="bPriceSum != null and bPriceSum != ''"> and b_price_sum = #{bPriceSum} </if>
+		  		  <if test="cPriceSum != null and cPriceSum != ''"> and c_price_sum = #{cPriceSum} </if>
+		  		  <if test="dPriceSum != null and dPriceSum != ''"> and d_price_sum = #{dPriceSum} </if>
+		  		  <if test="ePriceSum != null and ePriceSum != ''"> and e_price_sum = #{ePriceSum} </if>
+		  		  <if test="fPriceSum != null and fPriceSum != ''"> and f_price_sum = #{fPriceSum} </if>
+		  		  <if test="gPriceSum != null and gPriceSum != ''"> and g_price_sum = #{gPriceSum} </if>
+		  		  <if test="aAllPriceSum != null and aAllPriceSum != ''"> and a_all_price_sum = #{aAllPriceSum} </if>
+		  		  <if test="bAllPriceSum != null and bAllPriceSum != ''"> and b_all_price_sum = #{bAllPriceSum} </if>
+		  		  <if test="cAllPriceSum != null and cAllPriceSum != ''"> and c_all_price_sum = #{cAllPriceSum} </if>
+		  		  <if test="dAllPriceSum != null and dAllPriceSum != ''"> and d_all_price_sum = #{dAllPriceSum} </if>
+		  		  <if test="eAllPriceSum != null and eAllPriceSum != ''"> and e_all_price_sum = #{eAllPriceSum} </if>
+		  		  <if test="fAllPriceSum != null and fAllPriceSum != ''"> and f_all_price_sum = #{fAllPriceSum} </if>
+		  		  <if test="gAllPriceSum != null and gAllPriceSum != ''"> and g_all_price_sum = #{gAllPriceSum} </if>
+		  		  <if test="aPricePercent != null and aPricePercent != ''"> and a_price_percent = #{aPricePercent} </if>
+		  		  <if test="bPricePercent != null and bPricePercent != ''"> and b_price_percent = #{bPricePercent} </if>
+		  		  <if test="cPricePercent != null and cPricePercent != ''"> and c_price_percent = #{cPricePercent} </if>
+		  		  <if test="dPricePercent != null and dPricePercent != ''"> and d_price_percent = #{dPricePercent} </if>
+		  		  <if test="ePricePercent != null and ePricePercent != ''"> and e_price_percent = #{ePricePercent} </if>
+		  		  <if test="fPricePercent != null and fPricePercent != ''"> and f_price_percent = #{fPricePercent} </if>
+		  		  <if test="gPricePercent != null and gPricePercent != ''"> and g_price_percent = #{gPricePercent} </if>
+		  		  <if test="customerSum != null and customerSum != ''"> and customer_sum = #{customerSum} </if>
+		  		  <if test="customerAvgSum != null and customerAvgSum != ''"> and customer_avg_sum = #{customerAvgSum} </if>
+		  		  <if test="customerPriceSum != null and customerPriceSum != ''"> and customer_price_sum = #{customerPriceSum} </if>
+		  		  <if test="customerAllPriceSum != null and customerAllPriceSum != ''"> and customer_all_price_sum = #{customerAllPriceSum} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		insert into crmkhv2_report_totaldata
+		(
+			`bigarea`, 
+			`provinceid`, 
+			`ProvinceName`, 
+			`CityID`, 
+			`CityName`, 
+			`branch_code`, 
+			`branch_name`, 
+			`customer_id`, 
+			`customer_name`, 
+			`yjbm`, 
+			`yjmc`, 
+			`customer_source_type`, 
+			`order_sum`, 
+			`qrcode_order_sum`, 
+			`cainiao_order_sum`, 
+			`ordinary_order_sum`, 
+			`order_avg`, 
+			`price_sum`, 
+			`dianzi_order_sum`, 
+			`dianzi_num_percent`, 
+			`create_date`, 
+			`report_date`, 
+			`dianzi_percent`, 
+			`a_customer_sum`, 
+			`b_customer_sum`, 
+			`c_customer_sum`, 
+			`d_customer_sum`, 
+			`e_customer_sum`, 
+			`f_customer_sum`, 
+			`g_customer_sum`, 
+			`a_order_avg`, 
+			`b_order_avg`, 
+			`c_order_avg`, 
+			`d_order_avg`, 
+			`e_order_avg`, 
+			`f_order_avg`, 
+			`g_order_avg`, 
+			`a_order_sum`, 
+			`b_order_sum`, 
+			`c_order_sum`, 
+			`d_order_sum`, 
+			`e_order_sum`, 
+			`f_order_sum`, 
+			`g_order_sum`, 
+			`a_price_sum`, 
+			`b_price_sum`, 
+			`c_price_sum`, 
+			`d_price_sum`, 
+			`e_price_sum`, 
+			`f_price_sum`, 
+			`g_price_sum`, 
+			`a_all_price_sum`, 
+			`b_all_price_sum`, 
+			`c_all_price_sum`, 
+			`d_all_price_sum`, 
+			`e_all_price_sum`, 
+			`f_all_price_sum`, 
+			`g_all_price_sum`, 
+			`a_price_percent`, 
+			`b_price_percent`, 
+			`c_price_percent`, 
+			`d_price_percent`, 
+			`e_price_percent`, 
+			`f_price_percent`, 
+			`g_price_percent`, 
+			`customer_sum`, 
+			`customer_avg_sum`, 
+			`customer_price_sum`, 
+			`customer_all_price_sum`
+		)
+		values
+		(
+			#{bigarea}, 
+			#{provinceid}, 
+			#{provincename}, 
+			#{cityid}, 
+			#{cityname}, 
+			#{branchCode}, 
+			#{branchName}, 
+			#{customerId}, 
+			#{customerName}, 
+			#{yjbm}, 
+			#{yjmc}, 
+			#{customerSourceType}, 
+			#{orderSum}, 
+			#{qrcodeOrderSum}, 
+			#{cainiaoOrderSum}, 
+			#{ordinaryOrderSum}, 
+			#{orderAvg}, 
+			#{priceSum}, 
+			#{dianziOrderSum}, 
+			#{dianziNumPercent}, 
+			#{createDate}, 
+			#{reportDate}, 
+			#{dianziPercent}, 
+			#{aCustomerSum}, 
+			#{bCustomerSum}, 
+			#{cCustomerSum}, 
+			#{dCustomerSum}, 
+			#{eCustomerSum}, 
+			#{fCustomerSum}, 
+			#{gCustomerSum}, 
+			#{aOrderAvg}, 
+			#{bOrderAvg}, 
+			#{cOrderAvg}, 
+			#{dOrderAvg}, 
+			#{eOrderAvg}, 
+			#{fOrderAvg}, 
+			#{gOrderAvg}, 
+			#{aOrderSum}, 
+			#{bOrderSum}, 
+			#{cOrderSum}, 
+			#{dOrderSum}, 
+			#{eOrderSum}, 
+			#{fOrderSum}, 
+			#{gOrderSum}, 
+			#{aPriceSum}, 
+			#{bPriceSum}, 
+			#{cPriceSum}, 
+			#{dPriceSum}, 
+			#{ePriceSum}, 
+			#{fPriceSum}, 
+			#{gPriceSum}, 
+			#{aAllPriceSum}, 
+			#{bAllPriceSum}, 
+			#{cAllPriceSum}, 
+			#{dAllPriceSum}, 
+			#{eAllPriceSum}, 
+			#{fAllPriceSum}, 
+			#{gAllPriceSum}, 
+			#{aPricePercent}, 
+			#{bPricePercent}, 
+			#{cPricePercent}, 
+			#{dPricePercent}, 
+			#{ePricePercent}, 
+			#{fPricePercent}, 
+			#{gPricePercent}, 
+			#{customerSum}, 
+			#{customerAvgSum}, 
+			#{customerPriceSum}, 
+			#{customerAllPriceSum}
+		)
+	</insert>
+	
+	<!-- 查找当天新增或者更新的组织机构信息  -->
+	<insert id="saveLjByCustomer" parameterType="java.util.Date">
+ 	 insert into tmpv2_cust_od_sum(`customer_id`,`qu_date`,`customer_name`,`branch_code`,`customer_source_type`,`gs`,`order_sum`,`order_avg`,`price_level` )
+		 select                                                                                         
+		 customer_id,qu_date,customer_name,branch_code,customer_source_type,gs, 
+		 sum(daily_order_num) order_sum,                                                                
+		 sum(daily_order_num) order_avg,                     
+		 case 
+		 when sum(daily_order_num) &lt; 50 then 'a'
+		 when sum(daily_order_num) &gt;= 50   and sum(daily_order_num) &lt;  200  then 'b'
+		 when sum(daily_order_num) &gt;= 200  and sum(daily_order_num) &lt;  1000 then 'c'
+		 when sum(daily_order_num) &gt;= 1000 and sum(daily_order_num) &lt;  2000 then 'd'
+		 when sum(daily_order_num) &gt;= 2000 and sum(daily_order_num) &lt;  3000 then 'e'
+		 when sum(daily_order_num) &gt;= 3000 and sum(daily_order_num) &lt;  5000 then 'f'
+		 when sum(daily_order_num) &gt;= 5000 then 'g'
+		 else '' end as price_level 
+		 from crmkhv2_report_order_stats_all a                                                            
+		 where a.qu_date = date_format(#{targetDay},'%Y-%m-%d')                  
+		 GROUP BY customer_id,branch_code,customer_source_type,gs	
+	 	</insert>
+	 	
+ 	<insert id="saveLjByCustomerNew" parameterType="java.util.Date">
+	 	 insert into tmpv2_cust_od_sum(`customer_id`,`qu_date`,`customer_name`,`branch_code`,`customer_source_type`,`gs`,`order_sum`,`order_avg`,`price_level` )
+			 select                                                                                         
+			 customer_id,qu_date,customer_name,branch_code,customer_source_type,gs, 
+			 sum(daily_order_num) order_sum,                                                                
+			 sum(daily_order_num) order_avg,                     
+			 case 
+			 when sum(daily_order_num) &gt;= 0    and sum(daily_order_num) &lt;=  50   then 'a'
+			 when sum(daily_order_num) &gt; 50   and sum(daily_order_num) &lt;=  100  then 'b'
+			 when sum(daily_order_num) &gt; 100  and sum(daily_order_num) &lt;=  500 then 'c'
+			 when sum(daily_order_num) &gt; 500 and sum(daily_order_num) &lt;=  1000 then 'd'
+			 when sum(daily_order_num) &gt; 1000 and sum(daily_order_num) &lt;=  3000 then 'e'
+			 when sum(daily_order_num) &gt; 3000 and sum(daily_order_num) &lt;=  5000 then 'f'
+			 when sum(daily_order_num) &gt; 5000 then 'g'
+			 else '' end as price_level 
+			 from crmkhv2_report_order_stats_all a                                                            
+			 where a.qu_date = date_format(#{targetDay},'%Y-%m-%d')                  
+			 GROUP BY customer_id,branch_code,customer_source_type,gs	
+	</insert>
+ 	
+ 	<delete id="removeLjByCustomer" parameterType="java.util.Date">
+		delete from tmpv2_cust_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<insert id="saveLjByGs" parameterType="java.util.Date">
+ 	     insert into tmpv2_gs_sum(`branch_code`,`qu_date`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`)                    
+					 select a.branch_code, a.report_date,                                                            
+					 sum(ifnull(a.daily_order_got_num,0)) order_sum,                                             
+					 sum(ifnull(a.daily_order_got_num,0)) order_avg,                                             
+					 sum(ifnull(a.daily_cainiao_num,0)) cainiao_order_sum,                                       
+					 sum(ifnull(a.daily_qrcode_num,0)) qrcode_order_sum,                                         
+					 sum(ifnull(a.daily_ordinary_num,0)) ordinary_order_sum                                 
+					 from crmkhv2_report_order_stats_gs_num a                                            
+					 where a.report_date = date_format(#{targetDay},'%Y-%m-%d')
+					 GROUP BY branch_code	
+	 	</insert>
+	 	
+		<delete id="removeLjByGs" parameterType="java.util.Date">
+				delete from tmpv2_gs_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	 
+	 
+	 	<insert id="saveLjByWangdian" parameterType="java.util.Date">
+ 		insert into tmpv2_gs_od_sum (`branch_code`,`qu_date`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+				     select base2.branch_code, base2.qu_date,                                                                                   
+					 base2.order_sum order_sum,                                                                                 
+					 base2.order_avg order_avg,                                                                                 
+					 base2.cainiao_order_sum,                                                                                   
+					 base2.qrcode_order_sum,                                                                                    
+					 base2.ordinary_order_sum,                                                                                  
+					 count(base.customer_id) customer_sum,                                                                      
+					 sum(ifnull(base.order_avg,0))     order_avg_sum,                                                                     
+					 sum(ifnull(base.order_sum,0))     dianzi_order_sum,                                                                     
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt; 50 then 1 else 0 end)      a_customer_sum,       
+					 sum(case when base.order_avg &gt;= 50   AND base.order_avg &lt; 200 then 1 else 0 end)     b_customer_sum,       
+					 sum(case when base.order_avg &gt;= 200  AND base.order_avg &lt; 1000 then 1 else 0 end)    c_customer_sum,       
+					 sum(case when base.order_avg &gt;= 1000 AND base.order_avg &lt; 2000 then 1 else 0 end)    d_customer_sum,       
+					 sum(case when base.order_avg &gt;= 2000 AND base.order_avg &lt; 3000 then 1 else 0 end)    e_customer_sum,       
+					 sum(case when base.order_avg &gt;= 3000 AND base.order_avg &lt; 5000 then 1 else 0 end)    f_customer_sum,       
+					 sum(case when base.order_avg &gt;= 5000 then 1 else 0 end)                              g_customer_sum,       
+					                                                                                                            
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt; 50   then base.order_avg else 0 end)    a_order_avg,  
+					 sum(case when base.order_avg &gt;= 50   AND base.order_avg &lt; 200  then base.order_avg else 0 end)    b_order_avg,  
+					 sum(case when base.order_avg &gt;= 200  AND base.order_avg &lt; 1000 then base.order_avg else 0 end)    c_order_avg,  
+					 sum(case when base.order_avg &gt;= 1000 AND base.order_avg &lt; 2000 then base.order_avg else 0 end)    d_order_avg,  
+					 sum(case when base.order_avg &gt;= 2000 AND base.order_avg &lt; 3000 then base.order_avg else 0 end)    e_order_avg,  
+					 sum(case when base.order_avg &gt;= 3000 AND base.order_avg &lt; 5000 then base.order_avg else 0 end)    f_order_avg,  
+					 sum(case when base.order_avg &gt;= 5000                           then base.order_avg else 0 end)    g_order_avg,  
+					                                                                                                            
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt; 50   then base.order_sum else 0 end) a_order_sum,
+					 sum(case when base.order_avg &gt;= 50   AND base.order_avg &lt; 200  then base.order_sum else 0 end) b_order_sum,
+					 sum(case when base.order_avg &gt;= 200  AND base.order_avg &lt; 1000 then base.order_sum else 0 end) c_order_sum,
+					 sum(case when base.order_avg &gt;= 1000 AND base.order_avg &lt; 2000 then base.order_sum else 0 end) d_order_sum,
+					 sum(case when base.order_avg &gt;= 2000 AND base.order_avg &lt; 3000 then base.order_sum else 0 end) e_order_sum,
+					 sum(case when base.order_avg &gt;= 3000 AND base.order_avg &lt; 5000 then base.order_sum else 0 end) f_order_sum,
+					 sum(case when base.order_avg &gt;= 5000                           then base.order_sum else 0 end) g_order_sum 
+					                                                                                                            
+					 from tmpv2_gs_sum base2                                                                
+					 LEFT JOIN tmpv2_cust_od_sum base on base.branch_code = base2.branch_code  where   base2.qu_date=date_format(#{targetDay},'%Y-%m-%d') and   base.qu_date=date_format(#{targetDay},'%Y-%m-%d')            
+					 GROUP BY base2.branch_code	
+	 	</insert>
+	 	
+	 	<insert id="saveLjByWangdianNew" parameterType="java.util.Date">
+ 			insert into tmpv2_gs_od_sum (`branch_code`,`qu_date`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+				     select base2.branch_code, base2.qu_date,                                                                                   
+					 base2.order_sum order_sum,                                                                                 
+					 base2.order_avg order_avg,                                                                                 
+					 base2.cainiao_order_sum,                                                                                   
+					 base2.qrcode_order_sum,                                                                                    
+					 base2.ordinary_order_sum,                                                                                  
+					 count(base.customer_id) customer_sum,                                                                      
+					 sum(ifnull(base.order_avg,0))     order_avg_sum,                                                                     
+					 sum(ifnull(base.order_sum,0))     dianzi_order_sum,                                                                     
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt;= 50   then 1 else 0 end)    a_customer_sum,       
+					 sum(case when base.order_avg &gt; 50    AND base.order_avg &lt;= 100  then 1 else 0 end)    b_customer_sum,       
+					 sum(case when base.order_avg &gt; 100   AND base.order_avg &lt;= 500 then 1 else 0 end)    c_customer_sum,       
+					 sum(case when base.order_avg &gt; 500  AND base.order_avg &lt;= 1000 then 1 else 0 end)    d_customer_sum,       
+					 sum(case when base.order_avg &gt; 1000  AND base.order_avg &lt;= 3000 then 1 else 0 end)    e_customer_sum,       
+					 sum(case when base.order_avg &gt; 3000  AND base.order_avg &lt;= 5000 then 1 else 0 end)    f_customer_sum,       
+					 sum(case when base.order_avg &gt; 5000  							   then 1 else 0 end)    g_customer_sum,       
+					                                                                                                            
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt;= 50   then base.order_avg else 0 end)    a_order_avg,  
+					 sum(case when base.order_avg &gt; 50    AND base.order_avg &lt;= 100  then base.order_avg else 0 end)    b_order_avg,  
+					 sum(case when base.order_avg &gt; 100   AND base.order_avg &lt;= 500 then base.order_avg else 0 end)    c_order_avg,  
+					 sum(case when base.order_avg &gt; 500  AND base.order_avg &lt;= 1000 then base.order_avg else 0 end)    d_order_avg,  
+					 sum(case when base.order_avg &gt; 1000  AND base.order_avg &lt;= 3000 then base.order_avg else 0 end)    e_order_avg,  
+					 sum(case when base.order_avg &gt; 3000  AND base.order_avg &lt;= 5000 then base.order_avg else 0 end)    f_order_avg,  
+					 sum(case when base.order_avg &gt; 5000                           then base.order_avg else 0 end)    g_order_avg,  
+					                                                                                                            
+					 sum(case when base.order_avg &gt;= 0    AND base.order_avg &lt;= 50   then base.order_sum else 0 end) a_order_sum,
+					 sum(case when base.order_avg &gt; 50    AND base.order_avg &lt;= 100  then base.order_sum else 0 end) b_order_sum,
+					 sum(case when base.order_avg &gt; 100   AND base.order_avg &lt;= 500 then base.order_sum else 0 end) c_order_sum,
+					 sum(case when base.order_avg &gt; 500  AND base.order_avg &lt;= 1000 then base.order_sum else 0 end) d_order_sum,
+					 sum(case when base.order_avg &gt; 1000  AND base.order_avg &lt;= 3000 then base.order_sum else 0 end) e_order_sum,
+					 sum(case when base.order_avg &gt; 3000  AND base.order_avg &lt;= 5000 then base.order_sum else 0 end) f_order_sum,
+					 sum(case when base.order_avg &gt; 5000                           then base.order_sum else 0 end) g_order_sum 
+					                                                                                                            
+					 from tmpv2_gs_sum base2                                                                
+					 LEFT JOIN tmpv2_cust_od_sum base on base.branch_code = base2.branch_code  where   base2.qu_date=date_format(#{targetDay},'%Y-%m-%d') and   base.qu_date=date_format(#{targetDay},'%Y-%m-%d')            
+					 GROUP BY base2.branch_code	
+	 	</insert>
+	 	
+		<delete id="removeLjByWangdian" parameterType="java.util.Date">
+				delete from tmpv2_gs_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	 
+	 	<insert id="saveLjByCity" parameterType="java.util.HashMap">		
+			insert into tmpv2_city_od_sum (`CityID`,`qu_date`,`CityName`,`provinceid`,`ProvinceName`,`bigarea`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+				 select                                                                                
+					  t4.CityID CityID,base3.qu_date, t4.CityName CityName,t4.ProvinceID provinceid,t4.ProvinceName ProvinceName,t4.bigarea bigarea,
+					  sum(base3.order_sum           ) order_sum,                                            
+					  sum(base3.order_avg           ) order_avg,                                            
+					  sum(base3.cainiao_order_sum   ) cainiao_order_sum,                                    
+					  sum(base3.qrcode_order_sum    ) qrcode_order_sum,                                     
+					  sum(base3.ordinary_order_sum  ) ordinary_order_sum,                                   
+
+					                                                                                        
+					  sum(base3.customer_sum) customer_sum,                                                 
+					  sum(base3.order_avg_sum)     order_avg_sum,                                           
+					  sum(base3.dianzi_order_sum)     dianzi_order_sum,                                     
+					                                                                                        
+					  sum(base3.a_customer_sum)    a_customer_sum,                                          
+					  sum(base3.b_customer_sum)    b_customer_sum,                                          
+					  sum(base3.c_customer_sum)    c_customer_sum,                                          
+					  sum(base3.d_customer_sum)    d_customer_sum,                                          
+					  sum(base3.e_customer_sum)    e_customer_sum,                                          
+					  sum(base3.f_customer_sum)    f_customer_sum,                                          
+					  sum(base3.g_customer_sum)    g_customer_sum,                                          
+					                                                                                        
+					  sum(base3.a_order_avg)    a_order_avg,                                                
+					  sum(base3.b_order_avg)    b_order_avg,                                                
+					  sum(base3.c_order_avg)    c_order_avg,                                                
+					  sum(base3.d_order_avg)    d_order_avg,                                                
+					  sum(base3.e_order_avg)    e_order_avg,                                                
+					  sum(base3.f_order_avg)    f_order_avg,                                                
+					  sum(base3.g_order_avg)    g_order_avg,                                                
+					                                                                                        
+					  sum(base3.a_order_sum) a_order_sum,                                                   
+					  sum(base3.b_order_sum) b_order_sum,                                                   
+					  sum(base3.c_order_sum) c_order_sum,                                                   
+					  sum(base3.d_order_sum) d_order_sum,                                                   
+					  sum(base3.e_order_sum) e_order_sum,                                                   
+					  sum(base3.f_order_sum) f_order_sum,                                                   
+					  sum(base3.g_order_sum) g_order_sum                                                    
+					  from tmpv2_gs_od_sum base3                                            
+					  LEFT JOIN ydserver.gs gs on base3.branch_code = gs.bm  
+					  LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              					  
+					  where    base3.qu_date=date_format(#{targetDay},'%Y-%m-%d')              
+					  GROUP BY t4.CityID,t4.CityName,t4.provinceid,t4.ProvinceName,t4.bigarea	
+	 	</insert>
+	 	
+		<delete id="removeLjByCity" parameterType="java.util.Date">
+				delete from tmpv2_city_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+		
+		
+		
+	   <insert id="saveLjByProvince" parameterType="java.util.Date">					
+		insert into tmpv2_province_od_sum (`provinceid`,`qu_date`,`ProvinceName`,`bigarea`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+			select                                                 
+				base4.provinceid,base4.qu_date,base4.ProvinceName,base4.bigarea,     
+				sum(base4.order_sum           ) order_sum,             
+				sum(base4.order_avg           ) order_avg,             
+				sum(base4.cainiao_order_sum   ) cainiao_order_sum,     
+				sum(base4.qrcode_order_sum    ) qrcode_order_sum,      
+				sum(base4.ordinary_order_sum  ) ordinary_order_sum,    
+				                                                       
+				sum(base4.customer_sum) customer_sum,                  
+				sum(base4.order_avg_sum)     order_avg_sum,            
+				sum(base4.dianzi_order_sum)     dianzi_order_sum,      
+				                                                       
+				sum(base4.a_customer_sum)    a_customer_sum,           
+				sum(base4.b_customer_sum)    b_customer_sum,           
+				sum(base4.c_customer_sum)    c_customer_sum,           
+				sum(base4.d_customer_sum)    d_customer_sum,           
+				sum(base4.e_customer_sum)    e_customer_sum,           
+				sum(base4.f_customer_sum)    f_customer_sum,           
+				sum(base4.g_customer_sum)    g_customer_sum,           
+				                                                       
+				sum(base4.a_order_avg)    a_order_avg,                 
+				sum(base4.b_order_avg)    b_order_avg,                 
+				sum(base4.c_order_avg)    c_order_avg,                 
+				sum(base4.d_order_avg)    d_order_avg,                 
+				sum(base4.e_order_avg)    e_order_avg,                 
+				sum(base4.f_order_avg)    f_order_avg,                 
+				sum(base4.g_order_avg)    g_order_avg,                 
+				                                                       
+				sum(base4.a_order_sum) a_order_sum,                    
+				sum(base4.b_order_sum) b_order_sum,                    
+				sum(base4.c_order_sum) c_order_sum,                    
+				sum(base4.d_order_sum) d_order_sum,                    
+				sum(base4.e_order_sum) e_order_sum,                    
+				sum(base4.f_order_sum) f_order_sum,                    
+				sum(base4.g_order_sum) g_order_sum                     
+				from tmpv2_city_od_sum base4    where   base4.qu_date=date_format(#{targetDay},'%Y-%m-%d')    
+				GROUP BY base4.provinceid,base4.ProvinceName,base4.bigarea
+			</insert>
+	 	
+		<delete id="removeLjByProvince" parameterType="java.util.Date">
+				delete from tmpv2_province_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+	 <insert id="saveLjByBigArea" parameterType="java.util.Date">					
+			insert into tmpv2_bigarea_od_sum (`bigarea`,`qu_date`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+						 select                                               
+						 base4.bigarea,base4.qu_date,                                       
+						 sum(base4.order_sum           ) order_sum,           
+						 sum(base4.order_avg           ) order_avg,           
+						 sum(base4.cainiao_order_sum   ) cainiao_order_sum,   
+						 sum(base4.qrcode_order_sum    ) qrcode_order_sum,    
+						 sum(base4.ordinary_order_sum  ) ordinary_order_sum,  
+						                                                      
+						 sum(base4.customer_sum) customer_sum,                
+						 sum(base4.order_avg_sum)     order_avg_sum,          
+						 sum(base4.dianzi_order_sum)     dianzi_order_sum,    
+						                                                      
+						 sum(base4.a_customer_sum)    a_customer_sum,         
+						 sum(base4.b_customer_sum)    b_customer_sum,         
+						 sum(base4.c_customer_sum)    c_customer_sum,         
+						 sum(base4.d_customer_sum)    d_customer_sum,         
+						 sum(base4.e_customer_sum)    e_customer_sum,         
+						 sum(base4.f_customer_sum)    f_customer_sum,         
+						 sum(base4.g_customer_sum)    g_customer_sum,         
+						                                                      
+						 sum(base4.a_order_avg)    a_order_avg,               
+						 sum(base4.b_order_avg)    b_order_avg,               
+						 sum(base4.c_order_avg)    c_order_avg,               
+						 sum(base4.d_order_avg)    d_order_avg,               
+						 sum(base4.e_order_avg)    e_order_avg,               
+						 sum(base4.f_order_avg)    f_order_avg,               
+						 sum(base4.g_order_avg)    g_order_avg,               
+						                                                      
+						 sum(base4.a_order_sum) a_order_sum,                  
+						 sum(base4.b_order_sum) b_order_sum,                  
+						 sum(base4.c_order_sum) c_order_sum,                  
+						 sum(base4.d_order_sum) d_order_sum,                  
+						 sum(base4.e_order_sum) e_order_sum,                  
+						 sum(base4.f_order_sum) f_order_sum,                  
+						 sum(base4.g_order_sum) g_order_sum                   
+						 from tmpv2_city_od_sum base4    where base4.qu_date=date_format(#{targetDay},'%Y-%m-%d')     
+						 GROUP BY base4.bigarea
+			</insert>
+	 	
+		<delete id="removeLjByBigArea" parameterType="java.util.Date">
+				delete from tmpv2_bigarea_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	 
+	 
+	 
+	  <insert id="saveLjByAll" parameterType="java.util.Date">					
+			insert into tmpv2_all_od_sum (`order_sum`,`qu_date`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`)
+						 select                                             
+						 sum(base4.order_sum           ) order_sum, 
+				         IFNULL(base4.qu_date,'0000-00-00'),
+						 sum(base4.order_avg           ) order_avg,         
+						 sum(base4.cainiao_order_sum   ) cainiao_order_sum, 
+						 sum(base4.qrcode_order_sum    ) qrcode_order_sum,  
+						 sum(base4.ordinary_order_sum  ) ordinary_order_sum,
+						                                                    
+						 sum(base4.customer_sum) customer_sum,              
+						 sum(base4.order_avg_sum)     order_avg_sum,        
+						 sum(base4.dianzi_order_sum)     dianzi_order_sum,  
+						                                                    
+						 sum(base4.a_customer_sum)    a_customer_sum,       
+						 sum(base4.b_customer_sum)    b_customer_sum,       
+						 sum(base4.c_customer_sum)    c_customer_sum,       
+						 sum(base4.d_customer_sum)    d_customer_sum,       
+						 sum(base4.e_customer_sum)    e_customer_sum,       
+						 sum(base4.f_customer_sum)    f_customer_sum,       
+						 sum(base4.g_customer_sum)    g_customer_sum,       
+						                                                    
+						 sum(base4.a_order_avg)    a_order_avg,             
+						 sum(base4.b_order_avg)    b_order_avg,             
+						 sum(base4.c_order_avg)    c_order_avg,             
+						 sum(base4.d_order_avg)    d_order_avg,             
+						 sum(base4.e_order_avg)    e_order_avg,             
+						 sum(base4.f_order_avg)    f_order_avg,             
+						 sum(base4.g_order_avg)    g_order_avg,             
+						                                                    
+						 sum(base4.a_order_sum) a_order_sum,                
+						 sum(base4.b_order_sum) b_order_sum,                
+						 sum(base4.c_order_sum) c_order_sum,                
+						 sum(base4.d_order_sum) d_order_sum,                
+						 sum(base4.e_order_sum) e_order_sum,                
+						 sum(base4.f_order_sum) f_order_sum,                
+						 sum(base4.g_order_sum) g_order_sum                 
+						 from tmpv2_bigarea_od_sum base4 where base4.qu_date=date_format(#{targetDay},'%Y-%m-%d')
+			</insert>
+	 	
+		<delete id="removeLjByAll" parameterType="java.util.Date">
+				delete from tmpv2_all_od_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	 
+	   <insert id="saveJeByCustomer" parameterType="java.util.HashMap">					
+			insert into tmpv2_cust_price_sum (`customer_id`,`qu_date`,`customer_name`,`branch_code`,`gs`,`order_sum`,`order_avg`,`customer_source_type`,`price_level`,`price_num`,`all_price_sum`)
+						select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum 
+						from (select customer_id,qu_date,customer_name,branch_code,gs,	
+						sum(daily_order_num) order_sum,	sum(daily_order_num) order_avg,customer_source_type, 
+						case 
+						when sum(daily_order_num) &lt;50 then 'a'
+						when sum(daily_order_num) &gt;=50   and sum(daily_order_num)&lt;200  then 'b'
+						when sum(daily_order_num) &gt;=200  and sum(daily_order_num)&lt;1000 then 'c'
+						when sum(daily_order_num) &gt;=1000 and sum(daily_order_num)&lt;2000 then 'd'
+						when sum(daily_order_num) &gt;=2000 and sum(daily_order_num)&lt;3000 then 'e'
+						when sum(daily_order_num) &gt;=3000 and sum(daily_order_num)&lt;5000 then 'f'
+						when sum(daily_order_num) &gt;=5000 then 'g'
+						else '' end as price_level 
+						from crmkhv2_report_order_stats_all a 
+						where a.qu_date = date_format(#{targetDay},'%Y-%m-%d')
+						GROUP BY customer_id,branch_code,a.customer_source_type,gs) a 
+						LEFT JOIN crmkhv2_config_report_price_table b on a.price_level = b.price_level 
+						WHERE b.price_type=#{priceType}
+			</insert>
+			
+		<insert id="saveJeByCustomerNew" parameterType="java.util.HashMap">					
+			insert into tmpv2_cust_price_sum (`customer_id`,`qu_date`,`customer_name`,`branch_code`,`gs`,`order_sum`,`order_avg`,`customer_source_type`,`price_level`,`price_num`,`all_price_sum`)
+						select a.customer_id,a.qu_date,a.customer_name,a.branch_code,a.gs,a.order_sum,
+						a.order_avg,a.customer_source_type,a.price_level,
+						CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,
+						CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum
+						from 
+						(
+							SELECT g.*,
+								bp.ProvinceID,
+								case
+								when bp.ProvinceID in (#{firstProvinceids}) then 'X' 
+								when bp.ProvinceID is null then 'X' 
+								else 'Y' 
+								end as price_type
+							from 
+							(
+									select a.customer_id,
+										a.qu_date,
+										a.customer_name,
+										a.branch_code,
+										a.gs,	
+										sum(a.daily_order_num) order_sum,
+										sum(a.daily_order_num) order_avg,
+										a.customer_source_type, 
+										case 
+										when sum(a.daily_order_num) &lt;= 50   then 'a' 
+										when sum(a.daily_order_num) &gt;  50   and sum(a.daily_order_num) &lt;= 100   then 'b' 
+										when sum(a.daily_order_num) &gt; 100   and sum(a.daily_order_num) &lt;= 500 then 'c' 
+										when sum(a.daily_order_num) &gt; 500  and sum(a.daily_order_num) &lt;= 1000 then 'd' 
+										when sum(a.daily_order_num) &gt; 1000  and sum(a.daily_order_num) &lt;= 3000 then 'e'
+										when sum(a.daily_order_num) &gt; 3000  and sum(a.daily_order_num) &lt;= 5000  then 'f'
+										when sum(a.daily_order_num) &gt; 5000  then 'g' 
+										else '' end as price_level
+										from crmkhv2_report_order_stats_all a 
+										where a.qu_date = date_format(#{targetDay},'%Y-%m-%d') 
+										GROUP BY customer_id,branch_code,customer_source_type,gs
+							 ) g 
+							left join 
+							(
+									SELECT 	a.branch_code,
+										b.ProvinceID
+										from crmkhv2_report_order_stats_all a                                            
+										LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm  
+										LEFT JOIN crmkhv2_regional_basic_information b ON gs.szd = b.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN b.start_date AND b.end_date  										 
+										where  a.qu_date = date_format(#{targetDay},'%Y-%m-%d') 
+										GROUP BY a.branch_code,b.ProvinceID
+							) bp on g.branch_code = bp.branch_code   
+							GROUP BY customer_id,customer_name,branch_code,customer_source_type,gs
+		
+						)a
+						LEFT JOIN crmkhv2_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+		</insert>
+	 	
+		<delete id="removeJeByCustomer" parameterType="java.util.Date">
+				delete from tmpv2_cust_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+
+		   <insert id="saveJeByWangdian" parameterType="java.util.Date">					
+			insert into tmpv2_gs_price_sum (`branch_code`,`qu_date`,`price_sum`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                   
+						 select                                                                     
+						 base5.branch_code,base5.qu_date,                                                     
+						 sum(base5.price_num) price_sum,                                            
+						 sum(base5.all_price_sum) all_price_sum,     
+						 sum(case when base5.price_level = 'a' then base5.price_num else 0 end) a_price_sum,  
+						 sum(case when base5.price_level = 'b' then base5.price_num else 0 end) b_price_sum,  
+						 sum(case when base5.price_level = 'c' then base5.price_num else 0 end) c_price_sum,  
+						 sum(case when base5.price_level = 'd' then base5.price_num else 0 end) d_price_sum, 
+						 sum(case when base5.price_level = 'e' then base5.price_num else 0 end) e_price_sum,  
+						 sum(case when base5.price_level = 'f' then base5.price_num else 0 end) f_price_sum,  
+						 sum(case when base5.price_level = 'g' then base5.price_num else 0 end) g_price_sum,   
+						 sum(case when base5.price_level = 'a' then base5.all_price_sum else 0 end) a_all_price_sum, 
+						 sum(case when base5.price_level = 'b' then base5.all_price_sum else 0 end) b_all_price_sum, 
+						 sum(case when base5.price_level = 'c' then base5.all_price_sum else 0 end) c_all_price_sum, 
+						 sum(case when base5.price_level = 'd' then base5.all_price_sum else 0 end) d_all_price_sum, 
+						 sum(case when base5.price_level = 'e' then base5.all_price_sum else 0 end) e_all_price_sum, 
+						 sum(case when base5.price_level = 'f' then base5.all_price_sum else 0 end) f_all_price_sum, 
+						 sum(case when base5.price_level = 'g' then base5.all_price_sum else 0 end) g_all_price_sum  
+						 from tmpv2_cust_price_sum base5 where base5.qu_date= date_format(#{targetDay},'%Y-%m-%d')                                      
+						 GROUP BY base5.branch_code
+			</insert>
+	 	
+		<delete id="removeJeByWangdian" parameterType="java.util.Date">
+				delete from tmpv2_gs_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+
+		<insert id="saveJeByCity" parameterType="java.util.HashMap">					
+			insert into tmpv2_city_price_sum (`CityID`,`qu_date`,`CityName`,`provinceid`,`ProvinceName`,`bigarea`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 select                                                                         
+						 t4.CityID,base6.qu_date,t4.CityName,t4.ProvinceID provinceid,t4.ProvinceName,t4.bigarea,    
+						 sum(base6.all_price_sum) all_price_sum,     
+						 sum(a_price_sum) a_price_sum,                                                  
+						 sum(b_price_sum) b_price_sum,                                                  
+						 sum(c_price_sum) c_price_sum,                                                  
+						 sum(d_price_sum) d_price_sum,                                                  
+						 sum(e_price_sum) e_price_sum,                                                  
+						 sum(f_price_sum) f_price_sum,                                                  
+						 sum(g_price_sum) g_price_sum,                                                   
+						 sum(a_all_price_sum) a_all_price_sum,                                                                          
+						 sum(b_all_price_sum) b_all_price_sum,                                                                          
+						 sum(c_all_price_sum) c_all_price_sum,                                                                          
+						 sum(d_all_price_sum) d_all_price_sum,                                                                          
+						 sum(e_all_price_sum) e_all_price_sum,                                                                          
+						 sum(f_all_price_sum) f_all_price_sum,                                                                          
+						 sum(g_all_price_sum) g_all_price_sum                 
+						 from tmpv2_gs_price_sum base6                                             
+						 LEFT JOIN ydserver.gs gs on base6.branch_code = gs.bm  
+						 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date  						 
+						 where  base6.qu_date=date_format(#{targetDay},'%Y-%m-%d')      
+						 GROUP BY t4.CityID,t4.CityName,t4.provinceid,t4.ProvinceName,t4.bigarea
+			</insert>
+	 	
+		<delete id="removeJeByCity" parameterType="java.util.Date">
+				delete from tmpv2_city_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	 
+	 
+	   <insert id="saveJeByProvince" parameterType="java.util.Date">					
+			insert into tmpv2_province_price_sum (`provinceid`,`qu_date`,`ProvinceName`,`bigarea`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 select                                                 
+						 base6.provinceid,base6.qu_date,base6.ProvinceName,base6.bigarea,     
+						 sum(base6.all_price_sum) all_price_sum,  
+						 sum(a_price_sum) a_price_sum,                          
+						 sum(b_price_sum) b_price_sum,                          
+						 sum(c_price_sum) c_price_sum,                          
+						 sum(d_price_sum) d_price_sum,                          
+						 sum(e_price_sum) e_price_sum,                          
+						 sum(f_price_sum) f_price_sum,                          
+						 sum(g_price_sum) g_price_sum,                           
+						 sum(a_all_price_sum) a_all_price_sum,                        
+						 sum(b_all_price_sum) b_all_price_sum,                        
+						 sum(c_all_price_sum) c_all_price_sum,                        
+						 sum(d_all_price_sum) d_all_price_sum,                        
+						 sum(e_all_price_sum) e_all_price_sum,                        
+						 sum(f_all_price_sum) f_all_price_sum,                        
+						 sum(g_all_price_sum) g_all_price_sum  
+						 from tmpv2_city_price_sum base6    where   base6.qu_date=date_format(#{targetDay},'%Y-%m-%d')             
+						 GROUP BY base6.provinceid,base6.ProvinceName,base6.bigarea
+						 	</insert>
+	 	
+		<delete id="removeJeByProvince" parameterType="java.util.Date">
+				delete from tmpv2_province_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+	
+	 
+	  <insert id="saveJeByBigArea" parameterType="java.util.Date">					
+			insert into tmpv2_bigarea_price_sum (`bigarea`,`qu_date`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 select                                         
+						 base6.bigarea, base6.qu_date,                                 
+						 sum(base6.all_price_sum) all_price_sum,     
+						 sum(a_price_sum) a_price_sum,                  
+						 sum(b_price_sum) b_price_sum,                  
+						 sum(c_price_sum) c_price_sum,                  
+						 sum(d_price_sum) d_price_sum,                  
+						 sum(e_price_sum) e_price_sum,                  
+						 sum(f_price_sum) f_price_sum,                  
+						 sum(g_price_sum) g_price_sum,                   
+						 sum(a_all_price_sum) a_all_price_sum,                        
+						 sum(b_all_price_sum) b_all_price_sum,                        
+						 sum(c_all_price_sum) c_all_price_sum,                         
+						 sum(d_all_price_sum) d_all_price_sum,                         
+						 sum(e_all_price_sum) e_all_price_sum,                        
+						 sum(f_all_price_sum) f_all_price_sum,                        
+						 sum(g_all_price_sum) g_all_price_sum     
+						 from tmpv2_province_price_sum base6 where base6.qu_date = date_format(#{targetDay},'%Y-%m-%d')      
+						 GROUP BY base6.bigarea
+		 	</insert>
+	 	
+		<delete id="removeJeByBigArea" parameterType="java.util.Date">
+				delete from tmpv2_bigarea_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+		
+		  <insert id="saveJeByTime" parameterType="java.util.Date">					
+		insert into tmpv2_all_price_sum (`qu_date`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`all_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 select  IFNULL(qu_date,'0000-00-00'),                                      
+						 sum(a_price_sum) a_price_sum,                 
+						 sum(b_price_sum) b_price_sum,                 
+						 sum(c_price_sum) c_price_sum,                 
+						 sum(d_price_sum) d_price_sum,                 
+						 sum(e_price_sum) e_price_sum,                 
+						 sum(f_price_sum) f_price_sum,                 
+						 sum(g_price_sum) g_price_sum,                  
+						 sum(all_price_sum) all_price_sum,     
+						 sum(a_all_price_sum) a_all_price_sum,                 
+						 sum(b_all_price_sum) b_all_price_sum,                 
+						 sum(c_all_price_sum) c_all_price_sum,                 
+						 sum(d_all_price_sum) d_all_price_sum,                 
+						 sum(e_all_price_sum) e_all_price_sum,                 
+						 sum(f_all_price_sum) f_all_price_sum,                 
+						 sum(g_all_price_sum) g_all_price_sum                  
+						 from tmpv2_bigarea_price_sum where qu_date=date_format(#{targetDay},'%Y-%m-%d')
+		 	</insert>
+	 	
+		<delete id="removeJeByTime" parameterType="java.util.Date">
+				delete from tmpv2_all_price_sum where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+			<insert id="saveJeByCustomerStats" parameterType="java.util.Date">					
+	 			insert into tmpv2_cust_price_stats (`customer_id`,`qu_date`,`customer_name`,`branch_code`,`price_num`,`gs`,`all_price_sum`,`customer_source_type`)                                          
+				 SELECT                                                               
+				 customer_id, qu_date,                                                        
+				 customer_name,                                                       
+				 branch_code,                                                         
+				 SUM(price_num) price_num, gs ,                                           
+				 SUM(all_price_sum) all_price_sum,customer_source_type                 
+				                                                                      
+				 FROM(SELECT * FROM tmpv2_cust_price_sum where qu_date=date_format(#{targetDay},'%Y-%m-%d'))he                                                    
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+		 	</insert>
+	 	
+		<delete id="removeJeByCustomerStats" >
+				delete from tmpv2_cust_price_stats where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+		</delete>
+		
+		
+			<insert id="saveJeByGsPriceSum" parameterType="java.util.ArrayList">					
+			insert into tmpv2_gs_price_sum_sjd2 (`branch_code`,`start_date`,`end_date`,`price_sum`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 SELECT                                         
+						 branch_code, start_date,end_date,                                  
+						 SUM(price_sum) price_sum,                      
+						 SUM(all_price_sum) all_price_sum,                      
+						 SUM(a_price_sum) a_price_sum,                  
+						 SUM(b_price_sum) b_price_sum,                  
+						 SUM(c_price_sum) c_price_sum,                  
+						 SUM(d_price_sum) d_price_sum,                  
+						 SUM(e_price_sum) e_price_sum,                  
+						 SUM(f_price_sum) f_price_sum,                  
+						 SUM(g_price_sum) g_price_sum,                   
+						 SUM(a_all_price_sum) a_all_price_sum,                  
+						 SUM(b_all_price_sum) b_all_price_sum,                  
+						 SUM(c_all_price_sum) c_all_price_sum,                  
+						 SUM(d_all_price_sum) d_all_price_sum,                  
+						 SUM(e_all_price_sum) e_all_price_sum,                  
+						 SUM(f_all_price_sum) f_all_price_sum,                  
+						 SUM(g_all_price_sum) g_all_price_sum                   
+						 FROM(SELECT * FROM tmpv2_gs_price_sum_sjd 
+						 where 1=1 and 
+						 <foreach collection="list" item="item" open="(" close=")" separator="or">   				
+			   				(start_date =
+							date_format (
+							#{item.yone},
+							'%Y-%m-%d'
+							)
+							AND end_date =
+							date_format (
+							#{item.ytwo},
+							'%Y-%m-%d'
+							)) 	   				
+			   			</foreach>
+			   			 )he                                            
+						 GROUP BY branch_code
+		 	</insert>
+	 	
+		<delete id="removeJeByGsPriceSum" >
+				delete from tmpv2_gs_price_sum_sjd2 
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					) 
+		</delete>
+		
+		
+				<insert id="saveJeByCityPriceSum" >					
+				insert into tmpv2_city_price_sum_sjd2 (`CityID`,`start_date`,`end_date`,`CityName`,`provinceid`,`ProvinceName`,`bigarea`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`all_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 SELECT                                              
+						 CityID,start_date,end_date,                                             
+						 CityName,                                           
+						 provinceid,                                         
+						 ProvinceName,                                       
+						 bigarea,                                            
+						 SUM(a_price_sum) a_price_sum,                       
+						 SUM(b_price_sum) b_price_sum,                       
+						 SUM(c_price_sum) c_price_sum,                       
+						 SUM(d_price_sum) d_price_sum,                       
+						 SUM(e_price_sum) e_price_sum,                       
+						 SUM(f_price_sum) f_price_sum,                       
+						 SUM(g_price_sum) g_price_sum,                        
+						 sum(all_price_sum) all_price_sum, 
+						 SUM(a_all_price_sum) a_all_price_sum,                       
+						 SUM(b_all_price_sum) b_all_price_sum,                       
+						 SUM(c_all_price_sum) c_all_price_sum,                       
+						 SUM(d_all_price_sum) d_all_price_sum,                       
+						 SUM(e_all_price_sum) e_all_price_sum,                       
+						 SUM(f_all_price_sum) f_all_price_sum,                       
+						 SUM(g_all_price_sum) g_all_price_sum                        
+						                                                     
+						 FROM(SELECT * FROM tmpv2_city_price_sum_sjd
+						 	where 1=1 and 
+						<foreach collection="list" item="item" open="(" close=")" separator="or">   				
+			   				(start_date =
+							date_format (
+							#{item.yone},
+							'%Y-%m-%d'
+							)
+							AND end_date =
+							date_format (
+							#{item.ytwo},
+							'%Y-%m-%d'
+							)) 	   				
+			   			</foreach>
+			   			 )he                                                 
+						 GROUP BY bigarea,provinceid,CityID
+		 	</insert>
+	 	
+		<delete id="removeJeByCityPriceSum" >
+				delete from tmpv2_city_price_sum_sjd2 
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)  
+		</delete>
+	 
+	 
+			<insert id="saveJeByProvincePriceSum" >					
+				insert into tmpv2_province_price_sum_sjd2 (`provinceid`,`start_date`,`end_date`,`ProvinceName`,`bigarea`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`all_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                            
+						 SELECT                                               
+						 provinceid,start_date,end_date,                                         
+						 ProvinceName,                                        
+						 bigarea,                                             
+						 SUM(a_price_sum) a_price_sum,                        
+						 SUM(b_price_sum) b_price_sum,                        
+						 SUM(c_price_sum) c_price_sum,                        
+						 SUM(d_price_sum) d_price_sum,                        
+						 SUM(e_price_sum) e_price_sum,                        
+						 SUM(f_price_sum) f_price_sum,                        
+						 SUM(g_price_sum) g_price_sum,                         
+						 sum(all_price_sum) all_price_sum, 
+						 SUM(a_all_price_sum) a_all_price_sum,                        
+						 SUM(b_all_price_sum) b_all_price_sum,                        
+						 SUM(c_all_price_sum) c_all_price_sum,                        
+						 SUM(d_all_price_sum) d_all_price_sum,                        
+						 SUM(e_all_price_sum) e_all_price_sum,                        
+						 SUM(f_all_price_sum) f_all_price_sum,                        
+						 SUM(g_all_price_sum) g_all_price_sum                         						                                                      
+						                                                      
+						 FROM(SELECT * FROM tmpv2_province_price_sum_sjd 
+						 where 1=1 and 
+						<foreach collection="list" item="item" open="(" close=")" separator="or">   				
+			   				(start_date =
+							date_format (
+							#{item.yone},
+							'%Y-%m-%d'
+							)
+							AND end_date =
+							date_format (
+							#{item.ytwo},
+							'%Y-%m-%d'
+							)) 	   				
+			   			</foreach>
+			   			 )he                                                  
+						 GROUP BY bigarea,provinceid
+		 	</insert>
+	 	
+		<delete id="removeJeByProvincePriceSum" >
+				delete from tmpv2_province_price_sum_sjd2 
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)  
+		</delete>
+		
+		
+		
+		<insert id="saveJeByBigAreaPriceSum" >					
+			insert into tmpv2_bigarea_price_sum_sjd2 (`bigarea`,`start_date`,`end_date`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                             
+						 SELECT                                          
+						 bigarea, start_date, end_date,                                      
+						 SUM(a_price_sum) a_price_sum,                   
+						 SUM(b_price_sum) b_price_sum,                   
+						 SUM(c_price_sum) c_price_sum,                   
+						 SUM(d_price_sum) d_price_sum,                   
+						 SUM(e_price_sum) e_price_sum,                   
+						 SUM(f_price_sum) f_price_sum,                   
+						 SUM(g_price_sum) g_price_sum,                    
+						 sum(all_price_sum) all_price_sum,     
+						 SUM(a_all_price_sum) a_all_price_sum,                   
+						 SUM(b_all_price_sum) b_all_price_sum,                   
+						 SUM(c_all_price_sum) c_all_price_sum,                   
+						 SUM(d_all_price_sum) d_all_price_sum,                   
+						 SUM(e_all_price_sum) e_all_price_sum,                   
+						 SUM(f_all_price_sum) f_all_price_sum,                   
+						 SUM(g_all_price_sum) g_all_price_sum                    
+						 FROM(SELECT * FROM tmpv2_bigarea_price_sum_sjd 
+						 where 1=1 and 
+						 <foreach collection="list" item="item" open="(" close=")" separator="or">   				
+			   				(start_date =
+							date_format (
+							#{item.yone},
+							'%Y-%m-%d'
+							)
+							AND end_date =
+							date_format (
+							#{item.ytwo},
+							'%Y-%m-%d'
+							)) 	   				
+			   			</foreach>
+			   			 )he                                             
+						 GROUP BY bigarea 
+		 	</insert>
+	 	
+		<delete id="removeJeByBigAreaPriceSum" >
+				delete from tmpv2_bigarea_price_sum_sjd2 
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)
+		</delete>
+		
+		
+		
+		<insert id="saveJeByTimePriceSum" >					
+		insert into tmpv2_all_price_sum_sjd2 (`start_date`,`end_date`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`all_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                              
+    			         select   start_date,end_date,                            
+						  sum(a_price_sum) a_price_sum,      
+						  sum(b_price_sum) b_price_sum,      
+						  sum(c_price_sum) c_price_sum,      
+						  sum(d_price_sum) d_price_sum,      
+						  sum(e_price_sum) e_price_sum,      
+						  sum(f_price_sum) f_price_sum,      
+						  sum(g_price_sum) g_price_sum,       
+						  sum(all_price_sum) all_price_sum,  
+						  sum(a_all_price_sum) a_all_price_sum,      
+						  sum(b_all_price_sum) b_all_price_sum,      
+						  sum(c_all_price_sum) c_all_price_sum,      
+						  sum(d_all_price_sum) d_all_price_sum,      
+						  sum(e_all_price_sum) e_all_price_sum,      
+						  sum(f_all_price_sum) f_all_price_sum,      
+						  sum(g_all_price_sum) g_all_price_sum       
+						 from                                
+						 (select * from tmpv2_all_price_sum_sjd 
+						where 1=1 and 
+					    <foreach collection="list" item="item" open="(" close=")" separator="or">   				
+			   				(start_date =
+							date_format (
+							#{item.yone},
+							'%Y-%m-%d'
+							)
+							AND end_date =
+							date_format (
+							#{item.ytwo},
+							'%Y-%m-%d'
+							)) 	   				
+			   			</foreach>
+			   			) h
+		 	</insert>
+	 	
+		<delete id="removeJeByTimePriceSum" >
+				delete from tmpv2_all_price_sum_sjd2 
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)
+		</delete>
+		
+		
+			
+	<insert id="saveGpSource" parameterType="java.util.HashMap">
+		insert into crmkhv2_report_order_stats_gs_num
+		(
+			`branch_code`, 
+			`daily_order_got_num`, 
+			`daily_qrcode_num`, 
+			`daily_cainiao_num`,
+			`daily_ordinary_num`,
+			`report_date`,
+			`create_date`		
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.branch_code,jdbcType=INTEGER } ,#{item.daily_order_got_num,jdbcType=VARCHAR } ,
+			 #{item.erweima,jdbcType=VARCHAR } ,#{item.cainiao,jdbcType=VARCHAR } ,
+			  #{item.putong,jdbcType=VARCHAR } , #{item.report_date,jdbcType=DATE }
+			  , #{item.create_date,jdbcType=DATE })
+		</foreach>
+	</insert>
+	
+ 	<delete id="removeGpSource" parameterType="java.util.Date">
+		delete from crmkhv2_report_order_stats_gs_num where report_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+	
+	<insert id="saveGpCustomerSource" parameterType="java.util.HashMap">
+		insert into crmkhv2_report_order_stats_all
+		(
+			`customer_id`, 
+			`customer_name`, 
+			`branch_code`, 
+			`customer_source_type`,
+			`daily_order_num`,
+			`cre_date`,
+			`qu_date`,
+			`customer_addtime`,
+			`gs`		
+		)
+		values
+			<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.customer_id,jdbcType=VARCHAR } ,#{item.customer_name,jdbcType=VARCHAR } ,
+			 #{item.branch_code,jdbcType=INTEGER } ,#{item.customer_source_type,jdbcType=VARCHAR } ,
+			  #{item.daily_order_num,jdbcType=VARCHAR } , #{item.cre_date,jdbcType=DATE }
+			  , #{item.qu_date,jdbcType=DATE } , #{item.customer_addtime,jdbcType=TIMESTAMP } , #{item.gs,jdbcType=INTEGER })
+		</foreach>
+
+	</insert>
+	
+	
+ 	<delete id="removeGpCustomerSource" parameterType="java.util.Date">
+		delete from crmkhv2_report_order_stats_all where qu_date = date_format(#{targetDay},'%Y-%m-%d')
+	</delete>
+		
+		
+		
+		
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.ReportTotaldataDO">
+		update crmkhv2_report_totaldata 
+		<set>
+			<if test="provinceid != null">`provinceid` = #{provinceid}, </if>
+			<if test="provincename != null">`ProvinceName` = #{provincename}, </if>
+			<if test="cityid != null">`CityID` = #{cityid}, </if>
+			<if test="cityname != null">`CityName` = #{cityname}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="yjbm != null">`yjbm` = #{yjbm}, </if>
+			<if test="yjmc != null">`yjmc` = #{yjmc}, </if>
+			<if test="customerSourceType != null">`customer_source_type` = #{customerSourceType}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="qrcodeOrderSum != null">`qrcode_order_sum` = #{qrcodeOrderSum}, </if>
+			<if test="cainiaoOrderSum != null">`cainiao_order_sum` = #{cainiaoOrderSum}, </if>
+			<if test="ordinaryOrderSum != null">`ordinary_order_sum` = #{ordinaryOrderSum}, </if>
+			<if test="orderAvg != null">`order_avg` = #{orderAvg}, </if>
+			<if test="priceSum != null">`price_sum` = #{priceSum}, </if>
+			<if test="dianziOrderSum != null">`dianzi_order_sum` = #{dianziOrderSum}, </if>
+			<if test="dianziNumPercent != null">`dianzi_num_percent` = #{dianziNumPercent}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="reportDate != null">`report_date` = #{reportDate}, </if>
+			<if test="dianziPercent != null">`dianzi_percent` = #{dianziPercent}, </if>
+			<if test="aCustomerSum != null">`a_customer_sum` = #{aCustomerSum}, </if>
+			<if test="bCustomerSum != null">`b_customer_sum` = #{bCustomerSum}, </if>
+			<if test="cCustomerSum != null">`c_customer_sum` = #{cCustomerSum}, </if>
+			<if test="dCustomerSum != null">`d_customer_sum` = #{dCustomerSum}, </if>
+			<if test="eCustomerSum != null">`e_customer_sum` = #{eCustomerSum}, </if>
+			<if test="fCustomerSum != null">`f_customer_sum` = #{fCustomerSum}, </if>
+			<if test="gCustomerSum != null">`g_customer_sum` = #{gCustomerSum}, </if>
+			<if test="aOrderAvg != null">`a_order_avg` = #{aOrderAvg}, </if>
+			<if test="bOrderAvg != null">`b_order_avg` = #{bOrderAvg}, </if>
+			<if test="cOrderAvg != null">`c_order_avg` = #{cOrderAvg}, </if>
+			<if test="dOrderAvg != null">`d_order_avg` = #{dOrderAvg}, </if>
+			<if test="eOrderAvg != null">`e_order_avg` = #{eOrderAvg}, </if>
+			<if test="fOrderAvg != null">`f_order_avg` = #{fOrderAvg}, </if>
+			<if test="gOrderAvg != null">`g_order_avg` = #{gOrderAvg}, </if>
+			<if test="aOrderSum != null">`a_order_sum` = #{aOrderSum}, </if>
+			<if test="bOrderSum != null">`b_order_sum` = #{bOrderSum}, </if>
+			<if test="cOrderSum != null">`c_order_sum` = #{cOrderSum}, </if>
+			<if test="dOrderSum != null">`d_order_sum` = #{dOrderSum}, </if>
+			<if test="eOrderSum != null">`e_order_sum` = #{eOrderSum}, </if>
+			<if test="fOrderSum != null">`f_order_sum` = #{fOrderSum}, </if>
+			<if test="gOrderSum != null">`g_order_sum` = #{gOrderSum}, </if>
+			<if test="aPriceSum != null">`a_price_sum` = #{aPriceSum}, </if>
+			<if test="bPriceSum != null">`b_price_sum` = #{bPriceSum}, </if>
+			<if test="cPriceSum != null">`c_price_sum` = #{cPriceSum}, </if>
+			<if test="dPriceSum != null">`d_price_sum` = #{dPriceSum}, </if>
+			<if test="ePriceSum != null">`e_price_sum` = #{ePriceSum}, </if>
+			<if test="fPriceSum != null">`f_price_sum` = #{fPriceSum}, </if>
+			<if test="gPriceSum != null">`g_price_sum` = #{gPriceSum}, </if>
+			<if test="aAllPriceSum != null">`a_all_price_sum` = #{aAllPriceSum}, </if>
+			<if test="bAllPriceSum != null">`b_all_price_sum` = #{bAllPriceSum}, </if>
+			<if test="cAllPriceSum != null">`c_all_price_sum` = #{cAllPriceSum}, </if>
+			<if test="dAllPriceSum != null">`d_all_price_sum` = #{dAllPriceSum}, </if>
+			<if test="eAllPriceSum != null">`e_all_price_sum` = #{eAllPriceSum}, </if>
+			<if test="fAllPriceSum != null">`f_all_price_sum` = #{fAllPriceSum}, </if>
+			<if test="gAllPriceSum != null">`g_all_price_sum` = #{gAllPriceSum}, </if>
+			<if test="aPricePercent != null">`a_price_percent` = #{aPricePercent}, </if>
+			<if test="bPricePercent != null">`b_price_percent` = #{bPricePercent}, </if>
+			<if test="cPricePercent != null">`c_price_percent` = #{cPricePercent}, </if>
+			<if test="dPricePercent != null">`d_price_percent` = #{dPricePercent}, </if>
+			<if test="ePricePercent != null">`e_price_percent` = #{ePricePercent}, </if>
+			<if test="fPricePercent != null">`f_price_percent` = #{fPricePercent}, </if>
+			<if test="gPricePercent != null">`g_price_percent` = #{gPricePercent}, </if>
+			<if test="customerSum != null">`customer_sum` = #{customerSum}, </if>
+			<if test="customerAvgSum != null">`customer_avg_sum` = #{customerAvgSum}, </if>
+			<if test="customerPriceSum != null">`customer_price_sum` = #{customerPriceSum}, </if>
+			<if test="customerAllPriceSum != null">`customer_all_price_sum` = #{customerAllPriceSum}</if>
+		</set>
+		where bigarea = #{bigarea}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_report_totaldata where bigarea = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_report_totaldata where bigarea in 
+		<foreach item="bigarea" collection="array" open="(" separator="," close=")">
+			${bigarea}
+		</foreach>
+	</delete>
+		 <select id="countJeByCustomerSJD" parameterType="java.util.HashMap" resultType="int">
+	 	select count(1) from tmpv2_cust_price_stats_sjd2 base5
+        where
+	        base5.start_date =
+			date_format (
+			#{yone},
+			'%Y-%m-%d'
+			)
+			AND base5.end_date =
+			date_format (
+			#{ytwo},
+			'%Y-%m-%d'
+			) 
+	 	
+	</select>
+	
+	
+	<select id="searchTotalPriceConfig" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	 	select * from tmpv2_total_price_config	 	
+	</select>
+	
+	  <insert id="insertTotalPriceConfig" parameterType="java.util.HashMap" >					
+		insert into tmpv2_total_price_config (`start_date`,`end_date`)
+		values
+		(
+			#{yone}, 
+			#{ytwo}
+		)
+		</insert>
+		
+	   <insert id="saveJeByCustomerSJD" parameterType="java.util.HashMap">					
+		insert into tmpv2_cust_price_sum_sjd (`customer_id`,`start_date`,`end_date`,`customer_name`,`branch_code`,`gs`,`order_sum`,`order_avg`,`customer_source_type`,`price_level`,`price_num`,`all_price_sum`)
+						 	select a.*,a.order_avg*b.price price_num,a.order_sum*b.price all_price_sum
+							from (select customer_id,#{yone},#{ytwo},customer_name,branch_code,gs,	
+							sum(daily_order_num) order_sum,	sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) order_avg,customer_source_type,
+							case
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;50 then  'a'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=50   and sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1)&lt;200  then 'b'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=200  and sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1)&lt;1000 then 'c'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=1000 and sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1)&lt;2000 then 'd'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=2000 and sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1)&lt;3000 then 'e'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=3000 and sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1)&lt;5000 then 'f'
+							when sum(daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;=5000 then 'g'
+							else '' end as price_level
+							from crmkhv2_report_order_stats_all a
+							where 
+							  a.qu_date  BETWEEN
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								) 						
+							GROUP BY customer_id,branch_code,a.customer_source_type,gs) a
+							LEFT JOIN crmkhv2_config_report_price_table b on a.price_level = b.price_level
+							WHERE b.price_type=#{priceType}
+		</insert>
+		
+		<insert id="saveJeByCustomerSJDNew" parameterType="java.util.HashMap">					
+		insert into tmpv2_cust_price_sum_sjd (`customer_id`,`start_date`,`end_date`,`customer_name`,`branch_code`,`gs`,`order_sum`,`order_avg`,`customer_source_type`,`price_level`,`price_num`,`all_price_sum`)
+			select a.customer_id,a.start_date,a.end_date,a.customer_name,a.branch_code,a.gs,a.order_sum,
+				a.order_avg,a.customer_source_type,a.price_level,
+				CAST( a.order_avg*b.price AS DECIMAL(8,2)) price_num,
+				CAST( a.order_sum*b.price AS DECIMAL(8,2))  all_price_sum
+				from 
+				(
+					SELECT g.*,
+						bp.ProvinceID,
+						case
+						when bp.ProvinceID in (#{firstProvinceids}) then 'X' 
+						when bp.ProvinceID is null then 'X' 
+						else 'Y' 
+						end as price_type
+					from 
+					(
+							select a.customer_id,
+								#{yone} start_date,
+								#{ytwo} end_date,
+								a.customer_name,
+								a.branch_code,
+								a.gs,	
+								sum(a.daily_order_num) order_sum,
+								sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) order_avg,
+								a.customer_source_type, 
+								case 
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 50   then  'a'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  50   and sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 100  then 'b'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  100  and sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 500 then 'c'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  500 and sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 1000 then 'd'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  1000 and sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 3000 then 'e'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  3000 and sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &lt;= 5000 then 'f'
+								when sum(a.daily_order_num)/(datediff(#{ytwo},#{yone})+1) &gt;  5000 then 'g'
+								else '' end as price_level
+								from crmkhv2_report_order_stats_all a 
+								where a.qu_date BETWEEN
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								) 		 
+								GROUP BY customer_id,branch_code,customer_source_type,gs
+					 ) g 
+					left join 
+					(
+							SELECT 	a.branch_code,
+								b.ProvinceID
+								from crmkhv2_report_order_stats_all a                                            
+								LEFT JOIN ydserver.gs gs on a.branch_code = gs.bm 
+								LEFT JOIN crmkhv2_regional_basic_information b ON gs.szd = b.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN b.start_date AND b.end_date                                   
+								where  a.qu_date BETWEEN
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								) 		 
+								GROUP BY a.branch_code,b.ProvinceID
+					) bp on g.branch_code = bp.branch_code   
+					GROUP BY customer_id,customer_name,branch_code,customer_source_type,gs
+
+				)a
+				LEFT JOIN crmkhv2_config_finance_price_table b on a.price_level = b.price_level and a.price_type = b.price_type
+		</insert>
+		
+		<delete id="removeTotalPriceConfig" >
+				delete from tmpv2_total_price_config
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+		</delete>
+		
+		<delete id="removeJeByCustomerSJD" >
+				delete from tmpv2_cust_price_sum_sjd
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+		</delete>
+	
+	   <insert id="saveJeByWangdianSJD" >					
+			insert into tmpv2_gs_price_sum_sjd (`branch_code`,`start_date`,`end_date`,`price_sum`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                   
+								 select                                                                             
+							 base5.branch_code,#{yone},#{ytwo},                                                                 
+							 sum(base5.price_num) price_sum,                                                    
+							 sum(base5.all_price_sum) all_price_sum,   
+							 sum(case when base5.price_level = 'a' then base5.price_num else 0 end) a_price_sum,
+							 sum(case when base5.price_level = 'b' then base5.price_num else 0 end) b_price_sum,
+							 sum(case when base5.price_level = 'c' then base5.price_num else 0 end) c_price_sum,
+							 sum(case when base5.price_level = 'd' then base5.price_num else 0 end) d_price_sum,
+							 sum(case when base5.price_level = 'e' then base5.price_num else 0 end) e_price_sum,
+							 sum(case when base5.price_level = 'f' then base5.price_num else 0 end) f_price_sum,
+							 sum(case when base5.price_level = 'g' then base5.price_num else 0 end) g_price_sum, 
+							 sum(case when base5.price_level = 'a' then base5.all_price_sum else 0 end) a_all_price_sum, 
+							 sum(case when base5.price_level = 'b' then base5.all_price_sum else 0 end) b_all_price_sum, 
+							 sum(case when base5.price_level = 'c' then base5.all_price_sum else 0 end) c_all_price_sum, 
+							 sum(case when base5.price_level = 'd' then base5.all_price_sum else 0 end) d_all_price_sum, 
+							 sum(case when base5.price_level = 'e' then base5.all_price_sum else 0 end) e_all_price_sum,
+							 sum(case when base5.price_level = 'f' then base5.all_price_sum else 0 end) f_all_price_sum, 
+							 sum(case when base5.price_level = 'g' then base5.all_price_sum else 0 end) g_all_price_sum
+							 from tmpv2_cust_price_sum_sjd base5   
+            			   where
+						        base5.start_date =
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND base5.end_date =
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								)                                                 
+							 GROUP BY base5.branch_code
+			</insert>
+		<delete id="removeJeByWangdianSJD" >
+				delete from tmpv2_gs_price_sum_sjd
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+		</delete>
+			
+		 <insert id="saveJeByCitySJD">					
+			insert into tmpv2_city_price_sum_sjd (`CityID`,`CityName`,`start_date`,`end_date`,`provinceid`,`ProvinceName`,`bigarea`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+						 select                                                                                 
+							 t4.CityID,t4.CityName,base6.start_date,base6.end_date,
+							 t4.ProvinceID provinceid,t4.ProvinceName,t4.bigarea,  
+							 sum(base6.all_price_sum) all_price_sum,   
+							 sum(a_price_sum) a_price_sum,                                                          
+							 sum(b_price_sum) b_price_sum,                                                          
+							 sum(c_price_sum) c_price_sum,                                                          
+							 sum(d_price_sum) d_price_sum,                                                          
+							 sum(e_price_sum) e_price_sum,                                                          
+							 sum(f_price_sum) f_price_sum,                                                          
+							 sum(g_price_sum) g_price_sum,                                                           
+							 sum(a_all_price_sum) a_all_price_sum,                                                                                  
+							 sum(b_all_price_sum) b_all_price_sum,                                                                                  
+							 sum(c_all_price_sum) c_all_price_sum,                                                                                  
+							 sum(d_all_price_sum) d_all_price_sum,                                                                                  
+							 sum(e_all_price_sum) e_all_price_sum,                                                                                  
+							 sum(f_all_price_sum) f_all_price_sum,                                                                                  
+							 sum(g_all_price_sum) g_all_price_sum                         
+							 from tmpv2_gs_price_sum_sjd base6                                                     
+							 LEFT JOIN ydserver.gs gs on base6.branch_code = gs.bm   
+							 LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{startDay},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date  										 							    
+						     where
+						        base6.start_date =
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND base6.end_date =
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								)              
+							 GROUP BY t4.CityID,t4.CityName,t4.provinceid,t4.ProvinceName,t4.bigarea
+			</insert>
+			
+		<delete id="removeJeByCitySJD" >
+				delete from tmpv2_city_price_sum_sjd
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+		</delete>
+ 			<insert id="saveJeByProvinceSJD" >					
+			insert into tmpv2_province_price_sum_sjd (`provinceid`,`start_date`,`end_date`,`ProvinceName`,`bigarea`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+					 select                                                  
+							 base6.provinceid,base6.start_date,base6.end_date,base6.ProvinceName,base6.bigarea,      
+							 sum(base6.all_price_sum) all_price_sum,   
+							 sum(a_price_sum) a_price_sum,                           
+							 sum(b_price_sum) b_price_sum,                           
+							 sum(c_price_sum) c_price_sum,                           
+							 sum(d_price_sum) d_price_sum,                           
+							 sum(e_price_sum) e_price_sum,                           
+							 sum(f_price_sum) f_price_sum,                           
+							 sum(g_price_sum) g_price_sum,                            
+							 sum(a_all_price_sum) a_all_price_sum,                         
+							 sum(b_all_price_sum) b_all_price_sum,                         
+							 sum(c_all_price_sum) c_all_price_sum,                         
+							 sum(d_all_price_sum) d_all_price_sum,                         
+							 sum(e_all_price_sum) e_all_price_sum,                         
+							 sum(f_all_price_sum) f_all_price_sum,                         
+							 sum(g_all_price_sum) g_all_price_sum   
+							 from tmpv2_city_price_sum_sjd base6   
+							 where 
+							  base6.start_date =
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND base6.end_date =
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								)                  
+							 GROUP BY base6.provinceid,base6.ProvinceName,base6.bigarea
+		 	</insert>
+		 <delete id="removeJeByProvinceSJD" >
+				delete from tmpv2_province_price_sum_sjd
+				where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+		</delete>
+		 	<insert id="saveJeByBigAreaSJD" >					
+			insert into tmpv2_bigarea_price_sum_sjd (`bigarea`,`start_date`,`end_date`,`all_price_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+					       select                                               
+							 base6.bigarea,base6.start_date,base6.end_date,                                       
+							 sum(base6.all_price_sum) all_price_sum,   
+							 sum(a_price_sum) a_price_sum,                        
+							 sum(b_price_sum) b_price_sum,                        
+							 sum(c_price_sum) c_price_sum,                        
+							 sum(d_price_sum) d_price_sum,                        
+							 sum(e_price_sum) e_price_sum,                        
+							 sum(f_price_sum) f_price_sum,                        
+							 sum(g_price_sum) g_price_sum,                         
+							 sum(a_all_price_sum) a_all_price_sum,                       
+							 sum(b_all_price_sum) b_all_price_sum,                       
+							 sum(c_all_price_sum) c_all_price_sum,                       
+							 sum(d_all_price_sum) d_all_price_sum,                       
+							 sum(e_all_price_sum) e_all_price_sum,                       
+							 sum(f_all_price_sum) f_all_price_sum,                       
+							 sum(g_all_price_sum) g_all_price_sum   
+							 from tmpv2_province_price_sum_sjd base6   
+							 where 
+							  base6.start_date =
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND base6.end_date =
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								)           
+							 GROUP BY base6.bigarea
+		 		</insert>
+			 	 <delete id="removeJeByBigAreaSJD" >
+					delete from tmpv2_bigarea_price_sum_sjd
+					where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+				</delete>
+		 	  <insert id="saveJeByTimeSJD" >					
+				insert into tmpv2_all_price_sum_sjd (`start_date`,`end_date`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`all_price_sum`,`a_all_price_sum`,`b_all_price_sum`,`c_all_price_sum`,`d_all_price_sum`,`e_all_price_sum`,`f_all_price_sum`,`g_all_price_sum`)                                          
+				 select    IFNULL(start_date,'0000-00-00') start_date,IFNULL(end_date,'0000-00-00') end_date,                                         
+							 sum(a_price_sum) a_price_sum,                     
+							 sum(b_price_sum) b_price_sum,                     
+							 sum(c_price_sum) c_price_sum,                     
+							 sum(d_price_sum) d_price_sum,                     
+							 sum(e_price_sum) e_price_sum,                     
+							 sum(f_price_sum) f_price_sum,                     
+							 sum(g_price_sum) g_price_sum,                      
+							 sum(all_price_sum) all_price_sum,   
+							 sum(a_all_price_sum) a_all_price_sum,                     
+							 sum(b_all_price_sum) b_all_price_sum,                     
+							 sum(c_all_price_sum) c_all_price_sum,                     
+							 sum(d_all_price_sum) d_all_price_sum,                     
+							 sum(e_all_price_sum) e_all_price_sum,                     
+							 sum(f_all_price_sum) f_all_price_sum,                     
+							 sum(g_all_price_sum) g_all_price_sum                      
+							 from tmpv2_bigarea_price_sum_sjd
+							 where 
+							  start_date =
+								date_format (
+								#{yone},
+								'%Y-%m-%d'
+								)
+								AND end_date =
+								date_format (
+								#{ytwo},
+								'%Y-%m-%d'
+								) 
+			 	</insert>
+		 	 	<delete id="removeJeByTimeSJD" >
+					delete from tmpv2_all_price_sum_sjd 
+					where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)      		
+				</delete>
+		 	<insert id="saveJeByCustomerStatsSJD2" parameterType="java.util.ArrayList">					
+	 			insert into tmpv2_cust_price_stats_sjd2 (`customer_id`,`start_date`,`end_date`,`customer_name`,`branch_code`,`price_num`,`gs`,`all_price_sum`,`customer_source_type`)                                          
+				 SELECT                                                               
+				 customer_id, start_date, end_date,                                                        
+				 customer_name,                                                       
+				 branch_code,                                                         
+				 SUM(price_num) price_num, gs ,                                           
+				 SUM(all_price_sum) all_price_sum,customer_source_type                 				                                                                      
+				 FROM(SELECT * FROM tmpv2_cust_price_sum_sjd 
+				  where 1=1 and
+				 <foreach collection="list" item="item" open="(" close=")" separator="or">   				
+	   				(start_date =
+					date_format (
+					#{item.yone},
+					'%Y-%m-%d'
+					)
+					AND end_date =
+					date_format (
+					#{item.ytwo},
+					'%Y-%m-%d'
+					)) 	   				
+	   			</foreach>
+				 )he                                                    
+				 GROUP BY customer_id,branch_code,customer_source_type,gs
+		 	</insert>
+	 	
+		<delete id="removeJeByCustomerStatsSJD2" >
+				delete from tmpv2_cust_price_stats_sjd2
+			    where 
+				    start_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)					
+					AND end_date between
+					date_format (
+					#{yone},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{ytwo},
+					'%Y-%m-%d'
+					)			
+		</delete>
+</mapper>

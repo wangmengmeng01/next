@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+    <link th:href="@{/css/layui.css}" rel="stylesheet">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .form-container {
+            width: 700px;
+            padding: 20px;
+            margin: 0 auto;
+            /*border: 1px solid #000;*/
+        }
+        .title{
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .consultation-inp{
+            width: 180px;
+            height: 35px;
+            padding-left: 10px;
+        }
+        ul{
+            list-style-type: none;
+        }
+        ul li{
+            padding-left: 25px;
+            position: relative;
+        }
+        ul li .radio-input{
+            position: absolute;
+            left:0;
+            top: 6px;
+            width: 17px;
+            height: 17px;
+        }
+        ul li .input-item{
+            width: 70px;
+            height:25px;
+            text-indent: 10px;
+        }
+        ul li div{
+            margin: 10px 0;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form autocomplete="off" class="form-horizontal m-t form-container" id="signupForm">
+                        <input id="id" name="id" th:value="${consultConfig.id}" type="hidden">
+                        <!--<div class="form-group">
+                            <label class="col-sm-3 control-label">咨询来源：</label>
+                            <div class="col-sm-8">
+                                <input id="consultSource" name="consultSource" th:value="${consultConfig.consultSource}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">咨询类型：</label>
+                            <div class="col-sm-8">
+                                <input id="consultType" name="consultType" th:value="${consultConfig.consultType}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">处理时效：</label>
+                            <div class="col-sm-8">
+                                <input id="dealShiXiao" name="dealShiXiao" th:value="${consultConfig.dealShiXiao}"
+                                       class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">状态：</label>
+                            <div class="col-sm-8">
+                                <input id="state" name="state" th:value="${consultConfig.state}" class="form-control"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>-->
+                        <div>
+                            <label class="title">咨询来源：</label>
+                            <select name="consultSource" required class="consultation-inp">
+                                <option th:value="${consultConfig.consultSource}" th:text="${consultConfig.consultSource}" value="">请选择</option>
+                                <option value="工作台发起">工作台发起</option>
+                            </select>
+                            <label class="title" style="margin-left: 40px;">咨询类型：</label>
+                            <input name="consultType" required type="text" class="consultation-inp" th:value="${consultConfig.consultType}">
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <p class="title">处理时效：</p>
+                            <ul>
+                                <li>
+                                    <input type="radio" value="1" class="radio-input" name="type">
+                                    <div>咨询发单后 <input name="orderAfterHoursT1" id="orderAfterHoursT1" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 小时内未结单，则咨询单处理超时</div>
+                                </li>
+                                <li>
+                                    <input type="radio" value="2" class="radio-input" name="type">
+                                    <div>当天发起的咨询单，第 <input name="orderAfterDayT2" id="orderAfterDayT2" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 天 <input name="orderAfterTimeT2" id="orderAfterTimeT2" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')" max="24"> 点前未结单，则咨询单处理超时</div>
+                                </li>
+                                <li>
+                                    <input type="radio" value="3" class="radio-input" name="type">
+                                    <div>当天 <input name="todayOrderBeforeTimeT31" id="todayOrderBeforeTimeT31" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 点前发起的咨询单，第 <input name="orderAfterDayT31" id="orderAfterDayT31" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 天 <input name="orderAfterTimeT31" id="orderAfterTimeT31" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')" max="24"> 点前未结单，则咨询单处理超时</div>
+                                    <div>当天 <input name="todayOrderAfterTime32" id="todayOrderAfterTime32" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 点后发起的咨询单，第 <input name="orderBeforeDayT32" id="orderBeforeDayT32" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 天 <input name="orderBeforeTimeT32" id="orderBeforeTimeT32" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')" max="24"> 点前未结单，则咨询单处理超时</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <label class="title">预警时效：</label>
+                            <ul>
+                                <li>
+                                    <div>超时前 <input th:value="${consultConfig.yujingTime}" name="yujingTime" id="yujingTime" type="text" class="input-item" oninput="value=value.replace(/[^\d]/g,'')"> 小时为预警状态</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3" style="margin-top: 20px">
+                                <button type="submit" style="width: 20%" class="btn btn-primary">确认</button>
+                                <button type="button" style="width: 20%;margin-left: 20%" class="btn btn-primary" onclick="quitAudit()">取消</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" th:src="@{/js/bigcustomer/consultConfig/edit.js}">
+</script>
+</body>
+</html>

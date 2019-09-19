@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ProvinceOdSumDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.ProvinceOdSumDO">
+		select `provinceid`,`qu_date`,`ProvinceName`,`bigarea`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum` from tmpv2_province_od_sum where provinceid = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.ProvinceOdSumDO">
+		select `provinceid`,`qu_date`,`ProvinceName`,`bigarea`,`order_sum`,`order_avg`,`cainiao_order_sum`,`qrcode_order_sum`,`ordinary_order_sum`,`customer_sum`,`order_avg_sum`,`dianzi_order_sum`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum` from tmpv2_province_od_sum
+        <where>  
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceid = #{provinceid} </if>
+		  		  <if test="quDate != null and quDate != ''"> and qu_date = #{quDate} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="orderAvg != null and orderAvg != ''"> and order_avg = #{orderAvg} </if>
+		  		  <if test="cainiaoOrderSum != null and cainiaoOrderSum != ''"> and cainiao_order_sum = #{cainiaoOrderSum} </if>
+		  		  <if test="qrcodeOrderSum != null and qrcodeOrderSum != ''"> and qrcode_order_sum = #{qrcodeOrderSum} </if>
+		  		  <if test="ordinaryOrderSum != null and ordinaryOrderSum != ''"> and ordinary_order_sum = #{ordinaryOrderSum} </if>
+		  		  <if test="customerSum != null and customerSum != ''"> and customer_sum = #{customerSum} </if>
+		  		  <if test="orderAvgSum != null and orderAvgSum != ''"> and order_avg_sum = #{orderAvgSum} </if>
+		  		  <if test="dianziOrderSum != null and dianziOrderSum != ''"> and dianzi_order_sum = #{dianziOrderSum} </if>
+		  		  <if test="aCustomerSum != null and aCustomerSum != ''"> and a_customer_sum = #{aCustomerSum} </if>
+		  		  <if test="bCustomerSum != null and bCustomerSum != ''"> and b_customer_sum = #{bCustomerSum} </if>
+		  		  <if test="cCustomerSum != null and cCustomerSum != ''"> and c_customer_sum = #{cCustomerSum} </if>
+		  		  <if test="dCustomerSum != null and dCustomerSum != ''"> and d_customer_sum = #{dCustomerSum} </if>
+		  		  <if test="eCustomerSum != null and eCustomerSum != ''"> and e_customer_sum = #{eCustomerSum} </if>
+		  		  <if test="fCustomerSum != null and fCustomerSum != ''"> and f_customer_sum = #{fCustomerSum} </if>
+		  		  <if test="gCustomerSum != null and gCustomerSum != ''"> and g_customer_sum = #{gCustomerSum} </if>
+		  		  <if test="aOrderAvg != null and aOrderAvg != ''"> and a_order_avg = #{aOrderAvg} </if>
+		  		  <if test="bOrderAvg != null and bOrderAvg != ''"> and b_order_avg = #{bOrderAvg} </if>
+		  		  <if test="cOrderAvg != null and cOrderAvg != ''"> and c_order_avg = #{cOrderAvg} </if>
+		  		  <if test="dOrderAvg != null and dOrderAvg != ''"> and d_order_avg = #{dOrderAvg} </if>
+		  		  <if test="eOrderAvg != null and eOrderAvg != ''"> and e_order_avg = #{eOrderAvg} </if>
+		  		  <if test="fOrderAvg != null and fOrderAvg != ''"> and f_order_avg = #{fOrderAvg} </if>
+		  		  <if test="gOrderAvg != null and gOrderAvg != ''"> and g_order_avg = #{gOrderAvg} </if>
+		  		  <if test="aOrderSum != null and aOrderSum != ''"> and a_order_sum = #{aOrderSum} </if>
+		  		  <if test="bOrderSum != null and bOrderSum != ''"> and b_order_sum = #{bOrderSum} </if>
+		  		  <if test="cOrderSum != null and cOrderSum != ''"> and c_order_sum = #{cOrderSum} </if>
+		  		  <if test="dOrderSum != null and dOrderSum != ''"> and d_order_sum = #{dOrderSum} </if>
+		  		  <if test="eOrderSum != null and eOrderSum != ''"> and e_order_sum = #{eOrderSum} </if>
+		  		  <if test="fOrderSum != null and fOrderSum != ''"> and f_order_sum = #{fOrderSum} </if>
+		  		  <if test="gOrderSum != null and gOrderSum != ''"> and g_order_sum = #{gOrderSum} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by provinceid desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from tmpv2_province_od_sum
+		 <where>  
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceid = #{provinceid} </if>
+		  		  <if test="quDate != null and quDate != ''"> and qu_date = #{quDate} </if>
+		  		  <if test="provincename != null and provincename != ''"> and ProvinceName = #{provincename} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="orderAvg != null and orderAvg != ''"> and order_avg = #{orderAvg} </if>
+		  		  <if test="cainiaoOrderSum != null and cainiaoOrderSum != ''"> and cainiao_order_sum = #{cainiaoOrderSum} </if>
+		  		  <if test="qrcodeOrderSum != null and qrcodeOrderSum != ''"> and qrcode_order_sum = #{qrcodeOrderSum} </if>
+		  		  <if test="ordinaryOrderSum != null and ordinaryOrderSum != ''"> and ordinary_order_sum = #{ordinaryOrderSum} </if>
+		  		  <if test="customerSum != null and customerSum != ''"> and customer_sum = #{customerSum} </if>
+		  		  <if test="orderAvgSum != null and orderAvgSum != ''"> and order_avg_sum = #{orderAvgSum} </if>
+		  		  <if test="dianziOrderSum != null and dianziOrderSum != ''"> and dianzi_order_sum = #{dianziOrderSum} </if>
+		  		  <if test="aCustomerSum != null and aCustomerSum != ''"> and a_customer_sum = #{aCustomerSum} </if>
+		  		  <if test="bCustomerSum != null and bCustomerSum != ''"> and b_customer_sum = #{bCustomerSum} </if>
+		  		  <if test="cCustomerSum != null and cCustomerSum != ''"> and c_customer_sum = #{cCustomerSum} </if>
+		  		  <if test="dCustomerSum != null and dCustomerSum != ''"> and d_customer_sum = #{dCustomerSum} </if>
+		  		  <if test="eCustomerSum != null and eCustomerSum != ''"> and e_customer_sum = #{eCustomerSum} </if>
+		  		  <if test="fCustomerSum != null and fCustomerSum != ''"> and f_customer_sum = #{fCustomerSum} </if>
+		  		  <if test="gCustomerSum != null and gCustomerSum != ''"> and g_customer_sum = #{gCustomerSum} </if>
+		  		  <if test="aOrderAvg != null and aOrderAvg != ''"> and a_order_avg = #{aOrderAvg} </if>
+		  		  <if test="bOrderAvg != null and bOrderAvg != ''"> and b_order_avg = #{bOrderAvg} </if>
+		  		  <if test="cOrderAvg != null and cOrderAvg != ''"> and c_order_avg = #{cOrderAvg} </if>
+		  		  <if test="dOrderAvg != null and dOrderAvg != ''"> and d_order_avg = #{dOrderAvg} </if>
+		  		  <if test="eOrderAvg != null and eOrderAvg != ''"> and e_order_avg = #{eOrderAvg} </if>
+		  		  <if test="fOrderAvg != null and fOrderAvg != ''"> and f_order_avg = #{fOrderAvg} </if>
+		  		  <if test="gOrderAvg != null and gOrderAvg != ''"> and g_order_avg = #{gOrderAvg} </if>
+		  		  <if test="aOrderSum != null and aOrderSum != ''"> and a_order_sum = #{aOrderSum} </if>
+		  		  <if test="bOrderSum != null and bOrderSum != ''"> and b_order_sum = #{bOrderSum} </if>
+		  		  <if test="cOrderSum != null and cOrderSum != ''"> and c_order_sum = #{cOrderSum} </if>
+		  		  <if test="dOrderSum != null and dOrderSum != ''"> and d_order_sum = #{dOrderSum} </if>
+		  		  <if test="eOrderSum != null and eOrderSum != ''"> and e_order_sum = #{eOrderSum} </if>
+		  		  <if test="fOrderSum != null and fOrderSum != ''"> and f_order_sum = #{fOrderSum} </if>
+		  		  <if test="gOrderSum != null and gOrderSum != ''"> and g_order_sum = #{gOrderSum} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.ProvinceOdSumDO">
+		insert into tmpv2_province_od_sum
+		(
+			`provinceid`, 
+			`qu_date`, 
+			`ProvinceName`, 
+			`bigarea`, 
+			`order_sum`, 
+			`order_avg`, 
+			`cainiao_order_sum`, 
+			`qrcode_order_sum`, 
+			`ordinary_order_sum`, 
+			`customer_sum`, 
+			`order_avg_sum`, 
+			`dianzi_order_sum`, 
+			`a_customer_sum`, 
+			`b_customer_sum`, 
+			`c_customer_sum`, 
+			`d_customer_sum`, 
+			`e_customer_sum`, 
+			`f_customer_sum`, 
+			`g_customer_sum`, 
+			`a_order_avg`, 
+			`b_order_avg`, 
+			`c_order_avg`, 
+			`d_order_avg`, 
+			`e_order_avg`, 
+			`f_order_avg`, 
+			`g_order_avg`, 
+			`a_order_sum`, 
+			`b_order_sum`, 
+			`c_order_sum`, 
+			`d_order_sum`, 
+			`e_order_sum`, 
+			`f_order_sum`, 
+			`g_order_sum`
+		)
+		values
+		(
+			#{provinceid}, 
+			#{quDate}, 
+			#{provincename}, 
+			#{bigarea}, 
+			#{orderSum}, 
+			#{orderAvg}, 
+			#{cainiaoOrderSum}, 
+			#{qrcodeOrderSum}, 
+			#{ordinaryOrderSum}, 
+			#{customerSum}, 
+			#{orderAvgSum}, 
+			#{dianziOrderSum}, 
+			#{aCustomerSum}, 
+			#{bCustomerSum}, 
+			#{cCustomerSum}, 
+			#{dCustomerSum}, 
+			#{eCustomerSum}, 
+			#{fCustomerSum}, 
+			#{gCustomerSum}, 
+			#{aOrderAvg}, 
+			#{bOrderAvg}, 
+			#{cOrderAvg}, 
+			#{dOrderAvg}, 
+			#{eOrderAvg}, 
+			#{fOrderAvg}, 
+			#{gOrderAvg}, 
+			#{aOrderSum}, 
+			#{bOrderSum}, 
+			#{cOrderSum}, 
+			#{dOrderSum}, 
+			#{eOrderSum}, 
+			#{fOrderSum}, 
+			#{gOrderSum}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.ProvinceOdSumDO">
+		update tmpv2_province_od_sum 
+		<set>
+			<if test="quDate != null">`qu_date` = #{quDate}, </if>
+			<if test="provincename != null">`ProvinceName` = #{provincename}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="orderAvg != null">`order_avg` = #{orderAvg}, </if>
+			<if test="cainiaoOrderSum != null">`cainiao_order_sum` = #{cainiaoOrderSum}, </if>
+			<if test="qrcodeOrderSum != null">`qrcode_order_sum` = #{qrcodeOrderSum}, </if>
+			<if test="ordinaryOrderSum != null">`ordinary_order_sum` = #{ordinaryOrderSum}, </if>
+			<if test="customerSum != null">`customer_sum` = #{customerSum}, </if>
+			<if test="orderAvgSum != null">`order_avg_sum` = #{orderAvgSum}, </if>
+			<if test="dianziOrderSum != null">`dianzi_order_sum` = #{dianziOrderSum}, </if>
+			<if test="aCustomerSum != null">`a_customer_sum` = #{aCustomerSum}, </if>
+			<if test="bCustomerSum != null">`b_customer_sum` = #{bCustomerSum}, </if>
+			<if test="cCustomerSum != null">`c_customer_sum` = #{cCustomerSum}, </if>
+			<if test="dCustomerSum != null">`d_customer_sum` = #{dCustomerSum}, </if>
+			<if test="eCustomerSum != null">`e_customer_sum` = #{eCustomerSum}, </if>
+			<if test="fCustomerSum != null">`f_customer_sum` = #{fCustomerSum}, </if>
+			<if test="gCustomerSum != null">`g_customer_sum` = #{gCustomerSum}, </if>
+			<if test="aOrderAvg != null">`a_order_avg` = #{aOrderAvg}, </if>
+			<if test="bOrderAvg != null">`b_order_avg` = #{bOrderAvg}, </if>
+			<if test="cOrderAvg != null">`c_order_avg` = #{cOrderAvg}, </if>
+			<if test="dOrderAvg != null">`d_order_avg` = #{dOrderAvg}, </if>
+			<if test="eOrderAvg != null">`e_order_avg` = #{eOrderAvg}, </if>
+			<if test="fOrderAvg != null">`f_order_avg` = #{fOrderAvg}, </if>
+			<if test="gOrderAvg != null">`g_order_avg` = #{gOrderAvg}, </if>
+			<if test="aOrderSum != null">`a_order_sum` = #{aOrderSum}, </if>
+			<if test="bOrderSum != null">`b_order_sum` = #{bOrderSum}, </if>
+			<if test="cOrderSum != null">`c_order_sum` = #{cOrderSum}, </if>
+			<if test="dOrderSum != null">`d_order_sum` = #{dOrderSum}, </if>
+			<if test="eOrderSum != null">`e_order_sum` = #{eOrderSum}, </if>
+			<if test="fOrderSum != null">`f_order_sum` = #{fOrderSum}, </if>
+			<if test="gOrderSum != null">`g_order_sum` = #{gOrderSum}</if>
+		</set>
+		where provinceid = #{provinceid}
+	</update>
+	
+	<delete id="remove">
+		delete from tmpv2_province_od_sum where provinceid = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from tmpv2_province_od_sum where provinceid in 
+		<foreach item="provinceid" collection="array" open="(" separator="," close=")">
+			#{provinceid}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<body class="gray-bg">
+
+<input type="hidden" id="limitvalue" value="10">
+<input type="hidden" id="offsetvalue" value="0">
+
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group group-query" id="group_query">
+
+								<div class="col-md-6 col-sm-6 col-xs-24">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12" style="width:100px;"> 客户编码  </label>
+									<div class="col-md-9 col-sm-9 col-xs-12">
+
+											<!-- <div id="customerCode" class="form-control" ></div> 原来模糊搜索-->
+											<input type="text" class="form-control" id="customerCode" name="customerCode">
+									</div>
+								</div>
+
+
+								<div class="col-md-6 col-sm-6 col-xs-24">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12"  style="width:100px;"> 揽件时间 </label>
+									<div class="group-date col-sm-6 col-md-6 " id="group_month" style="">
+										<input type="text" class="form-control" id="month_year" name="month_year"  placeholder="月">
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-24" style="margin-top:10px;">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12"  style="width:100px;">网点编码 </label>
+									<div class="col-md-9 col-sm-9 col-xs-12">
+											<!-- <div id="branchCode" class="form-control" ></div> -->
+											<input type="text" class="form-control" id="branchCode" name="branchCode">
+									</div>
+								</div>
+
+
+
+							</div>
+							<div class="group-querybtn" id="group-querybtn" style="text-align:right;">
+								<!-- <div class="columns"> -->
+									<button class="btn btn-success" onclick="query()" type="button" style="margin-right:20px; background-color:#1E9FFF;border:1px solid #1E9FFF;">查询</button>
+									<input type="button" value="重置" onclick="resetForm()" class="btn  btn-success" style="margin-right:20px;">
+									<button shiro:hasPermission="costreport:costreportOrderCostFinish:exportExcel" style="margin-right:50px;" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+										<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+									</button>
+								<!-- </div> -->
+							</div>
+						</form>
+					</div>
+				</div>
+
+
+
+
+
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="costreport:costreportOrderCostFinish:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="costreport:costreportOrderCostFinish:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="costreport:costreportOrderCostFinish:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="costreport:costreportOrderCostFinish:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_provinceExpenditureData_h = 'hidden';
+
+			</script>
+		</div>
+		<div shiro:hasPermission="costreport:costreportOrderCostFinish:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="costreport:costreportOrderCostFinish:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="costreport:costreportOrderCostFinish:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="costreport:costreportCustCostFinish:costreportCustCostFinish">
+			<script type="text/javascript">
+				var s_provinceExpenditureData_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/costreport/costreportOrderCostFinish/costreportOrderCostFinish.js?v=38}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+	<script th:src="@{/js/demo/chouseInput.js}"></script>
+	<script th:src="@{/js/plugins/magicsuggest/magicsuggest-min.js}"></script>
+
+	<script>
+
+	</script>
+</body>
+</html>

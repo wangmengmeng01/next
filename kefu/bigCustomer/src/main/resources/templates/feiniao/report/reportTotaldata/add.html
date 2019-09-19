@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">省ID：</label>
+								<div class="col-sm-8">
+									<input id="provinceid" name="provinceid" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省名称：</label>
+								<div class="col-sm-8">
+									<input id="provincename" name="provincename" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市ID：</label>
+								<div class="col-sm-8">
+									<input id="cityid" name="cityid" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市名称：</label>
+								<div class="col-sm-8">
+									<input id="cityname" name="cityname" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点编码：</label>
+								<div class="col-sm-8">
+									<input id="branchCode" name="branchCode" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点名称：</label>
+								<div class="col-sm-8">
+									<input id="branchName" name="branchName" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户编码：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户名称：</label>
+								<div class="col-sm-8">
+									<input id="customerName" name="customerName" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">一级网点编码：</label>
+								<div class="col-sm-8">
+									<input id="yjbm" name="yjbm" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">一级网点名称：</label>
+								<div class="col-sm-8">
+									<input id="yjmc" name="yjmc" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户来源：</label>
+								<div class="col-sm-8">
+									<input id="customerSourceType" name="customerSourceType" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">面单量：</label>
+								<div class="col-sm-8">
+									<input id="orderSum" name="orderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">二维码面单量：</label>
+								<div class="col-sm-8">
+									<input id="qrcodeOrderSum" name="qrcodeOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">菜鸟面单量：</label>
+								<div class="col-sm-8">
+									<input id="cainiaoOrderSum" name="cainiaoOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单量：</label>
+								<div class="col-sm-8">
+									<input id="ordinaryOrderSum" name="ordinaryOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">日均单量：</label>
+								<div class="col-sm-8">
+									<input id="orderAvg" name="orderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">面单量返利金额：</label>
+								<div class="col-sm-8">
+									<input id="priceSum" name="priceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单返利金额：</label>
+								<div class="col-sm-8">
+									<input id="dianziOrderSum" name="dianziOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单占比：</label>
+								<div class="col-sm-8">
+									<input id="dianziNumPercent" name="dianziNumPercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建日期：</label>
+								<div class="col-sm-8">
+									<input id="createDate" name="createDate" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">订单日期：</label>
+								<div class="col-sm-8">
+									<input id="reportDate" name="reportDate" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">电子面单百分比：</label>
+								<div class="col-sm-8">
+									<input id="dianziPercent" name="dianziPercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="aCustomerSum" name="aCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="bCustomerSum" name="bCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="cCustomerSum" name="cCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="dCustomerSum" name="dCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="eCustomerSum" name="eCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="fCustomerSum" name="fCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类客户总数：</label>
+								<div class="col-sm-8">
+									<input id="gCustomerSum" name="gCustomerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="aOrderAvg" name="aOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="bOrderAvg" name="bOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="cOrderAvg" name="cOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="dOrderAvg" name="dOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="eOrderAvg" name="eOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="fOrderAvg" name="fOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类日均单量：</label>
+								<div class="col-sm-8">
+									<input id="gOrderAvg" name="gOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类面单量：</label>
+								<div class="col-sm-8">
+									<input id="aOrderSum" name="aOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类面单量：</label>
+								<div class="col-sm-8">
+									<input id="bOrderSum" name="bOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类面单量：</label>
+								<div class="col-sm-8">
+									<input id="cOrderSum" name="cOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类面单量：</label>
+								<div class="col-sm-8">
+									<input id="dOrderSum" name="dOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类面单量：</label>
+								<div class="col-sm-8">
+									<input id="eOrderSum" name="eOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类面单量：</label>
+								<div class="col-sm-8">
+									<input id="fOrderSum" name="fOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类面单量：</label>
+								<div class="col-sm-8">
+									<input id="gOrderSum" name="gOrderSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="aPriceSum" name="aPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="bPriceSum" name="bPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="cPriceSum" name="cPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="dPriceSum" name="dPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="ePriceSum" name="ePriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="fPriceSum" name="fPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额面单数：</label>
+								<div class="col-sm-8">
+									<input id="gPriceSum" name="gPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="aAllPriceSum" name="aAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="bAllPriceSum" name="bAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="cAllPriceSum" name="cAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="dAllPriceSum" name="dAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="eAllPriceSum" name="eAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="fAllPriceSum" name="fAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额总数：</label>
+								<div class="col-sm-8">
+									<input id="gAllPriceSum" name="gAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">a类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="aPricePercent" name="aPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">b类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="bPricePercent" name="bPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">c类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="cPricePercent" name="cPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">d类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="dPricePercent" name="dPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">e类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="ePricePercent" name="ePricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">f类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="fPricePercent" name="fPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">g类返利金额百分比：</label>
+								<div class="col-sm-8">
+									<input id="gPricePercent" name="gPricePercent" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户订单量：</label>
+								<div class="col-sm-8">
+									<input id="customerSum" name="customerSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户平均单量：</label>
+								<div class="col-sm-8">
+									<input id="customerAvgSum" name="customerAvgSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户返利单量：</label>
+								<div class="col-sm-8">
+									<input id="customerPriceSum" name="customerPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户返利单量：</label>
+								<div class="col-sm-8">
+									<input id="customerAllPriceSum" name="customerAllPriceSum" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportTotaldata/add.js}">
+	</script>
+</body>
+</html>

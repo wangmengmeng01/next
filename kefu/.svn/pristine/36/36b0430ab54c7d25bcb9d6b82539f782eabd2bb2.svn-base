@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.UserDao">
+
+	<!-- 统一授权  -->
+	<select id="getUserId" resultType="java.lang.Long">
+		select `user_id` from bootdo_sys_user where username = #{userId}
+	</select>
+	<select id="getRoleId" resultType="java.lang.String">
+		select `role_id` from bootdo_sys_role where role_name = #{userRole1}
+	</select>
+	<select id="getUserRole" resultType="java.lang.String">
+		select `role_id` from bootdo_sys_user_role where user_id = #{long1}
+	</select>
+	<select id="getAllUserRole" resultType="java.lang.String">
+		select distinct `role_id` from bootdo_sys_user_role
+	</select>
+	<select id="isExist" resultType="boolean">
+		  <![CDATA[ select count(username) 
+        from bootdo_sys_user where username=#{userId}]]>
+	</select>
+	
+	<insert id="insertPasswordAndUser">  
+		insert into bootdo_sys_user
+		(
+			`username`, 
+			`password`,
+			`name`,
+			`status`,
+			`org_code`
+		)
+		values
+		(
+			#{userId}, 
+		    #{passwordOrgin},
+		    #{name},
+		    #{status},
+		    #{companycode}
+		)
+	</insert>
+	<update id="updatePasswordAndUser">
+		update bootdo_sys_user 
+		<set>
+			<if test="userId != null">`username` = #{userId}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="passwordOrgin != null">`password` = #{passwordOrgin}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="companycode != null">`org_code` = #{companycode} </if>
+		</set>
+		where `username` = #{userId}
+	</update>
+	
+	
+	
+	
+	
+	<select id="queryLoginInfo" resultType="com.yunda.base.system.domain.UserDO">
+		select `user_id`,`username`,`name`,`password`,`dept_id`,`email`,`mobile`,`status`,`user_id_create`,`gmt_create`,`gmt_modified`,`sex`,`birth`,`org_code`,`org_name`,`org_type` from bootdo_sys_user where username = #{username}
+	</select>
+	
+	<select id="get" resultType="com.yunda.base.system.domain.UserDO">
+		select a.`user_id`,a.`username`,a.`name`,a.`password`,a.`dept_id`,a.`email`,a.`mobile`,a.`status`,a.`user_id_create`,a.`gmt_create`,a.`gmt_modified`,a.`sex`,a.`birth`,a.`org_code`,a.`org_type`,c.`role_id`,c.`role_name`,d.`organization_name` as org_name from bootdo_sys_user as a left join bootdo_sys_user_role as b on a.user_id=b.user_id left JOIN bootdo_sys_role c on b.role_id=c.role_id left join organization_manage d on a.org_code = d.organization_num where a.user_id = #{value} limit 1
+	</select>
+	
+	<select id="listUsers" resultType="com.yunda.base.system.domain.UserDO">
+		select a.`user_id`,a.`username`,a.`name`,a.`password`,a.`dept_id`,a.`email`,a.`mobile`,a.`status`,a.`user_id_create`,a.`gmt_create`,a.`gmt_modified`,a.`sex`,a.`birth`,a.`org_code`,a.`org_type`,c.`role_id`,c.`role_name`,d.`organization_name` as org_name from bootdo_sys_user as a left join bootdo_sys_user_role as b on a.user_id=b.user_id left JOIN bootdo_sys_role c on b.role_id=c.role_id left join organization_manage d on a.org_code = d.organization_num
+        <where>  
+		  		  <if test="userId != null and userId != ''"> and a.user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and a.username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and a.name like '%${name}%' </if>
+		  		  <if test="password != null and password != ''"> and a.password = #{password} </if>
+		  		  <if test="deptId != null and deptId != ''"> and a.dept_id = #{deptId} </if>
+		  		  <if test="email != null and email != ''"> and a.email = #{email} </if>
+		  		  <if test="mobile != null and mobile != ''"> and a.mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and a.status = #{status} </if>
+		  		  <if test="userIdCreate != null and userIdCreate != ''"> and a.user_id_create = #{userIdCreate} </if>
+		  		  <if test="gmtCreate != null and gmtCreate != ''"> and a.gmt_create = #{gmtCreate} </if>
+		  		  <if test="gmtModified != null and gmtModified != ''"> and a.gmt_modified = #{gmtModified} </if>
+		  		  <if test="sex != null and sex != ''"> and a.sex = #{sex} </if>
+		  		  <if test="birth != null and birth != ''"> and a.birth = #{birth} </if>
+		  		  <if test="orgCode != null and orgCode != ''"> and a.org_code = #{orgCode} </if>
+		  		  <!--<if test="orgName != null and orgName != ''"> and a.org_name = #{orgName} </if>-->
+		  		  <if test="orgType != null and orgType != ''"> and a.org_type = #{orgType} </if>
+		  		  <if test="roleId != null and roleId != ''"> and c.role_id = #{roleId} </if>
+		  		  <if test="orgCode != null and orgCode != ''"> and d.organization_num = #{orgCode} </if>
+		  		  <!--<if test="orgNum != null and orgNum != ''"> and d.organization_name = #{orgName} </if>-->
+		  		  <if test="organization != null and organization != ''"> and d.organization_name like '%${organization}%' </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by user_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.UserDO">
+		select `user_id`,`username`,`name`,`password`,`dept_id`,`email`,`mobile`,`status`,`user_id_create`,`gmt_create`,`gmt_modified`,`sex`,`birth`,`org_code`,`org_name`,`org_type` from bootdo_sys_user
+        <where>  
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and name like '%${name}%' </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="deptId != null and deptId != ''"> and dept_id = #{deptId} </if>
+		  		  <if test="email != null and email != ''"> and email = #{email} </if>
+		  		  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
+		  		  <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+		  		  <if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+		  		  <if test="sex != null and sex != ''"> and sex = #{sex} </if>
+		  		  <if test="birth != null and birth != ''"> and birth = #{birth} </if>
+		  		  <if test="orgCode != null and orgCode != ''"> and org_code = #{orgCode} </if>
+		  		  <if test="orgName != null and orgName != ''"> and org_name = #{orgName} </if>
+		  		  <if test="orgType != null and orgType != ''"> and org_type = #{orgType} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by user_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from bootdo_sys_user as a left join bootdo_sys_user_role as b on a.user_id=b.user_id left JOIN bootdo_sys_role c on b.role_id=c.role_id left join organization_manage d on a.org_code = d.organization_num
+		 <where>
+			 <if test="userId != null and userId != ''"> and a.user_id = #{userId} </if>
+			 <if test="username != null and username != ''"> and a.username = #{username} </if>
+			 <if test="name != null and name != ''"> and a.name like '%${name}%' </if>
+			 <if test="password != null and password != ''"> and a.password = #{password} </if>
+			 <if test="deptId != null and deptId != ''"> and a.dept_id = #{deptId} </if>
+			 <if test="email != null and email != ''"> and a.email = #{email} </if>
+			 <if test="mobile != null and mobile != ''"> and a.mobile = #{mobile} </if>
+			 <if test="status != null and status != ''"> and a.status = #{status} </if>
+			 <if test="userIdCreate != null and userIdCreate != ''"> and a.user_id_create = #{userIdCreate} </if>
+			 <if test="gmtCreate != null and gmtCreate != ''"> and a.gmt_create = #{gmtCreate} </if>
+			 <if test="gmtModified != null and gmtModified != ''"> and a.gmt_modified = #{gmtModified} </if>
+			 <if test="sex != null and sex != ''"> and a.sex = #{sex} </if>
+			 <if test="birth != null and birth != ''"> and a.birth = #{birth} </if>
+			 <!--<if test="orgCode != null and orgCode != ''"> and a.org_code = #{orgCode} </if>-->
+			 <!--<if test="orgName != null and orgName != ''"> and a.org_name = #{orgName} </if>-->
+			 <if test="orgType != null and orgType != ''"> and a.org_type = #{orgType} </if>
+			 <if test="roleId != null and roleId != ''"> and c.role_id = #{roleId} </if>
+			 <if test="orgCode != null and orgCode != ''"> and d.organization_num = #{orgCode} </if>
+			 <!--<if test="orgNum != null and orgNum != ''"> and d.organization_name = #{orgName} </if>-->
+			 <if test="organization != null and organization != ''"> and d.organization_name = #{organization} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.UserDO" useGeneratedKeys="true" keyProperty="userId">
+		insert into bootdo_sys_user
+		(
+			`username`, 
+			`name`, 
+			`password`, 
+			`dept_id`, 
+			`email`, 
+			`mobile`, 
+			`status`, 
+			`user_id_create`, 
+			`gmt_create`, 
+			`gmt_modified`, 
+			`sex`, 
+			`birth`, 
+			`org_code`, 
+			`org_name`, 
+			`org_type`
+		)
+		values
+		(
+			#{username}, 
+			#{name}, 
+			#{password}, 
+			#{deptId}, 
+			#{email}, 
+			#{mobile}, 
+			#{status}, 
+			#{userIdCreate}, 
+			#{gmtCreate}, 
+			#{gmtModified}, 
+			#{sex}, 
+			#{birth}, 
+			#{orgCode}, 
+			#{orgName}, 
+			#{orgType}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.UserDO">
+		update bootdo_sys_user 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="password != null">`password` = #{password}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
+			<if test="email != null">`email` = #{email}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="userIdCreate != null">`user_id_create` = #{userIdCreate}, </if>
+			<if test="gmtCreate != null">`gmt_create` = #{gmtCreate}, </if>
+			<if test="gmtModified != null">`gmt_modified` = #{gmtModified}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="birth != null">`birth` = #{birth}, </if>
+			<if test="orgCode != null">`org_code` = #{orgCode}, </if>
+			<if test="orgName != null">`org_name` = #{orgName}, </if>
+			<if test="orgType != null">`org_type` = #{orgType},</if>
+			<if test="base64 != null">`base64` = #{base64}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	<update id="updateBase64" parameterType="com.yunda.base.system.domain.UserDO">
+		update bootdo_sys_user 
+		<set>
+			<if test="base64 != null">`base64` = #{base64}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<delete id="remove">
+		delete from bootdo_sys_user where user_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from bootdo_sys_user where user_id in 
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+
+	<select id="listAllDept" resultType="long">
+				select DISTINCT dept_id from bootdo_sys_user
+	</select>
+	<select id="selectUserByBase64" resultType="java.lang.String">
+		select base64 from bootdo_sys_user
+		 <where>  
+  		  <if test="username != null and username != ''"> and username = #{username} </if>
+  		</where> 
+	</select>
+	<select id="getRoleIds" resultType="java.lang.String">
+		select role_id from bootdo_sys_user_role
+		 <where>
+  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+  		</where>
+	</select>
+	<!-- 根据网点编码获取网点名称 -->
+	<select id="getMcByBranchCode" resultType="java.lang.String">
+		select mc from ydserver.gs where `bm` = #{branchCode}
+	</select>
+	<!-- 根据userId修改状态 -->
+	<update id="stateUpdate">
+		update bootdo_sys_user
+		<set>
+			`status` = #{status}
+		</set>
+		where `user_id` = #{userId}
+	</update>
+</mapper>

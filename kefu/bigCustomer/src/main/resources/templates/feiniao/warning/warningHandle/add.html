@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">客户编码：</label>
+								<div class="col-sm-8">
+									<input id="customerId" name="customerId" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户名称：</label>
+								<div class="col-sm-8">
+									<input id="customerName" name="customerName" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">所属站点编码(公司)：</label>
+								<div class="col-sm-8">
+									<input id="gs" name="gs" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">所属站点名称(公司)：</label>
+								<div class="col-sm-8">
+									<input id="gsmc" name="gsmc" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上级网点编码：</label>
+								<div class="col-sm-8">
+									<input id="branchCode" name="branchCode" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上级网点名称：</label>
+								<div class="col-sm-8">
+									<input id="branchName" name="branchName" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">该条数据的预警日期：</label>
+								<div class="col-sm-8">
+									<input id="warnDate" name="warnDate" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">日均单量：</label>
+								<div class="col-sm-8">
+									<input id="orderAvg" name="orderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上周日均量：</label>
+								<div class="col-sm-8">
+									<input id="lastOrderAvg" name="lastOrderAvg" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">降幅比率：</label>
+								<div class="col-sm-8">
+									<input id="reducedRatio" name="reducedRatio" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">降幅单量：</label>
+								<div class="col-sm-8">
+									<input id="reducedOrder" name="reducedOrder" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户来源：</label>
+								<div class="col-sm-8">
+									<input id="customerSourceType" name="customerSourceType" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">客户类型：</label>
+								<div class="col-sm-8">
+									<input id="priceLevel" name="priceLevel" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">反馈截止时间--标识字段 无业务功能：</label>
+								<div class="col-sm-8">
+									<input id="feedbackDeadline" name="feedbackDeadline" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">反馈状态：</label>
+								<div class="col-sm-8">
+									<input id="feedbackStatus" name="feedbackStatus" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">备注：</label>
+								<div class="col-sm-8">
+									<input id="remark" name="remark" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市id：</label>
+								<div class="col-sm-8">
+									<input id="cityid" name="cityid" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">市名称：</label>
+								<div class="col-sm-8">
+									<input id="cityname" name="cityname" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省id：</label>
+								<div class="col-sm-8">
+									<input id="provinceid" name="provinceid" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省名称：</label>
+								<div class="col-sm-8">
+									<input id="provincename" name="provincename" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">大区：</label>
+								<div class="col-sm-8">
+									<input id="bigarea" name="bigarea" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点反馈类型：</label>
+								<div class="col-sm-8">
+									<input id="branchDealType" name="branchDealType" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点反馈内容：</label>
+								<div class="col-sm-8">
+									<input id="branchDealDesc" name="branchDealDesc" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点反馈人：</label>
+								<div class="col-sm-8">
+									<input id="barnchDealUser" name="barnchDealUser" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">网点反馈时间--用来罚款的：</label>
+								<div class="col-sm-8">
+									<input id="branchFeedbackDate" name="branchFeedbackDate" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省总反馈内容：</label>
+								<div class="col-sm-8">
+									<input id="provinceDealDesc" name="provinceDealDesc" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省总反馈人：</label>
+								<div class="col-sm-8">
+									<input id="provinceDealUser" name="provinceDealUser" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省总反馈时间：</label>
+								<div class="col-sm-8">
+									<input id="provinceFeedbackDate" name="provinceFeedbackDate" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">总部反馈内容：</label>
+								<div class="col-sm-8">
+									<input id="zbDealDesc" name="zbDealDesc" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">总部反馈人：</label>
+								<div class="col-sm-8">
+									<input id="zbDealUser" name="zbDealUser" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">总部反馈时间：</label>
+								<div class="col-sm-8">
+									<input id="zbFeedbackDate" name="zbFeedbackDate" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/warning/warningHandle/add.js}">
+	</script>
+</body>
+</html>

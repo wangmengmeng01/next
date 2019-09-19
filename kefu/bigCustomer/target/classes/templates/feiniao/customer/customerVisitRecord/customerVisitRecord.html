@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group group-query" id="group_query">							
+								
+								<div class="col-md-4">
+									<label>拜访id：</label> 
+									<input type="text" name="visitId" id="visitId" class="form-control">
+								</div>
+								
+								<div class="group-time" id="group_time">
+									<div class=" time-bucket" id="time_bucket">
+										<label class="control-label col-sm-2 col-md-1">创建时间：</label>
+										 <div class="col-sm-2">
+											<input id="startDate" name="startDate" class="form-control" type="text"  placeholder="开始时间">
+										</div>
+										<div style="float:left;margin-top: 6px;">——</div>
+										<div class="col-sm-2">
+											<input id="endDate" name="endDate" class="form-control" type="text" placeholder="结束时间">
+										</div>
+									</div>
+								</div>	
+								<div class="group-time" id="group_time">
+									<div class=" time-bucket" id="time_bucket">
+										<label class="control-label col-sm-2 col-md-1">拜访时间：</label>
+										 <div class="col-sm-2">
+											<input id="startVisitDate" name="startVisitDate" class="form-control" type="text"  placeholder="开始时间">
+										</div>
+										<div style="float:left;margin-top: 6px;">——</div>
+										<div class="col-sm-2">
+											<input id="endVisitDate" name="endVisitDate" class="form-control" type="text" placeholder="结束时间">
+										</div>
+									</div>
+								</div>	
+								
+
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">
+								                            网点编码                        
+								</label>                        
+								<div class="col-md-4 col-sm-4 col-xs-12">
+										
+										<div id="branchCode" class="form-control" ></div>
+								</div>
+								
+								<div class="query-time group-select" id="group_select">
+									<label class="col-sm-2 col-md-2 control-label label-time" id="lable-time">所在省：</label>
+								    <div class="col-sm-2" >
+									     <select id = "customerProvince" name="customerProvince" class="form-control">
+									     	  <option value="">请选择</option>
+									          <option value="110000">北京市</option>
+									          <option value="120000">天津市</option>
+									          <option value="130000">河北省</option>
+									          <option value="140000">山西省</option>
+									          <option value="150000">内蒙古自治区</option>    
+  									          <option value="210000">辽宁省</option>    
+  									          <option value="220000">吉林省</option>    
+  									          <option value="230000">黑龙江省</option>    
+  									          <option value="310000">上海市</option>    
+  									          <option value="320000">江苏省</option>    
+											  <option value="330000">浙江省</option>
+											  <option value="340000">安徽省</option>
+											  <option value="350000">福建省</option>
+											  <option value="360000">江西省</option>
+											  <option value="370000">山东省</option>
+											  <option value="410000">河南省</option>
+											  <option value="420000">湖北省</option>
+											  <option value="430000">湖南省</option>
+											  <option value="440000">广东省</option>
+											  <option value="450000">广西壮族自治区</option>
+											  <option value="460000">海南省</option>
+											  <option value="500000">重庆市</option>
+											  <option value="510000">四川省</option>
+											  <option value="520000">贵州省</option>
+											  <option value="530000">云南省</option>
+											  <option value="540000">西藏自治区</option>
+											  <option value="610000">陕西省</option>
+									     </select>
+								   </div>
+								</div>
+								
+									
+								<div class="group-querybtn col-sm-offset-1" id="group-querybtn">
+									<input type="button" value="查询" onclick="query()" class="btn btn-warning" style="margin-left:20px;">
+								</div>
+							</div>	   								
+						</form>
+					</div>
+				</div>
+		
+		
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="customer:customerVisitRecord:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="customer:customerVisitRecord:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="customer:customerVisitRecord:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="customer:customerVisitRecord:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<button shiro:hasPermission="customer:customerVisitRecord:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							<button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="">
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerVisitRecord:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerVisitRecord:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="customer:customerVisitRecord:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/customerVisitRecord/customerVisitRecord.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

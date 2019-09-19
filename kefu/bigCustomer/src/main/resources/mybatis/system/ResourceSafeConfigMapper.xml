@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.ResourceSafeConfigDao">
+
+	<select id="get" resultType="com.yunda.base.system.domain.ResourceSafeConfigDO">
+		select `id`,`resource_path`,`safe_level` from crmkh_resource_safe_config where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.ResourceSafeConfigDO">
+		select `id`,`resource_path`,`safe_level` from crmkh_resource_safe_config
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="resourcePath != null and resourcePath != ''"> and resource_path = #{resourcePath} </if>
+		  		  <if test="safeLevel != null and safeLevel != ''"> and safe_level = #{safeLevel} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_resource_safe_config
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="resourcePath != null and resourcePath != ''"> and resource_path = #{resourcePath} </if>
+		  		  <if test="safeLevel != null and safeLevel != ''"> and safe_level = #{safeLevel} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.ResourceSafeConfigDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkh_resource_safe_config
+		(
+			`resource_path`, 
+			`safe_level`
+		)
+		values
+		(
+			#{resourcePath}, 
+			#{safeLevel}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.ResourceSafeConfigDO">
+		update crmkh_resource_safe_config 
+		<set>
+			<if test="resourcePath != null">`resource_path` = #{resourcePath}, </if>
+			<if test="safeLevel != null">`safe_level` = #{safeLevel}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_resource_safe_config where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_resource_safe_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="getSafeLevel" resultType="java.lang.String">
+		select `safe_level` from crmkh_resource_safe_config where resource_path = #{url}
+	</select>
+
+</mapper>

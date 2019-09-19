@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.customer.dao.NotCooperateCustomerDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		select `id`,`province`,`city`,`customer_name`,`customer_phone`,`contact_name`,`product_type`,`day_average_amount`,`product_average_heavy`,`soak`,`branch_code`,`branch_name`,`time`,`state`,`remark`,`upload_name_phone`,`customer_platform`,`customer_deliver_address`,`not_cooperate_cause`,`customer_intention`,`feed_back_check`,`cooperate_branch`,`branch_need`,`bound_vip_account`,`province_deal_opinion`,`province_deal_name`,`province_deal_time`,`zongbu_deal_opinion`,`zong_bu_deal_name`,`zong_bu_deal_time` from crmkhv2_not_cooperate_customer where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		select `id`,`province`,`mc_code`,`city`,`customer_name`,`customer_phone`,`contact_name`,`product_type`,`bound_vip_account`,`day_average_amount`,`product_average_heavy`,`soak`,`branch_code`,`branch_name`,`time`,`state`,`remark`,`upload_name_phone`,`customer_platform`,`customer_deliver_address`,`not_cooperate_cause`,`customer_intention`,`branch_need` from crmkhv2_not_cooperate_customer
+        <where>
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="mcCode != null and mcCode != ''"> and mc_code = #{mcCode} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name like CONCAT("%",#{customerName},"%")</if>
+		  		  <if test="customerPhone != null and customerPhone != ''"> and customer_phone = #{customerPhone} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code in (#{branchCode}) </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and province = #{provinceName} </if>
+				  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+				  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+                order by id desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_not_cooperate_customer
+		 <where>
+		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  <if test="customerName != null and customerName != ''"> and customer_name like CONCAT("%",#{customerName},"%") </if>
+		  <if test="customerPhone != null and customerPhone != ''"> and customer_phone = #{customerPhone} </if>
+		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		  <if test="state != null and state != ''"> and state = #{state} </if>
+		</where>
+	</select>
+	<!-- 根据时间和状态获取数据 -->
+	<select id="queryByState" resultType="java.util.Map">
+		select count(*) customerNumber,IFNULL(SUM(`day_average_amount`),0) sumDayAverageAmount from crmkhv2_not_cooperate_customer
+		where state=#{state} and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')
+	</select>
+
+	<!-- 根据时间和状态获取数据 -->
+	<select id="queryByNotState" resultType="java.util.Map">
+		select count(*) customerNumber,IFNULL(SUM(`day_average_amount`),0) sumDayAverageAmount from crmkhv2_not_cooperate_customer
+		where state <![CDATA[ <> ]]> #{state} and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')
+	</select>
+	<!-- 根据网点编码获取网点名称 -->
+	<select id="getgetCompanyNameByOrgCode" resultType="java.lang.String">
+		select mc from ydserver.gs where bm=#{orgCode}
+	</select>
+	<!-- 根据网点编码获取网点所在的省 -->
+	<select id="getProvinceNameByBranchCode" resultType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		select ProvinceName_b province,a.ProvinceID_b provinceId from ydserver.province_business a LEFT JOIN ydserver.county b on a.ProvinceID_b=b.ProvinceID_b LEFT JOIN ydserver.gs c on b.CountyID=c.szd where c.bm=#{branchCode}
+	</select>
+	<!-- 根据网点编码获取网点所在的市 -->
+	<select id="getCityNameByBranchCode" resultType="java.lang.String">
+		select CityName from ydserver.city a LEFT JOIN ydserver.county b on a.CityID=b.CityID LEFT JOIN ydserver.gs c on b.CountyID=c.szd where c.bm=#{branchCode}
+	</select>
+	<!-- 根据业务省id获取业务省名称 -->
+	<select id="getProvinceNameByProvinceId" resultType="java.lang.String">
+		select ProvinceName_b from ydserver.province_business
+		<where>
+			ProvinceID_b in
+			<foreach collection="list" item="provinceId" index="index" open="(" close=")" separator=",">
+				'${provinceId}'
+			</foreach>
+		</where>
+	</select>
+	<!-- 根据省名称获取未合作用户信息 -->
+	<select id="listInfoByProvinceName" resultType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		select `id`,`province`,`city`,`customer_name`,`customer_phone`,`contact_name`,`product_type`,`day_average_amount`,`product_average_heavy`,`soak`,`branch_code`,`branch_name`,`time`,`state`,`remark`,`upload_name_phone`,`customer_platform`,`customer_deliver_address`,`not_cooperate_cause`,`customer_intention`,`branch_need` from crmkhv2_not_cooperate_customer
+		<where>
+			`province` in (#{provinceName})
+			<if test="customerName != null and customerName != ''"> and customer_name like CONCAT("%",#{customerName},"%")</if>
+			<if test="customerPhone != null and customerPhone != ''"> and customer_phone = #{customerPhone} </if>
+			<if test="branchCode != null and branchCode != ''"> and branch_code in (#{branchCode}) </if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+			<if test="state != null and state != ''"> and state = #{state} </if>
+		</where>
+	</select>
+
+	<!-- 根据省名称获取未合作用户数量 -->
+	<select id="countByProvinceName" resultType="int">
+		select count(*) from crmkhv2_not_cooperate_customer
+		<where>
+			`province` in (#{provinceName})
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> and `time` &gt;= date_format (#{startDate},'%Y-%m-%d 00:00:00') and `time` &lt;= date_format (#{endDate},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_not_cooperate_customer
+		(
+			`province`, 
+			`province_id`,
+			`city`,
+			`customer_name`,
+			`customer_phone`,
+			`contact_name`, 
+			`product_type`, 
+			`day_average_amount`,
+			`product_average_heavy`,
+			`soak`,
+			`branch_code`, 
+			`branch_name`,
+			`mc_code`,
+			`mc`,
+			`time`, 
+			`state`, 
+			`remark`, 
+			`upload_name_phone`,
+			`customer_platform`, 
+			`customer_deliver_address`, 
+			`not_cooperate_cause`, 
+			`customer_intention`, 
+			`branch_need`,
+			`delete`
+		)
+		values
+		(
+			#{province}, 
+			#{provinceId},
+			#{city},
+			#{customerName}, 
+			#{customerPhone},
+			#{contactName},
+			#{productType}, 
+			#{dayAverageAmount}, 
+			#{productAverageHeavy},
+			#{soak},
+			#{branchCode},
+			#{branchName},
+			#{mcCode},
+			#{mc},
+			#{time}, 
+			#{state}, 
+			#{remark}, 
+			#{uploadNamePhone},
+			#{customerPlatform},
+			#{customerDeliverAddress}, 
+			#{notCooperateCause}, 
+			#{customerIntention}, 
+			#{branchNeed},
+			#{delete}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		update crmkhv2_not_cooperate_customer 
+		<set>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="city != null">`city` = #{city}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="customerPhone != null and customerPhone != ''">`customer_phone` = #{customerPhone}, </if>
+			<if test="contactName != null and contactName != ''">`contact_name` = #{contactName}, </if>
+			<if test="productType != null and productType != ''">`product_type` = #{productType}, </if>
+			<if test="dayAverageAmount != null">`day_average_amount` = #{dayAverageAmount}, </if>
+			<if test="productAverageHeavy != null">`product_average_heavy` = #{productAverageHeavy}, </if>
+			<if test="soak != null and soak != ''">`soak` = #{soak}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="time != null">`time` = #{time},</if>
+			<if test="state != null and state !=''">`state` = #{state}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="uploadNamePhone != null">`upload_name_phone` = #{uploadNamePhone}, </if>
+			<if test="customerPlatform != null">`customer_platform` = #{customerPlatform}, </if>
+			<if test="customerDeliverAddress != null">`customer_deliver_address` = #{customerDeliverAddress}, </if>
+			<if test="notCooperateCause != null">`not_cooperate_cause` = #{notCooperateCause}, </if>
+			<if test="customerIntention != null">`customer_intention` = #{customerIntention}, </if>
+			<if test="branchNeed != null">`branch_need` = #{branchNeed},</if>
+			<if test="feedBackCheck != null and feedBackCheck != ''">`feed_back_check` = #{feedBackCheck},</if>
+			<if test="cooperateBranch != null">`cooperate_branch` = #{cooperateBranch},</if>
+			<if test="boundVipAccount != null">`bound_vip_account` = #{boundVipAccount},</if>
+			<if test="provinceDealOpinion != null">`province_deal_opinion` = #{provinceDealOpinion},</if>
+			<if test="provinceDealName != null">`province_deal_name` = #{provinceDealName},</if>
+			<if test="provinceDealTime != null">`province_deal_time` = #{provinceDealTime},</if>
+			<if test="zongBuDealOpinion != null">`zongbu_deal_opinion` = #{zongBuDealOpinion},</if>
+			<if test="zongBuDealName != null">`zong_bu_deal_name` = #{zongBuDealName},</if>
+			<if test="zongBuDealTime != null">`zong_bu_deal_time` = #{zongBuDealTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="updateBoundVipAccountById" parameterType="com.yunda.base.feiniao.customer.domain.NotCooperateCustomerDO">
+		update crmkhv2_not_cooperate_customer
+		<set>
+			<if test="cooperateBranch != null">`cooperate_branch` = #{cooperateBranch}, </if>
+			<if test="boundVipAccount != null">`bound_vip_account` = #{boundVipAccount}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_not_cooperate_customer where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_not_cooperate_customer where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<!-- 获取一级网点编码 -->
+	<select id="getMcByBranchCode" resultType="java.lang.String">
+		select sjdw from ydserver.gs
+		<where>
+			bm=#{branchCode}
+		</where>
+		limit 1;
+	</select>
+	<!-- 获取一级网点名称 -->
+	<select id="getMcCodeByBranchCode" resultType="java.lang.String">
+		select mc from ydserver.gs
+		<where>
+			sjdw=#{provinceMcCode}
+		</where>
+		limit 1;
+	</select>
+	<!-- 获取一级网点名称 -->
+	<select id="checkCooperateBranch" resultType="java.lang.Integer">
+		select count(*) from ydserver.gs
+		<where>
+			bm=#{cooperateBranch}
+		</where>
+		limit 1;
+	</select>
+	<!-- 根据网点编码和产品类型获取同行合作信息 -->
+	<select id="huiXianCooperatePeer" resultType="com.yunda.base.feiniao.customer.domain.CooperatePeerDO">
+		select `branch_code`,`product_type`,`cooperate_peer_name`,`cooperate_ratio`,`cooperate_price`,`remark` from crmkhv2_cooperate_peer
+		<where>
+			`branch_code`=#{branchCode} and `product_type`=#{productType}
+		</where>
+	</select>
+	<!-- 根据网点编码和产品类型获取同行合作信息 -->
+	<select id="getSuccessCooperateByDate" resultType="com.yunda.base.feiniao.customer.domain.ChangeCooperateOrderNumDO">
+		SELECT
+		a.`customer_id`,
+		b.`province` province_name,
+		b.`province_id`,
+		b.`mc`,
+		b.`mc_code`,
+		b.`branch_name`,
+		b.`branch_code`,
+		SUM(a.`daily_order_num`) order_num,
+		b.`time` upload_time,
+		a.`qu_date` time
+		FROM
+		crmkhv2_report_order_stats_all a
+		LEFT JOIN crmkhv2_not_cooperate_customer b ON a.customer_id = CONCAT(b.branch_code,b.bound_vip_account)
+		<where>
+			b.`state` = #{state}
+			AND b.time >= date_format (#{uploadTime},'%Y-%m-%d 00:00:00')
+			AND b.time <![CDATA[ <= ]]> date_format (#{uploadTime},'%Y-%m-%d 23:59:59')
+			AND a.`qu_date` = #{time}
+		</where>
+	</select>
+	<!-- 保存揽件量信息 -->
+	<insert id="saveChangeCooperateOrderNumDO" parameterType="com.yunda.base.feiniao.customer.domain.ChangeCooperateOrderNumDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_change_cooperate_order_num
+		(
+			`customer_id`,
+			`province_name`,
+			`province_id`,
+			`mc`,
+			`mc_code`,
+			`branch_name`,
+			`branch_code`,
+			`order_num`,
+			`upload_time`,
+			`time`
+		)
+		values
+		(
+			#{customerId},
+			#{provinceName},
+			#{provinceId},
+			#{mc},
+			#{mcCode},
+			#{branchName},
+			#{branchCode},
+			#{orderNum},
+			#{uploadTime},
+			#{time}
+		)
+	</insert>
+	<delete id="removeBdByDate">
+		delete from crmkhv2_change_cooperate_order_num where `time` = #{dqday}
+	</delete>
+
+</mapper>

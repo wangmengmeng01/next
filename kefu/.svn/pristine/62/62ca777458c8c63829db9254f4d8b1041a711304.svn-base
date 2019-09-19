@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-content">
+					<form id="searchFluctuateData" class="form-horizontal m-t">
+						<div class="form-group">
+							<label class="control-label col-sm-2 col-md-2 col-sm-offset-1 col-md-offset-1">查询时间：</label>
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchStartDate" id="searchStartDate" class="form-control" placeholder="开始时间">
+							</div>
+							<div style="float:left;margin-top: 6px;">—</div>
+							<div class="col-md-2 col-sm-2">
+								<input type="text" name="searchEndDate" id="searchEndDate" class="form-control" placeholder="结束时间">
+							</div>
+							<div class="group-btn" id="groop_btn" style="text-align:right">
+								<!-- <div class="col-sm-1 col-md-1 col-sm-offset-1 col-md-offset-1"> -->
+									<input type="button" value="查询" onclick="query()" class="btn btn-warning" style="margin-left:20px;margin-right:20px; background-color:#1E9FFF;border:1px solid #1E9FFF;">
+								<!-- </div> -->
+								<!-- <div class="col-sm-1 col-md-1"> -->
+									<input type="button" value="重置" onclick="resetForm()" class="btn btn-success" style="margin-right:20px;">
+								<!-- </div> -->
+								<button shiro:hasPermission="report:reportFluctuate:exportExcel" type="button" class="btn btn-warning" style="margin-right:50px;" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+									<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+								</button>
+								 <div style="color:red; margin:20px 30px; text-align:left;">备注：
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="report:reportFluctuate:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="report:reportFluctuate:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="report:reportFluctuate:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="report:reportFluctuate:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<!-- <button shiro:hasPermission="report:reportFluctuate:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button> -->
+							<!-- <button id="refresh" type="button" class="btn btn-primary">
+								<i class="fa fa-refresh" aria-hidden="true"></i>重置
+							</button> -->
+						</div>
+						<!-- <div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="">
+						</div> -->
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				<!--波动表点击省获取市的数据-->
+				var s_shengData_h = 'hidden';
+				<!--点击流失数或新增数，获取客户波动情况-->
+				var s_custData_h = 'hidden';
+			</script>
+
+		<div shiro:hasPermission="report:reportFluctuate:edit">
+			<script type="text/javascript">
+				var s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportFluctuate:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportFluctuate:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportFluctuate:reportFluctuateSheng">
+			<script type="text/javascript">
+				var s_shengData_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportFluctuate:reportFluctuateCust">
+			<script type="text/javascript">
+				var s_custData_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportFluctuate/reportFluctuate.js?v=20}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

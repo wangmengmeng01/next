@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<script type="text/javascript" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+<head>
+    <style>
+        .form-control {
+            display: inline-block;
+            width: 66%;
+        }
+        ul li {
+            list-style-type: none;
+        }
+        .fixed-table-container tbody
+        .selected td{background-color:#EEE8AA}
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <form autocomplete="off" id="searchUser" style="padding: 20px 0;background: #fff">
+                    <div class="row" style="margin: 0;  background-color: #fff; border: 0px solid #e4dce4;">
+                        <div class="col-md-4" >
+                            <label  style="width: 100px;text-align: right;float: left">运单号：</label>
+                            <textarea type="text" th:value="${waybillNum}"  name="waybillNum" style="width: 55%;display: inline-block" id="waybillNum" class="layui-textarea" placeholder="最多可查询50条单号，回车分隔" onkeyup="this.value=this.value.replace(/[^\r\n0-9\,\，]/g,'');"></textarea>
+                        </div>
+                        <div class="col-md-4" >
+                            <div>
+                                <label style="width: 100px;text-align: right">咨询单号：</label>
+                                <input type="text"  name="orderId" style="width: 55%" id="orderId" class="form-control"></input>
+
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <label  style="width: 100px;text-align: right">物流订单号：</label> <input type="text"
+                                                                                                     name="logisticOrderNum"
+                                                                                                     style="width: 55%;"
+                                                                                                     id="logisticOrderNum"
+                                                                                                     class="form-control"></input>
+                            </div>
+                         </div>
+                        <div class="col-md-4" >
+                            <div>
+                                <label style="width: 100px;text-align: right" >时效预警状态：</label>
+                                <select type="text" name="shiXiaoState" style="width: 55%" id="shiXiaoState"  class="form-control">
+                                    <option value="">请选择</option>
+                                    <option value="超时">超时</option>
+                                    <option value="预警">预警</option>
+                                    <option value="正常">正常</option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <label style="width: 100px;text-align: right">客户：</label>
+                                <input type="text"  name="merchant" style="width: 55%;" id="merchant" class="form-control"></input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                         style="margin: 0; padding: 10px 0; background-color: #fff; border: 0px solid #e4dce4;">
+                        <div class="col-md-4">
+                            <label  style="width: 100px;text-align: right">优先级：</label>
+                            <select type="text" name="priority" style="width: 55%"  id="priority" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="紧急">紧急</option>
+                                <option value="一般">一般</option>
+                                <option value="低">低</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4" >
+                            <label  style="width: 100px;text-align: right">责任机构编码：</label>
+                            <input type="text"  name="organizationNum" style="width: 55%" id="organizationNum" class="form-control" oninput = "value=value.replace(/[^\d]/g,'')"></input>
+                        </div>
+                        <div class="col-md-4">
+                            <label style="width: 100px;text-align: right">状态：</label>
+                            <select type="text" name="state" style="width: 55%;"
+                                    id="state" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="待申领">待申领</option>
+                                <option value="待处理">待处理</option>
+                                <option value="处理中">处理中</option>
+                                <option value="已结单">已结单</option>
+                            </select>
+                        </div>
+                       <!-- <div class="col-md-4" style="margin-left: -53px;margin-top: -16px;">
+                            <label style="margin-left: 58px;margin-top: 6px;">处理人编码：</label>
+                            <input type="text"  name="dealCode" style="float: right;width: 60%;margin-left: -10px" id="dealCode" class="form-control" oninput = "value=value.replace(/[^\d]/g,'')"></input>
+                        </div>-->
+                    </div>
+                    <div class="row"
+                         style="margin: 0;  overflow: hidden;padding-top: 10px; background-color: #fff; border: 0px solid #e4dce4;">
+                        <div class="col-md-4" >
+                            <label style="width: 100px;text-align: right">咨询类型：</label>
+                            <select type="text" name="consultType" id="consultType" style="width: 55%" class="form-control consultType">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5" >
+                            <div class="layui-inline" >
+                                <label class="control-label"style="width: 100px;text-align: right">咨询时间：</label>
+                                <!-- 默认时间是这个月的1号到昨天 -->
+                                <div class="layui-input-inline" style="width:148px;">
+                                    <input type="text" placeholder="开始时间" autocomplete="off" required lay-verify="required"
+                                           class="layui-input" id="startDate" style="height:34px;border-color:#ccc;">
+                                </div><b> -</b>
+                                <div class="layui-input-inline" style="width:148px;">
+                                    <input type="text" placeholder="结束时间" autocomplete="off" required lay-verify="required"
+                                           class="layui-input" id="endDate" style="height:34px;border-color:#ccc;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5" style="margin-top: 20px">
+                            <div class="layui-inline" >
+                                <label class="control-label"style="width: 100px;text-align: right">结单时间：</label>
+                                <!-- 默认时间是这个月的1号到昨天 -->
+                                <div class="layui-input-inline" style="width:148px;">
+                                    <input type="text" placeholder="开始时间" autocomplete="off" required lay-verify="required"
+                                           class="layui-input" id="jieDanStartDate" style="height:34px;border-color:#ccc;">
+                                </div><b> -</b>
+                                <div class="layui-input-inline" style="width:148px;">
+                                    <input type="text" placeholder="结束时间" autocomplete="off" required lay-verify="required"
+                                           class="layui-input" id="jieDanEndDate" style="height:34px;border-color:#ccc;">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row"
+                         style="margin: 0;  background-color: #fff; border: 0px solid #e4dce4;">
+
+
+
+
+                    </div>
+                    <div class="row" style="margin:0px; background-color: #fff; padding-top: 10px; border: 0px solid #e4dce4;">
+                        <div class="layui-inline" style="margin-left: 60%;margin-top: 10px" hidden>
+                            <input hidden id="shenLingCheckBox" name="checkbox" type="checkbox" onchange="changeCheckShenLingCheckBox()"></input>
+                            <input hidden id="faQiCheckBox" name="checkbox" type="checkbox" style="margin-left: 20px;" onchange="changeCheckFaQiCheckBox()"></input>
+                        </div>
+                        <div class="col-md-9" style="width:260px; float: right;margin-top: 10px">
+                            <input type="button" value="查询" onclick="reLoad()" class="btn  btn-warning">
+                            <input type="button" value="重置" onclick="resetForm()" class="btn  btn-success">
+                            <button shiro:hasPermission="bigcustomer:meFaQiOrder:exportExcel" type="button"
+                                    class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+                                <i class="fa fa-anchor" aria-hidden="true"></i>导出
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+                <div style="margin-top: 10px">
+                    <!--<div id="leftBtnDiv" style="float: left">
+                        <a style="font-size: 20px;color: blue" onclick="shenLing()"
+                           shiro:hasPermission="bigcustomer:order:shenLing">申领</a>
+                        <a style="font-size: 20px;color: blue;margin-left: 20px" onclick="zhiPai()"
+                           shiro:hasPermission="bigcustomer:order:zhiPai">指派</a>
+                        <a style="font-size: 20px;color: blue;margin-left: 20px" onclick="zhuanFa()"
+                           shiro:hasPermission="bigcustomer:orderChi:zhuanFa">转发</a>
+                        <a style="font-size: 20px;color: blue;margin-left: 20px" onclick="piLiangJieDan()"
+                           shiro:hasPermission="bigcustomer:order:piLiangJieDan">批量结单</a>
+                    </div>-->
+                    <div style="font-size: 15px;margin-left: 75%;margin-top: -5px;float: right;margin-right: 5px; float: none">
+                        时效预警
+                        <div style="display: inline-block;line-height: 30px"><i
+                                style="display:inline-block;width: 20px;height: 20px;position: relative;top:4px;background: green"></i>
+                            正常
+                        </div>
+                        <div style="display: inline-block;line-height: 30px"><i
+                                style="display:inline-block;width: 20px;height: 20px;position: relative;top:4px;background: yellow"></i>预警
+                        </div>
+                        <div style="display: inline-block;line-height: 30px"><i
+                                style="display:inline-block;width: 20px;height: 20px;position: relative;top:4px;background: red"></i>超时
+                        </div>
+
+                    </div>
+                </div>
+                <div class="bootstrap-table" style="margin-top: -20px">
+                    <table id="exampleTable" data-mobile-responsive="true">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<div>
+    <script type="text/javascript">
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+        var s_resetPwd_h = 'hidden';
+    </script>
+</div>
+<div shiro:hasPermission="bigcustomer:meFaQiOrder:edit">
+    <script type="text/javascript">
+        s_edit_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="bigcustomer:meFaQiOrder:remove">
+    <script type="text/javascript">
+        var s_remove_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="bigcustomer:meFaQiOrder:resetPwd">
+    <script type="text/javascript">
+        var s_resetPwd_h = '';
+    </script>
+</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" th:src="@{/js/jquery.editable-select.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bigcustomer/meFaQiOrder/meFaQiOrder.js}"></script>
+<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.GpBasSCustPickTmpDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.GpBasSCustPickTmpDO">
+		select `pick_brch_cd`,`pick_dt`,`cust_cd`,`cust_src`,`pick_cnt` from crmkh_gp_bas_s_cust_pick_tmp where pick_brch_cd = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.GpBasSCustPickTmpDO">
+		select `pick_brch_cd`,`pick_dt`,`cust_cd`,`cust_src`,`pick_cnt` from crmkh_gp_bas_s_cust_pick_tmp
+        <where>  
+		  		  <if test="pickBrchCd != null and pickBrchCd != ''"> and pick_brch_cd = #{pickBrchCd} </if>
+		  		  <if test="pickDt != null and pickDt != ''"> and pick_dt = #{pickDt} </if>
+		  		  <if test="custCd != null and custCd != ''"> and cust_cd = #{custCd} </if>
+		  		  <if test="custSrc != null and custSrc != ''"> and cust_src = #{custSrc} </if>
+		  		  <if test="pickCnt != null and pickCnt != ''"> and pick_cnt = #{pickCnt} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by pick_brch_cd desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryGpSource" parameterType="java.util.Map" resultType="java.util.HashMap">
+             select ifnull(b.sjdw,0) as branch_code,sum(a.pick_cnt) as daily_order_got_num,                                           
+						ifnull(sum(case when a.cust_src=2 THEN a.pick_cnt ELSE 0 END),0) erweima,
+						ifnull(sum(case when a.cust_src=1 THEN a.pick_cnt ELSE 0 END),0) cainiao,
+						ifnull(sum(case when a.cust_src=3 THEN a.pick_cnt ELSE 0 END),0) putong, 
+						a.pick_dt as report_date,now() as create_date                                                           
+						from crmkh_gp_bas_s_cust_pick_tmp a                                      
+						LEFT JOIN ydserver.gs b on a.pick_brch_cd=b.bm                           
+						where  b.sjgs !=0 
+		  		  <if test="pickDt != null and pickDt != ''"> 
+			  		   and  a.pick_dt BETWEEN
+						date_format (
+						#{pickDt},
+						'%Y-%m-%d'
+						)
+						AND
+						date_format (
+						#{pickDt},
+						'%Y-%m-%d'
+						) 
+		  		  </if>
+              	 GROUP BY b.sjdw,a.pick_dt 	
+              	 		<if test="limit != null and limit != ''">
+			     limit #{skip}, #{limit}
+		</if>	
+	</select>
+	
+		<select id="queryGpCustomerSource" parameterType="java.util.Map" resultType="java.util.HashMap">
+          select a.cust_cd as customer_id,'-'  as customer_name,ifnull(c.sjdw,0) as branch_code,a.cust_src as customer_source_type,a.pick_cnt as daily_order_num,now()  as cre_date,a.pick_dt as qu_date,now() as customer_addtime,a.pick_brch_cd as gs 
+					 from crmkh_gp_bas_s_cust_pick_tmp a                                                             
+					 LEFT JOIN ydserver.gs c on a.pick_brch_cd=c.bm                                                  
+					 where  c.sjgs !=0  
+			  <if test="pickDt != null and pickDt != ''"> 
+			  		   and  a.pick_dt BETWEEN
+						date_format (
+						#{pickDt},
+						'%Y-%m-%d'
+						)
+						AND
+						date_format (
+						#{pickDt},
+						'%Y-%m-%d'
+						) 
+		  	  </if>					 
+			  <if test="custSrc != null and custSrc != ''"> 
+		  		   and a.cust_src= #{custSrc}   
+		  	  </if>	
+		  	  	<if test="limit != null and limit != ''">
+			     limit #{skip}, #{limit}
+			    </if>	
+			     		 		
+	</select>
+	<select id="searchSellerCN" parameterType="java.util.Map"  resultType="java.util.HashMap">
+			select seller_id,seller_name,branch_code,customer_id 
+			from t_waybill_seller_info
+		<if test="skip != null and limit != null">
+			limit #{skip},  #{limit}
+		</if>
+	</select>
+	<select id="searchSellerJD" parameterType="java.util.Map"  resultType="java.util.HashMap">
+			select jd.vendor_code ,jd.vendor_name ,jd.branch_code ,jd.customer_id
+			from jingdong.jd_waybill_seller_info  jd 
+		<if test="skip != null and limit != null">
+			limit #{skip},  #{limit}
+		</if>
+	</select>
+ 	<select id="count" resultType="int">
+		select count(*) from crmkh_gp_bas_s_cust_pick_tmp
+		 <where>  
+		  		  <if test="pickBrchCd != null and pickBrchCd != ''"> and pick_brch_cd = #{pickBrchCd} </if>
+		  		  <if test="pickDt != null and pickDt != ''"> and pick_dt = #{pickDt} </if>
+		  		  <if test="custCd != null and custCd != ''"> and cust_cd = #{custCd} </if>
+		  		  <if test="custSrc != null and custSrc != ''"> and cust_src = #{custSrc} </if>
+		  		  <if test="pickCnt != null and pickCnt != ''"> and pick_cnt = #{pickCnt} </if>
+		  		</where>
+	</select>
+	
+	 	<select id="countGpSource" resultType="int">
+		select count(*) from crmkh_gp_bas_s_cust_pick_tmp
+	</select>
+	
+	
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.GpBasSCustPickTmpDO">
+		insert into crmkh_gp_bas_s_cust_pick_tmp
+		(
+			`pick_brch_cd`, 
+			`pick_dt`, 
+			`cust_cd`, 
+			`cust_src`, 
+			`pick_cnt`
+		)
+		values
+		(
+			#{pickBrchCd}, 
+			#{pickDt}, 
+			#{custCd}, 
+			#{custSrc}, 
+			#{pickCnt}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.GpBasSCustPickTmpDO">
+		update crmkh_gp_bas_s_cust_pick_tmp 
+		<set>
+			<if test="pickDt != null">`pick_dt` = #{pickDt}, </if>
+			<if test="custCd != null">`cust_cd` = #{custCd}, </if>
+			<if test="custSrc != null">`cust_src` = #{custSrc}, </if>
+			<if test="pickCnt != null">`pick_cnt` = #{pickCnt}</if>
+		</set>
+		where pick_brch_cd = #{pickBrchCd}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkh_gp_bas_s_cust_pick_tmp where pick_brch_cd = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkh_gp_bas_s_cust_pick_tmp where pick_brch_cd in 
+		<foreach item="pickBrchCd" collection="array" open="(" separator="," close=")">
+			#{pickBrchCd}
+		</foreach>
+	</delete>
+
+</mapper>

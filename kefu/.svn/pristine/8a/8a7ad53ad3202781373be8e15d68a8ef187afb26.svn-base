@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.bigcustomer.dao.ConsultFileDao">
+
+    <insert id="saveBatch">
+        insert into consult_file (
+        `order_id`,
+        `file_type`,
+        `file_name`,
+        `file_suffix`,
+        `upload_path`,
+        `status`,
+        `create_time`,
+        `updated_time`,
+        `operate_code`
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.orderId},
+            #{item.fileType},
+            #{item.fileName},
+            #{item.fileSuffix},
+            #{item.uploadPath},
+            #{item.status},
+            #{item.createTime},
+            #{item.updatedTime},
+            #{item.operateCode}
+            )
+        </foreach>
+    </insert>
+    <select id="getListByOrderIdAndTime" resultType="com.yunda.base.bigcustomer.domain.ConsultFileDO">
+        select `id`,`order_id`,`file_type`,`file_name`,`file_suffix`,CONCAT(DATE_FORMAT(`create_time`,'%Y-%m-%d'),"/",`upload_path`) `upload_path`,`status`,`create_time`,`updated_time`,`operate_code` from consult_file where `order_id` =#{orderId} and `create_time` =#{time}
+    </select>
+
+    <select id="findByOrderIdAndTime" resultType="com.yunda.base.bigcustomer.domain.ConsultFileDO">
+        select `id`,`order_id`,`file_type`,`file_name`,`file_suffix`,CONCAT(#{uploadPathPrefix},DATE_FORMAT(`create_time`,'%Y-%m-%d'),"/",`upload_path`) `upload_path`,`status`,`create_time`,`updated_time`,`operate_code` from consult_file where `order_id` =#{orderId} and `create_time` =#{time}
+    </select>
+</mapper>

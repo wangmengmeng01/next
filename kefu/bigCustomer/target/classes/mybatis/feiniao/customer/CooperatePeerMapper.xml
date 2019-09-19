@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.customer.dao.CooperatePeerDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.customer.domain.CooperatePeerDO">
+		select `id`,`branch_code`,`product_type`,`cooperate_peer_name`,`cooperate_ratio`,`cooperate_price`,`remark` from crmkhv2_cooperate_peer where branch_code = #{branchCode} and product_type = #{productType}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.customer.domain.CooperatePeerDO">
+		select `id`,`branch_code`,`product_type`,`cooperate_peer_name`,`cooperate_ratio`,`cooperate_price`,`remark` from crmkhv2_cooperate_peer
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="productType != null and productType != ''"> and product_type = #{productType} </if>
+		  		  <if test="cooperatePeerName != null and cooperatePeerName != ''"> and cooperate_peer_name = #{cooperatePeerName} </if>
+		  		  <if test="cooperateRatio != null and cooperateRatio != ''"> and cooperate_ratio = #{cooperateRatio} </if>
+		  		  <if test="cooperatePrice != null and cooperatePrice != ''"> and cooperate_price = #{cooperatePrice} </if>
+		  		  <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_cooperate_peer
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="productType != null and productType != ''"> and product_type = #{productType} </if>
+		  		  <if test="cooperatePeerName != null and cooperatePeerName != ''"> and cooperate_peer_name = #{cooperatePeerName} </if>
+		  		  <if test="cooperateRatio != null and cooperateRatio != ''"> and cooperate_ratio = #{cooperateRatio} </if>
+		  		  <if test="cooperatePrice != null and cooperatePrice != ''"> and cooperate_price = #{cooperatePrice} </if>
+		  		  <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.customer.domain.CooperatePeerDO">
+		insert into crmkhv2_cooperate_peer
+		(
+			`branch_code`, 
+			`product_type`, 
+			`cooperate_peer_name`, 
+			`cooperate_ratio`, 
+			`cooperate_price`, 
+			`remark`
+		)
+		values
+		(
+			#{branchCode}, 
+			#{productType}, 
+			#{cooperatePeerName}, 
+			#{cooperateRatio}, 
+			#{cooperatePrice}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.customer.domain.CooperatePeerDO">
+		update crmkhv2_cooperate_peer 
+		<set>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="productType != null">`product_type` = #{productType}, </if>
+			<if test="cooperatePeerName != null">`cooperate_peer_name` = #{cooperatePeerName}, </if>
+			<if test="cooperateRatio != null">`cooperate_ratio` = #{cooperateRatio}, </if>
+			<if test="cooperatePrice != null">`cooperate_price` = #{cooperatePrice}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_cooperate_peer where `branch_code` = #{branchCode} and `product_type`=#{productType}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_cooperate_peer where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

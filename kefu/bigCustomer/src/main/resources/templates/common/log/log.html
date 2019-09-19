@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+<style>
+    .form-control {
+    	display: inline-block;
+    	width: 70%;
+    }
+    .col-md-9 {
+	    width: 150px;
+	    margin-top: 11px;
+	    margin-left: 600px;
+	}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<form id="searchLog">
+						<div class="row"
+						style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+							<div class="col-md-4">
+								<label>用户名：</label> <input type="text" name="searchUsername"
+									id="searchUsername" class="form-control">
+							</div>
+							<div class="col-md-4">
+								<label>操作：</label> <input type="text" name="searchOperation"
+									id="searchOperation" class="form-control">
+							</div>
+						</div>
+					</form>
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+						</div>
+						<div class="col-md-9">
+							<input type="button" value="查询"
+								onclick="query()" class="btn  btn-warning">
+								 <input type="button"
+								 value="重置" onclick="resetForm()"
+								class="btn  btn-success">
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/common/log/log.js}"></script>
+</body>
+</html>

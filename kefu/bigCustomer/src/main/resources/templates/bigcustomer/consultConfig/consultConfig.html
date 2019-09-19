@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="col-md-4" style="width: 100%;height: 35px">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="bigcustomer:organizationManage:add" type="button"
+									class="btn  btn-primary" onclick="add()" style="width: 70px;">
+								<i class="fa fa-plus hidden" aria-hidden="true"></i>新增
+							</button>
+							<button shiro:hasPermission="bigcustomer:organizationManage:edit" type="button"
+									class="btn  btn-primary" onclick="edit()" style="width: 70px;">
+								<i class="fa fa-plus hidden" aria-hidden="true"></i>修改
+							</button>
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="bigcustomer:consultConfig:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="bigcustomer:consultConfig:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="bigcustomer:consultConfig:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/bigcustomer/consultConfig/consultConfig.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

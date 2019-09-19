@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body>
+	<div class="row text-center" style="width: 90%;margin: 50px auto;padding:50px;border:1px solid #666;">
+		<div class="row" style="margin-bottom:20px;">
+			<div class="row" style="margin-left: 0;">
+				<div class="col-md-2">
+					<input type="text" placeholder="请输入key查询" id="queryData" class="form-control">
+				</div>
+			   	<div class="col-md-1">
+			   		<button class="btn btn-primary" type="submit" id="query">查询</button>
+			   	</div>
+			</div>
+		   	<div class="row" style="margin-top:10px;margin-left: 0;">
+		   		<div class="col-md-5">
+					<textarea type="text" placeholder="查询结果" id="result" class="form-control" cols="20" rows="10" style="resize:none;"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin-bottom:20px;">
+			<div class="col-md-2">
+		 		<input type="text" placeholder="请输入key增加" id="addData_key" class="form-control">
+		 	</div>
+		 	<div class="col-md-2">
+		 		<input type="text" placeholder="请输入value增加" id="addData_value" class="form-control">
+		 	</div>
+		 	<div class="col-md-1">
+		 		<button class="btn btn-primary" type="submit" id="add">增加</button>
+		 	</div>
+		</div>
+		<div class="row" style="margin-bottom:20px;">
+			<div class="col-md-2">
+		 		<input type="text" placeholder="请输入key删除" id="deleteData" class="form-control">
+		 	</div>
+		 	<div class="col-md-1">
+		 		<button class="btn btn-primary" type="submit" id="delete">删除</button>
+		 	</div>
+		</div>
+		<div class="row" style="margin-bottom:20px;">
+			<div class="col-md-2">
+		 		<input type="text" placeholder="请输入key更新" id="updateData_key" class="form-control">
+		 	</div>
+		 	<div class="col-md-2">
+		 		<input type="text" placeholder="请输入value更新"  id="updateData_value" class="form-control">
+		 	</div>
+		 	<div class="col-md-1">
+		 		<button class="btn btn-primary" type="submit" id="update">更新</button>
+		 	</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+</body>
+<script type="text/javascript">
+     $('#query').click(function(){
+    	 $.ajax({
+ 		    url:"/vipkf/system/redis/getRedis",    //请求的url地址
+ 		    dataType:"json",   //返回格式为json
+ 		    async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+ 		    data:{
+ 		    	"key": $("#queryData").val() == undefined ? '' : $("#queryData").val().trim()
+ 		    	},    //参数值
+ 		    type:"POST",   //请求方式
+ 		    success:function(req){
+ 		    	$('#result').val(req.key);
+ 		    },
+ 		    error:function(){
+ 		    }
+ 		});
+     })
+     $('#add').click(function(){
+    	 $.ajax({
+ 		    url:"/vipkf/system/redis/addRedis",    //请求的url地址
+ 		    dataType:"json",   //返回格式为json
+ 		    async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+ 		    data:{
+ 		    	"key": $("#addData_key").val() == undefined ? '' : $("#addData_key").val().trim(),
+ 		    	"value": $("#addData_value").val() == undefined ? '' : $("#addData_value").val().trim()
+ 		    	},    //参数值
+ 		    type:"POST",   //请求方式
+ 		    success:function(req){
+ 		    	layer.msg(req.msg);
+ 		    },
+ 		    error:function(){
+ 		    }
+ 		});
+     })
+     $('#delete').click(function(){
+    	 $.ajax({
+ 		    url:"/vipkf/system/redis/deleteRedis",    //请求的url地址
+ 		    dataType:"json",   //返回格式为json
+ 		    async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+ 		    data:{
+ 		    	"key": $("#deleteData").val() == undefined ? '' : $("#deleteData").val().trim()
+ 		    	},    //参数值
+ 		    type:"POST",   //请求方式
+ 		    success:function(req){
+ 		    	layer.msg(req.msg);
+ 		    },
+ 		    error:function(){
+ 		    }
+ 		});
+     })
+     $('#update').click(function(){
+    	 $.ajax({
+ 		    url:"/vipkf/system/redis/updateRedis",    //请求的url地址
+ 		    dataType:"json",   //返回格式为json
+ 		    async:true,//请求是否异步，默认为异步，这也是ajax重要特性
+ 		    data:{
+ 		    	"key":$("#updateData_key").val() == undefined ? '' : $("#updateData_key").val().trim(),
+ 		    	"value": $("#updateData_value").val() == undefined ? '' : $("#updateData_value").val().trim()
+ 		    	},    //参数值
+ 		    type:"POST",   //请求方式
+ 		    success:function(req){
+ 		    	layer.msg(req.msg);
+ 		    },
+ 		    error:function(){
+ 		    }
+ 		}); 
+     })
+</script>
+</html>

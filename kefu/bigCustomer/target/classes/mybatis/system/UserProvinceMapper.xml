@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.UserProvinceDao">
+
+	<select id="queryUP" resultType="long">
+		select province_id from bootdo_sys_user_province
+		<where>user_id = #{userId}</where>
+	</select>
+	
+	<select id="get" resultType="com.yunda.base.system.domain.UserProvinceDO">
+		select `id`,`user_id`,`province_id` from bootdo_sys_user_province where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.UserProvinceDO">
+		select `id`,`user_id`,`province_id` from bootdo_sys_user_province
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="provinceId != null and provinceId != ''"> and province_id = #{provinceId} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from bootdo_sys_user_province
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="provinceId != null and provinceId != ''"> and province_id = #{provinceId} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.UserProvinceDO" useGeneratedKeys="true" keyProperty="id">
+		insert into bootdo_sys_user_province
+		(
+			`user_id`, 
+			`province_id`
+		)
+		values
+		(
+			#{userId}, 
+			#{provinceId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.UserProvinceDO">
+		update bootdo_sys_user_province 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from bootdo_sys_user_province where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from bootdo_sys_user_province where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<select id="listProvinceIdByUserId" resultType="long">
+		select province_id from bootdo_sys_user_province
+		<where>user_id = #{id}</where>
+	</select>
+	
+	<delete id="removeByUserId">
+		delete from bootdo_sys_user_province where user_id=#{userId}
+	</delete>
+	
+	<insert id="batchSave">
+		INSERT INTO bootdo_sys_user_province(user_id, province_id) values
+		<foreach item="item" index="index" collection="list"
+			separator=",">
+			(#{item.userId},#{item.provinceId})
+		</foreach>
+	</insert>
+
+	<select id="getProvinceAndBigarea" resultType="map">
+		SELECT
+		b.ProvinceName as province,
+		b.bigarea as big_area
+		FROM
+		`bootdo_sys_user_province` AS a
+		LEFT JOIN sys_province AS b ON a.province_id = b.ProvinceID
+		<where>
+			<if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		</where>
+	</select>
+</mapper>

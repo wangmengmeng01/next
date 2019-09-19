@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.RoleDao">
+
+	<select id="listRole" resultType="com.yunda.base.system.domain.RoleDO">
+		select
+		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`,`up_role_id`,`state`
+		from bootdo_sys_role
+		<where>
+			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+			<if test="roleName != null and roleName != ''"> and role_name like '%${roleName}%' </if>
+			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
+			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
+			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
+			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="state != null and state != ''"> and state = #{state} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by #{sort}, #{order}
+			</when>
+			<otherwise>
+				order by role_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="get" resultType="com.yunda.base.system.domain.RoleDO">
+		select
+		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`,`up_role_id`,`data_permissions`
+		from bootdo_sys_role where role_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.RoleDO">
+		select
+		`role_id`,`role_name`,`role_sign`,`remark`,`user_id_create`,`gmt_create`,`gmt_modified`,`up_role_id`
+		from bootdo_sys_role
+		<where>
+			state = 1
+			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+			<if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
+			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
+			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
+			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
+			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by #{sort} ,#{order}
+			</when>
+			<otherwise>
+				order by role_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="listRoleQX" resultType="com.yunda.base.system.domain.RoleDO">
+		select
+		`role_id`,`role_name` from bootdo_sys_role
+		<where>
+			<if test="roleId != null and roleId != ''"> role_id = #{roleId} or up_role_id = #{roleId} </if>
+
+		</where>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from bootdo_sys_role
+		<where>
+			<if test="roleId != null and roleId != ''"> and role_id = #{roleId} </if>
+			<if test="roleName != null and roleName != ''"> and role_name like '%${roleName}%' </if>
+			<if test="roleSign != null and roleSign != ''"> and role_sign = #{roleSign} </if>
+			<if test="remark != null and remark != ''"> and remark = #{remark} </if>
+			<if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
+			<if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+			<if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+			<if test="state != null and state != ''"> and state = #{state} </if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.yunda.base.system.domain.RoleDO"
+		useGeneratedKeys="true" keyProperty="roleId">
+		insert into bootdo_sys_role
+		(
+		`role_id`,
+		`role_name`,
+		`role_sign`,
+		`remark`,
+		`user_id_create`,
+		`gmt_create`,
+		`gmt_modified`,
+		`state`,
+		`up_role_id`
+		)
+		values
+		(
+		#{roleId},
+		#{roleName},
+		#{roleSign},
+		#{remark},
+		#{userIdCreate},
+		#{gmtCreate},
+		#{gmtModified},
+		#{state},
+		#{upRoleId}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.yunda.base.system.domain.RoleDO">
+		update bootdo_sys_role
+		<set>
+			<if test="roleName != null">`role_name` = #{roleName}, </if>
+			<if test="roleSign != null">`role_sign` = #{roleSign}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="userIdCreate != null">`user_id_create` = #{userIdCreate}, </if>
+			<if test="gmtCreate != null">`gmt_create` = #{gmtCreate}, </if>
+			<if test="gmtModified != null">`gmt_modified` = #{gmtModified}</if>
+			<if test="dataPermissions != null">`data_permissions` = #{dataPermissions}</if>
+			<if test="upRoleId != null">`up_role_id` = #{upRoleId}</if>
+		</set>
+		where role_id = #{roleId}
+	</update>
+
+	<delete id="remove">
+		delete from bootdo_sys_role where role_id = #{value}
+	</delete>
+
+	<delete id="batchRemove">
+		delete from bootdo_sys_role where role_id in
+		<foreach item="roleId" collection="array" open="(" separator=","
+			close=")">
+			#{roleId}
+		</foreach>
+	</delete>
+
+	<update id="stateUpdate">
+		update bootdo_sys_role
+		<set>
+			`state` = #{state}
+		</set>
+		where `role_id` = #{roleId}
+	</update>
+
+	<select id="getRoleNameByRoleId" resultType="String">
+		select `role_name` from bootdo_sys_role where `role_id`=#{roleId} limit 1
+	</select>
+
+	<select id="getDataPermissionsByUserId" resultType="String">
+		select `data_permissions` from bootdo_sys_role a left join bootdo_sys_user_role b on a.`role_id`=b.`role_id` where `user_id`=#{userId} limit 1
+	</select>
+<!-- 获取最后一个RoleId -->
+	<select id="getLastRoleId" resultType="Long">
+		select `role_id` from bootdo_sys_role order by role_id desc limit 1
+	</select>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.bigcustomer.dao.PermissionsManageDao">
+
+	<select id="get" resultType="com.yunda.base.bigcustomer.domain.PermissionsManageDO">
+		select `id`,`role_num`,`role_name`,`role_explain`,`superior_role`,`superior_role_num`,`state` from permissions_manage where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.bigcustomer.domain.PermissionsManageDO">
+		select `id`,`role_num`,`role_name`,`role_explain`,`superior_role`,`superior_role_num`,`state` from permissions_manage
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="roleNum != null and roleNum != ''"> and role_num = #{roleNum} </if>
+		  		  <if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
+		  		  <if test="roleExplain != null and roleExplain != ''"> and role_explain = #{roleExplain} </if>
+		  		  <if test="superiorRole != null and superiorRole != ''"> and superior_role = #{superiorRole} </if>
+		  		  <if test="superiorRoleNum != null and superiorRoleNum != ''"> and superior_role_num = #{superiorRoleNum} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from permissions_manage
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="roleNum != null and roleNum != ''"> and role_num = #{roleNum} </if>
+		  		  <if test="roleName != null and roleName != ''"> and role_name = #{roleName} </if>
+		  		  <if test="roleExplain != null and roleExplain != ''"> and role_explain = #{roleExplain} </if>
+		  		  <if test="superiorRole != null and superiorRole != ''"> and superior_role = #{superiorRole} </if>
+		  		  <if test="superiorRoleNum != null and superiorRoleNum != ''"> and superior_role_num = #{superiorRoleNum} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.bigcustomer.domain.PermissionsManageDO" useGeneratedKeys="true" keyProperty="id">
+		insert into permissions_manage
+		(
+			`role_num`, 
+			`role_name`, 
+			`role_explain`, 
+			`superior_role`, 
+			`superior_role_num`, 
+			`state`
+		)
+		values
+		(
+			#{roleNum}, 
+			#{roleName}, 
+			#{roleExplain}, 
+			#{superiorRole}, 
+			#{superiorRoleNum}, 
+			#{state}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.bigcustomer.domain.PermissionsManageDO">
+		update permissions_manage 
+		<set>
+			<if test="roleNum != null">`role_num` = #{roleNum}, </if>
+			<if test="roleName != null">`role_name` = #{roleName}, </if>
+			<if test="roleExplain != null">`role_explain` = #{roleExplain}, </if>
+			<if test="superiorRole != null">`superior_role` = #{superiorRole}, </if>
+			<if test="superiorRoleNum != null">`superior_role_num` = #{superiorRoleNum}, </if>
+			<if test="state != null">`state` = #{state}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from permissions_manage where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from permissions_manage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<update id="stateUpdate">
+		update permissions_manage
+		<set>
+			`state` = #{state}
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

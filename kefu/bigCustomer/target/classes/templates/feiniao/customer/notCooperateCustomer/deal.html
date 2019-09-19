@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="include :: header"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link th:href="@{/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/plugins/bootstrap-table/bootstrap-table.min.css}" />
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.editable-select.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/bootstrap-table.min.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}" charset="utf-8"></script>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            width:818px;
+            margin:20px auto;
+        }
+
+        ul li .form-item .label-text {
+            display: inline-block;
+            width: 110px;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .form-item {
+            display: inline-block;
+            width: 30%;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .form-textarea {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+            position: relative;
+            margin-top:10px;
+        }
+        .form-textarea label{
+            display: inline-block;
+            width:110px;
+            margin-right:10px;
+            float: left;
+            text-align: right;
+        }
+
+        .form-item input[type='text'], select, .form-item input[type='number'] {
+            width: 51%;
+            border: 1px solid #ccc;
+            height: 32px;
+            text-indent: 10px;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 100px;
+        }
+        .checkbox input{
+            margin-right:5px;
+            width: 15px;
+            height: 15px;
+            position: relative;
+            top: 3px;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        table td,th {
+            border:1px solid #ccc;
+            text-align: center;
+            width:120px;
+            font-size: 15px;
+            height:33px;
+        }
+        table td input{
+            width:80px;
+            border:1px solid #ccc;
+            height:22px;
+            padding-left:10px;
+        }
+        textarea{
+            width:42%;
+            height:70px;
+            padding:5px;
+            border: 1px solid #ccc;
+            resize:none
+        }
+        .bottom-btn {
+            width:350px;
+            margin:20px auto;
+        }
+        .bottom-btn button{
+            width:110px;
+            height: 35px;
+            border:none;
+            color: #fff;
+            margin:0 20px;
+            border-radius: 3px;
+        }
+        .warning{
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            left:114px;
+            top:39px;
+        }
+        .defaultInput{
+            position: relative;
+        }
+        .defaultInput span{
+            position: absolute;
+            right:16px;
+            top:8px;
+            font-size: 12px;
+            background: #fff;
+            z-index: 100;
+        }
+        .textarea-check{
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            left:492px;
+            top:65px;
+        }
+        .item-title{
+            font-size: 16px;
+            color: #000;
+            background: #eee;
+            padding:3px 10px;
+            margin-bottom:10px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul>
+        <form class="form-horizontal m-t" id="signupForm">
+            <li>
+                <p class="item-title">网点处理</p>
+                <div class="form-item" style="width: 100%">
+                    <label class="label-text">未合作原因：</label>
+                    <div style="padding-left: 100px;padding-right: 30px">
+                        <span th:text="${notCooperateCustomerDO.notCooperateCause}"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="form-item" style="width: 100%">
+                    <label class="label-text">客户意向：</label>
+                    <div style="padding-left: 100px;padding-right: 30px">
+                        <span th:text="${notCooperateCustomerDO.customerIntention}"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="form-item" style="width: 100%">
+                    <label class="label-text">网点需求：</label>
+                    <div style="padding-left: 100px;padding-right: 30px">
+                        <span th:text="${notCooperateCustomerDO.branchNeed}"></span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="form-item" style="width: 100%">
+                    <label class="label-text">所属网点：</label>
+                    <span th:text="${notCooperateCustomerDO.branchName}+'('+${notCooperateCustomerDO.branchCode}+')'"></span>
+                    <input type="hidden" name="branchCode" th:value="${notCooperateCustomerDO.branchCode}"/>
+                </div>
+                <div class="form-item" style="width: 65%;">
+                    <label class="label-text" style="width: 200px;">上传人员姓名及联系方式：</label>
+                    <span th:text="${notCooperateCustomerDO.uploadNamePhone}"></span>
+                </div>
+            </li>
+            <li>
+                <div class="form-item" style="width: 100%;">
+                    <label class="label-text">上传时间：</label>
+                    <span th:text="${notCooperateCustomerDO.time}"></span>
+                    <input type="hidden" name="time" th:value="${notCooperateCustomerDO.time}"/>
+                </div>
+            </li>
+            <input name="id" type="hidden" th:value="${notCooperateCustomerDO.id}">
+            <input type="hidden" name="dayAverageAmount" th:value="${notCooperateCustomerDO.dayAverageAmount}">
+            <li>
+                <p class="item-title">省公司处理</p>
+                <div class="form-item">
+                    <label class="label-text">网点反馈审核：</label>
+                    <select id="feedBackCheck" name="feedBackCheck" required>
+                        <option th:value="${notCooperateCustomerDO.feedBackCheck}" th:text="${notCooperateCustomerDO.feedBackCheck}" value="">请选择</option>
+                        <option value="属实">属实</option>
+                        <option value="不属实">不属实</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="form-item">
+                    <label class="label-text">处理状态：</label>
+                    <select id="state" name="state" required>
+                        <option th:text="${notCooperateCustomerDO.state}" th th:value="${notCooperateCustomerDO.state}" value="">请选择</option>
+                        <option value="已达成合作">已达成合作</option>
+                        <option value="洽谈中">洽谈中</option>
+                        <option value="未达成合作">未达成合作</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label class="label-text">合作网点编码：</label>
+                    <!-- 后台校验编码是否准确 -->
+                    <input required id="cooperateBranch" name="cooperateBranch" type="number" min="0" placeholder="请输入网点编码" th:value="${notCooperateCustomerDO.cooperateBranch}" style="width: 50%;"/>
+                </div>
+                <div class="form-item">
+                    <label class="label-text">绑定客户VIP账号：</label>
+                    <input required id="boundVipAccount" name="boundVipAccount" th:value="${notCooperateCustomerDO.boundVipAccount}" placeholder="请输入VIP账号" type="text" style="width: 50%;">
+                </div>
+            </li>
+            <li>
+                <div class="form-textarea">
+                    <label class="label-text">处理意见：</label>
+                    <textarea required id="provinceDealOpinion" name="provinceDealOpinion" th:text="${notCooperateCustomerDO.provinceDealOpinion}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字"></textarea>
+                </div>
+            </li>
+            <li>
+                <div class="form-item" style="width: 45%">
+                    <label class="label-text">处理人：</label>
+                    <span id="provinceDealName_span" th:text="${notCooperateCustomerDO.provinceDealName}"></span>
+                    <input name="provinceDealName" type="hidden" th:value="${notCooperateCustomerDO.provinceDealName}"/>
+                </div>
+                <div class="form-item" style="width: 45%">
+                    <label class="label-text">处理时间：</label>
+                    <span id="provinceDealTime_span" th:text="${notCooperateCustomerDO.provinceDealTime}"></span>
+                    <input name="provinceDealTime" type="hidden" th:value="${notCooperateCustomerDO.provinceDealTime}"/>
+                </div>
+            </li>
+              <!-- 这一块要加权限,总部权限才能看得到 -->
+            <div id="zongBuDeal_div">
+                <li>
+                    <p class="item-title">总部处理</p>
+                    <div class="form-textarea">
+                        <label class="label-text">处理意见：</label>
+                        <textarea id="zongBuDealOpinion" name="zongBuDealOpinion" th:text="${notCooperateCustomerDO.zongBuDealOpinion}" maxlength="200" oninput="checkLengthT(this,200)" placeholder="限定200个字" ></textarea>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-item" style="width: 45%">
+                        <label class="label-text">处理人：</label>
+                        <span id="zongBuDealName_span" th:text="${notCooperateCustomerDO.zongBuDealName}"></span>
+                        <input name="zongBuDealName" type="hidden" th:value="${notCooperateCustomerDO.zongBuDealName}"/>
+                    </div>
+                    <div class="form-item" style="width: 45%">
+                        <label class="label-text">处理时间：</label>
+                        <span id="zongBuDealTime_span" th:text="${notCooperateCustomerDO.zongBuDealTime}"></span>
+                        <input name="zongBuDealTime" type="hidden" th:value="${notCooperateCustomerDO.zongBuDealTime}"/>
+                    </div>
+                </li>
+            </div>
+            <li>
+                <div>
+                    <div class="bottom-btn">
+                        <!--onclick="save()"-->
+                        <button type="submit" style="background: rgb(26,166,137)">确认</button>
+                        <button type="button" onclick="quitAudit()" style="background: rgb(246,164,75)">关闭</button>
+                    </div>
+                </div>
+            </li>
+        </form>
+    </ul>
+</div>
+<!--shiro控制div看见性 来自wangyang的创新方案 -->
+<div>
+    <div>
+        <script type="text/javascript">
+            $("#zongBuDeal_div").attr("class","hidden");
+        </script>
+    </div>
+    <div shiro:hasPermission="customer:notCooperateCustomer:zongBuDeal">
+        <script type="text/javascript">
+            $("#zongBuDeal_div").attr("class","");
+            $("#zongBuDealOpinion").attr("class","required");
+            //把省公司处理后的信息改为只读,总部人员无法修改
+            $("#feedBackCheck").attr("disabled","disabled");
+            $("#state").attr("disabled","disabled");
+            $("#cooperateBranch").attr("readonly","readonly");
+            $("#boundVipAccount").attr("readonly","readonly");
+            $("#provinceDealOpinion").attr("readonly","readonly");
+        </script>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" th:src="@{/js/appjs/feiniao/customer/notCooperateCustomer/deal.js}"></script>
+<script>
+    /*参数校验*/
+    function checkLengthT(that,count) {
+      if ($(that).val().length >= count) {
+        $(that).parent().append("<span class='textarea-check'>限定输入"+count+"个字符</span>")
+      } else {
+        $(that).parent().find('.textarea-check').remove()
+      }
+    }
+
+    /*$('#cooperateBranch').editableSelect({
+//        effects: 'slide',
+        onSelect:function (element) {
+            $('.cooperateBranch').val(element.attr('value'));
+            console.log(element)
+        },
+        onHide:function(){
+            console.log($('.cooperateBranch').val())
+        }
+    }).prop('placeholder','请输入或选择班次名..');*/
+</script>
+</body>
+</html>

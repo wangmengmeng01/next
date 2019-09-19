@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+<style>
+    .form-control {
+    	display: inline-block;
+    	width: 70%;
+    }
+    .col-md-9 {
+	    width: 150px;
+	    margin-top: 11px;
+	    margin-left: 390px;
+	}
+	ul li {
+		list-style-type: none;
+	}
+	.es-list{
+		display: none;
+	}
+	input.es-input{padding-right:0px!important;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat}input.es-input:focus{-webkit-border-bottom-left-radius:0;-moz-border-radius-bottomleft:0;border-bottom-left-radius:0;-webkit-border-bottom-right-radius:0;-moz-border-radius-bottomright:0;border-bottom-right-radius:0}.es-list{display:block;position:absolute;padding:0;margin:0;border:1px solid #d1d1d1;display:none;z-index:1000;background:#fff;max-height:260px;overflow-y:auto;-moz-box-shadow:0 2px 3px #ccc;-webkit-box-shadow:0 2px 3px #ccc;box-shadow:0 2px 3px #ccc}.es-list li{display:block;padding:5px 0 0 10px;box-sizing:border-box;margin:0;width: 100%;cursor: pointer}.es-list li.selected{background:#19AEFE;color: #fff}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		
+        <br>
+		<div class="row">
+			<div class="col-sm-3" style="display: none">
+				<div class="ibox ibox-body">
+					<div class="ibox-title">
+						<h5>选择部门</h5>
+					</div>
+					<div class="ibox-content">
+						<div id="jstree"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="ibox">
+					<div class="ibox-body">
+						<form autocomplete="off" id="searchUser">
+							<div class="row"
+							style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+								<div class="col-md-4">
+									<label>用户编码：</label> <input type="text" name="searchUserName"
+															  id="searchUserName" class="form-control">
+								</div>
+
+								<div class="col-md-4">
+									<label>姓名：</label> <input type="text" name="searchName"
+										id="searchName" class="form-control">
+								</div>
+								<div class="col-md-4">
+									<label>用户角色：</label>
+									<select required id="roleId" name="roleId" class="form-control role">
+										<option value="">请选择</option>
+										<optgroup th:each="role:${roles}">
+											<option th:value="${role.roleId}" th:text="${role.roleName}"></option>
+										</optgroup>
+									</select>
+								</div>
+								<div class="col-md-4" style="margin-top: 10px;">
+									<label>所属机构：</label>
+									<input type="text" name="organization" id="organization" class="form-control">
+								</div>
+								<!-- <div class="col-md-4" style="margin-left: -20px;">
+									<label>所属机构：</label>
+									<select required id="organization" name="organization" class="form-control organization" onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+										<optgroup th:each="organization:${organizationList}">
+											<option th:value="${organization}" th:text="${organization}"></option>
+										</optgroup>
+									</select>
+								</div> -->
+							</div>
+						</form>
+						<div class="fixed-table-toolbar">
+							<div class="columns pull-left">
+								<button shiro:hasPermission="sys:user:add" type="button"
+									class="btn  btn-primary" onclick="add()">
+									<i class="fa fa-plus" aria-hidden="true"></i>添加
+								</button>
+								<button shiro:hasPermission="sys:role:edit" type="button"
+										class="btn btn-primary" onclick="edit()">
+									<i class="fa fa-edit" aria-hidden="true"></i>修改
+								</button>
+								<button shiro:hasPermission="sys:user:batchRemove" type="button"
+									class="btn  btn-danger" onclick="batchRemove()">
+									<i class="fa fa-trash" aria-hidden="true"></i>删除
+								</button>
+								<!-- <button shiro:hasPermission="sys:user:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            		<i class="fa fa-file-excel-o"></i>导入Excel
+                        		</button> -->
+							</div>
+							<div class="col-md-9">
+								<input type="button" value="查询" onclick="query()" class="btn  btn-warning">
+								 <input type="button" value="重置" onclick="resetForm()" class="btn  btn-success">
+							</div>
+						</div>
+						<table id="exampleTable" data-mobile-responsive="true">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_editProvince_h = 'hidden';
+				var s_editBigarea_h = 'hidden';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:user:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:user:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:user:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:user:editProvince">
+			<script type="text/javascript">
+				var s_editProvince_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="sys:user:editBigarea">
+			<script type="text/javascript">
+				var s_editBigarea_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/jquery.editable-select.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/appjs/sys/user/user.js}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            width:818px;
+            margin:20px auto;
+        }
+
+        ul li .form-item .label-text {
+            display: inline-block;
+            width: 122px;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .form-item {
+            display: inline-block;
+            width: 30%;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .form-textarea {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .form-textarea label{
+            display: inline-block;
+            width:120px;
+            margin-right:10px;
+            float: left;
+            text-align: right;
+        }
+
+        .form-item input[type='text'], select, .form-item input[type='number'] {
+            width: 51%;
+            border: 1px solid #ccc;
+            height: 32px;
+            text-indent: 10px;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 100px;
+        }
+        .checkbox input{
+            margin-right:5px;
+            width: 15px;
+            height: 15px;
+            position: relative;
+            top: 3px;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        table td,th {
+            border:1px solid #ccc;
+            text-align: center;
+            width:120px;
+            font-size: 15px;
+            height:33px;
+        }
+        table td input{
+            width:80px;
+            border:1px solid #ccc;
+            height:22px;
+            padding-left:10px;
+        }
+        textarea{
+            width:74%;
+            height:40px;
+            padding:5px;
+            border: 1px solid #ccc;
+            resize:none
+        }
+        .bottom-btn {
+            width:350px;
+            margin:20px auto;
+        }
+        .bottom-btn button{
+            width:110px;
+            height: 35px;
+            border:none;
+            color: #fff;
+            margin:0 20px;
+            border-radius: 3px;
+        }
+        .warning{
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            left:114px;
+            top:39px;
+        }
+        .defaultInput{
+            position: relative;
+        }
+        .defaultInput span{
+            position: absolute;
+            right:16px;
+            top:8px;
+            font-size: 12px;
+            background: #fff;
+            z-index: 100;
+        }
+        .textarea-check{
+            color: red;
+            font-size: 14px;
+            position: absolute;
+            left:129px;
+            top:52px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul>
+        <li style="width: 202%;">
+            <div class="form-item">
+                <label class="label-text">所属网点：</label>
+                <span th:text="${notCooperateCustomerDO.branchName}"></span>
+            </div>
+            <div class="form-item">
+                <label class="label-text">网点编码：</label>
+                <span th:text="${notCooperateCustomerDO.branchCode}"></span>
+            </div>
+        </li>
+        <li>
+            <div class="form-item">
+                <label class="label-text">客户名称：</label>
+                <span th:text="${notCooperateCustomerDO.customerName}"></span>
+            </div>
+            <div class="form-item">
+                <label class="label-text">联系人：</label>
+                <span th:text="${notCooperateCustomerDO.contactName}"></span>
+            </div>
+            <div class="form-item">
+                <label class="label-text">联系电话：</label>
+                <span th:text="${notCooperateCustomerDO.customerPhone}"></span>
+            </div>
+        </li>
+        <li>
+            <div class="form-item">
+                <label class="label-text">日均票件量：</label>
+                <span th:text="${notCooperateCustomerDO.dayAverageAmount}"></span>
+            </div>
+            <div class="form-item">
+                <label class="label-text">产品类目：</label>
+                <span th:text="${notCooperateCustomerDO.productType}"></span>
+            </div>
+            <div class="form-item">
+                <label class="label-text">产品均重：</label>
+                <span th:text="${notCooperateCustomerDO.productAverageHeavy}"></span>
+            </div>
+        </li>
+        <li>
+            <div class="form-item">
+                <label class="label-text">是否泡货：</label>
+                <span th:text="${notCooperateCustomerDO.soak}"></span>
+            </div>
+            <div class="form-item" style="width: 65%;">
+                <label class="label-text" style="width: 190px;">上传人员姓名及联系方式：</label>
+                <span th:text="${notCooperateCustomerDO.uploadNamePhone}"></span>
+            </div>
+        </li>
+        <li>
+            <div class="form-item" style="width: 100%;">
+                <label class="label-text">客户所属平台：</label>
+                <span th:text="${notCooperateCustomerDO.customerPlatform}"></span>
+
+            </div>
+        </li>
+        <li>
+            <div class="form-item" style="width: 100%;">
+                <label class="label-text">合作同行及情况：</label>
+                <span th:text="${notCooperateCustomerDO.cooperatePeerCase}"></span>
+
+            </div>
+        </li>
+        <li>
+            <div class="form-textarea">
+                <label class="label-text">客户发货地址：</label>
+                <div style="padding-left: 100px;padding-right: 30px">
+                    <span th:text="${notCooperateCustomerDO.customerDeliverAddress}"></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="form-textarea">
+                <label class="label-text">备注：</label>
+                <div style="padding-left: 100px;padding-right: 30px">
+                    <span th:text="${notCooperateCustomerDO.remark}"></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="form-textarea">
+                <label class="label-text">未合作原因：</label>
+                <div style="padding-left: 100px;padding-right: 30px">
+                    <span th:text="${notCooperateCustomerDO.notCooperateCause}"></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="form-textarea">
+                <label class="label-text">客户意向：</label>
+                <div style="padding-left: 100px;padding-right: 30px">
+                    <span th:text="${notCooperateCustomerDO.customerIntention}"></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="form-textarea">
+                <label class="label-text">网点需求：</label>
+                <div style="padding-left: 100px;padding-right: 30px">
+                    <span th:text="${notCooperateCustomerDO.branchNeed}"></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div>
+                <div class="bottom-btn">
+                    <button type="button" onclick="quitAudit()" style="background: rgb(246,164,75)">关闭</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+</div>
+  <script>
+      function quitAudit(){
+          parent.reLoad();
+          var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+          parent.layer.close(index);
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.market.dao.MarketOccupancyReportDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		select `record_Id` recordId,`bigarea`,`provinceID`,`provinceName`,`cityID`,`cityName`,`responsible_people`,`contain_city`,`report_date`,`report_status`,`audit_result`,`audit_remarks`,`region_gs`,`proportion_yd`,`proportion_yt`,`proportion_zt`,`proportion_st`,`proportion_bs`,`audit_user`,`update_time`,`month_score`,`report_nian`,`report_yue`,`order_province_yd_sum`,`order_jtzl_yd_sum` from crmkhv2_market_occupancy_report where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		select (@i :=@i + 1) AS `record_Id`,`bigarea`,`provinceID`,`provinceName`,`cityID`,`cityName`,`responsible_people`,`contain_city`,`report_date`,`report_status`,`audit_result`,`audit_remarks`,`region_gs`,`proportion_yd`,`proportion_yt`,`proportion_zt`,`proportion_st`,`proportion_bs`,`audit_user`,`update_time`,`month_score`,`report_nian`,`report_yue`,`order_province_yd_sum`,`order_jtzl_yd_sum` from crmkhv2_market_occupancy_report,
+(SELECT @i := 0) AS it
+        <where>  
+                  1=1
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and provinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and cityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and cityName = #{cityname} </if>
+		  		  <if test="responsiblePeople != null and responsiblePeople != ''"> and responsible_people = #{responsiblePeople} </if>
+		  		  <if test="containCity != null and containCity != ''"> and contain_city = #{containCity} </if>
+		  		<!--   <if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if> -->
+		  		  <if test="reportStatus != null and reportStatus != ''"> and report_status = #{reportStatus} </if>
+		  		  <if test="auditResult != null and auditResult != ''"> and audit_result = #{auditResult} </if>
+		  		  <if test="auditRemarks != null and auditRemarks != ''"> and audit_remarks = #{auditRemarks} </if>
+		  		  <if test="regionGs != null and regionGs != ''"> and region_gs = #{regionGs} </if>
+		  		  <if test="proportionYd != null and proportionYd != ''"> and proportion_yd = #{proportionYd} </if>
+		  		  <if test="proportionYt != null and proportionYt != ''"> and proportion_yt = #{proportionYt} </if>
+		  		  <if test="proportionZt != null and proportionZt != ''"> and proportion_zt = #{proportionZt} </if>
+		  		  <if test="proportionSt != null and proportionSt != ''"> and proportion_st = #{proportionSt} </if>
+		  		  <if test="proportionBs != null and proportionBs != ''"> and proportion_bs = #{proportionBs} </if>
+		  		  <if test="auditUser != null and auditUser != ''"> and audit_user = #{auditUser} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="monthScore != null and monthScore != ''"> and month_score = #{monthScore} </if>
+		  		  <if test="reportNian != null and reportNian != ''"> and report_nian = #{reportNian} </if>
+		  		  <if test="reportYue != null and reportYue != ''"> and report_yue = #{reportYue} </if>
+		  		  <if test="orderProvinceYdSum != null and orderProvinceYdSum != ''"> and order_province_yd_sum = #{orderProvinceYdSum} </if>
+		  		  <if test="orderJtzlYdSum != null and orderJtzlYdSum != ''"> and order_jtzl_yd_sum = #{orderJtzlYdSum} </if>
+  		</where>
+		  		  and cityName ='所在省' GROUP BY provinceID,provinceName,report_nian,report_yue  ORDER BY record_id
+		<if test="offset != null and limit != null">
+				  limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+  <select id="listSearch" parameterType="java.util.Map" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		select `record_Id` recordId,`bigarea`,`provinceID`,`provinceName`,`cityID`,`cityName`,`responsible_people`,`contain_city`,`report_date`,`report_status`,`audit_result`,`audit_remarks`,`region_gs`,`proportion_yd`,`proportion_yt`,`proportion_zt`,`proportion_st`,`proportion_bs`,`audit_user`,`update_time`,`month_score`,`report_nian`,`report_yue`,`order_province_yd_sum`,`order_jtzl_yd_sum` 
+		FROM crmkhv2_market_occupancy_report WHERE 1=1
+		<if  test='type == "1" '> and provinceID = #{provinceID}  </if>
+		<if  test='type == "2" '> and provinceID in('320000','320001','320002','320003')  </if>
+		<if  test='type == "3" '> and provinceID in('330000','330001','330002')  </if>
+		 and report_nian = #{year} and report_yue =  #{month} 
+	
+	</select>
+	
+	<select id="searchReportStatus" resultType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		SELECT report_status reportStatus FROM crmkhv2_market_occupancy_report WHERE provinceID = #{provinceid}  and report_nian = #{reportNian} and report_yue = #{reportYue} limit 1	
+	</select>
+	
+	
+	<update id="updateMarketStatus" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+	 		UPDATE crmkhv2_market_occupancy_report SET report_status = '1',month_score = #{monthScore},audit_result = #{auditResult},audit_remarks = #{auditRemarks} WHERE provinceID = #{provinceid}   and report_nian = #{reportNian} and report_yue = #{reportYue}	 
+	 	</update>
+	
+	
+ 	<select id="countSearch" resultType="int">
+		select count(*) from crmkhv2_market_occupancy_report WHERE 1=1
+		<if  test='type == "1" '> and provinceID = #{provinceID}  </if>
+		<if  test='type == "2" '> and provinceID in('320000','320001','320002','320003')  </if>
+		<if  test='type == "3" '> and provinceID in('330000','330001','330002')  </if>
+		 and report_nian = #{year} and report_yue =  #{month} 
+	
+	</select>
+	
+	<select id="checkResult" resultType="int">
+	   SELECT COUNT(1) FROM crmkhv2_market_occupancy_report WHERE provinceID = #{provinceID} AND (audit_result = '1') and report_nian = #{year} and report_yue = #{month} 	
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_market_occupancy_report
+		 <where> 
+		          1=1 
+		  		  <if test="recordId != null and recordId != ''"> and record_id = #{recordId} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceid != null and provinceid != ''"> and provinceID = #{provinceid} </if>
+		  		  <if test="provincename != null and provincename != ''"> and provinceName = #{provincename} </if>
+		  		  <if test="cityid != null and cityid != ''"> and cityID = #{cityid} </if>
+		  		  <if test="cityname != null and cityname != ''"> and cityName = #{cityname} </if>
+		  		  <if test="responsiblePeople != null and responsiblePeople != ''"> and responsible_people = #{responsiblePeople} </if>
+		  		  <if test="containCity != null and containCity != ''"> and contain_city = #{containCity} </if>
+		  		  <!--<if test="reportDate != null and reportDate != ''"> and report_date = #{reportDate} </if>-->
+		  		  <if test="reportStatus != null and reportStatus != ''"> and report_status = #{reportStatus} </if>
+		  		  <if test="auditResult != null and auditResult != ''"> and audit_result = #{auditResult} </if>
+		  		  <if test="auditRemarks != null and auditRemarks != ''"> and audit_remarks = #{auditRemarks} </if>
+		  		  <if test="regionGs != null and regionGs != ''"> and region_gs = #{regionGs} </if>
+		  		  <if test="proportionYd != null and proportionYd != ''"> and proportion_yd = #{proportionYd} </if>
+		  		  <if test="proportionYt != null and proportionYt != ''"> and proportion_yt = #{proportionYt} </if>
+		  		  <if test="proportionZt != null and proportionZt != ''"> and proportion_zt = #{proportionZt} </if>
+		  		  <if test="proportionSt != null and proportionSt != ''"> and proportion_st = #{proportionSt} </if>
+		  		  <if test="proportionBs != null and proportionBs != ''"> and proportion_bs = #{proportionBs} </if>
+		  		  <if test="auditUser != null and auditUser != ''"> and audit_user = #{auditUser} </if>
+		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
+		  		  <if test="monthScore != null and monthScore != ''"> and month_score = #{monthScore} </if>
+		  		  <if test="reportNian != null and reportNian != ''"> and report_nian = #{reportNian} </if>
+		  		  <if test="reportYue != null and reportYue != ''"> and report_yue = #{reportYue} </if>
+		  		  <if test="orderProvinceYdSum != null and orderProvinceYdSum != ''"> and order_province_yd_sum = #{orderProvinceYdSum} </if>
+		  		  <if test="orderJtzlYdSum != null and orderJtzlYdSum != ''"> and order_jtzl_yd_sum = #{orderJtzlYdSum} </if>
+		  		</where>
+		  			  and cityName ='所在省' 
+		  		
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkhv2_market_occupancy_report
+		(
+			`bigarea`, 
+			`provinceID`, 
+			`provinceName`, 
+			`cityID`, 
+			`cityName`, 
+			`responsible_people`, 
+			`contain_city`, 
+			`report_date`, 
+			`report_status`, 
+			`audit_result`, 
+			`audit_remarks`, 
+			`region_gs`, 
+			`proportion_yd`, 
+			`proportion_yt`, 
+			`proportion_zt`, 
+			`proportion_st`, 
+			`proportion_bs`, 
+			`audit_user`, 
+			`update_time`, 
+			`month_score`, 
+			`report_nian`, 
+			`report_yue`, 
+			`order_province_yd_sum`, 
+			`order_jtzl_yd_sum`
+		)
+		values
+		(
+			#{bigarea}, 
+			#{provinceid}, 
+			#{provincename}, 
+			#{cityid}, 
+			#{cityname}, 
+			#{responsiblePeople}, 
+			#{containCity}, 
+			#{reportDate}, 
+			#{reportStatus}, 
+			#{auditResult}, 
+			#{auditRemarks}, 
+			#{regionGs}, 
+			#{proportionYd}, 
+			#{proportionYt}, 
+			#{proportionZt}, 
+			#{proportionSt}, 
+			#{proportionBs}, 
+			#{auditUser}, 
+			#{updateTime}, 
+			#{monthScore}, 
+			#{reportNian}, 
+			#{reportYue}, 
+			#{orderProvinceYdSum}, 
+			#{orderJtzlYdSum}
+		)
+	</insert>
+	 
+ 	 <select id="countMarketData" resultType="int">
+	 		SELECT COUNT(1) FROM crmkhv2_market_occupancy_report WHERE report_nian = #{year} AND report_yue = #{month}
+	 </select>
+	 
+  	 <select id="provinceSum" resultType="Double"> 
+		 SELECT order_province_yd_sum FROM crmkhv2_market_occupancy_report WHERE report_nian = #{year} AND report_yue = #{month} LIMIT 1
+ 	 </select>
+	 
+	 <insert id="saveMarketData">
+		
+		INSERT INTO `crmkhv2_market_occupancy_report` (bigarea,provinceID,provinceName,cityID,cityName,responsible_people,contain_city,report_date,report_status,audit_result,audit_remarks,region_gs,proportion_yd,proportion_yt,proportion_zt,proportion_st,proportion_bs,audit_user,update_time,month_score,report_nian,report_yue) VALUES ( '广东大区', '440000', '广东省', '000001', '所在省', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '440100', '广州市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '440300', '深圳市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '441900', '东莞市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '442000', '中山市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '445200', '揭阳市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '440600', '佛山市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '440500', '汕头市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,('广东大区', '440000', '广东省', '441300', '惠州市', '汪北方', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '广东大区', '450000', '广西壮族自治区', '000002', '所在省', '叶文辉', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '广东大区', '450000', '广西壮族自治区', '450100', '南宁市', '叶文辉', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '广东大区', '460000', '海南省', '000003', '所在省', '李向明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		
+		
+		,( '上海+西北大区', '310000', '上海市', '000004', '所在省', '余君义', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '310000', '上海市', '310100', '上海市', '余君义', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '610000', '陕西省', '000005', '所在省', '周道军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '610000', '陕西省', '610100', '西安市', '周道军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '620000', '甘肃省', '000006', '所在省', '周道军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '640000', '宁夏省', '000007', '所在省', '周道军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '650000', '新疆省', '000008', '所在省', '吴一翔', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '上海+西北大区', '630000', '青海省', '000009', '所在省', '周道军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		
+		
+		,( '北京大区', '110000', '北京市', '000010', '所在省', '方小金', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '110000', '北京市', '110100', '北京市', '方小金', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '120000', '天津市', '000011', '所在省', '叶苗生', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '120000', '天津市', '120100', '天津市', '叶苗生', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '130000', '河北省', '000012', '所在省', '江士明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '130000', '河北省', '130100', '石家庄市', '江士明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '130000', '河北省', '130600', '保定市', '江士明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '130000', '河北省', '131000', '廊坊市', '江士明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '230000', '黑龙江省', '000013', '所在省', '孙晓', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '230000', '黑龙江省', '230100', '哈尔滨市', '孙晓', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '220000', '吉林省', '000014', '所在省', '边东阳', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '210000', '辽宁省', '000015', '所在省', '王正贤', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '210000', '辽宁省', '210100', '沈阳市', '王正贤', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '140000', '山西省', '000016', '所在省', '李新', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '140000', '山西省', '140100', '太原市', '李新', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '北京大区', '150000', '内蒙古', '000017', '所在省', '沈国平', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320000', '江苏省', '000018', '所在省', '濮根水+李荣华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320002', '南京区省公司', '320100', '南京市', '濮根水', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320002', '南京区省公司', '320200', '无锡市', '濮根水', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320002', '南京区省公司', '320300', '徐州市', '濮根水', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320002', '南京区省公司', '321300', '宿迁市', '濮根水', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320002', '南京区省公司', '321000', '扬州市', '濮根水', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320001', '苏州区省公司', '320500', '苏州市', '李荣华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320001', '苏州区省公司', '320600', '南通市', '李荣华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '320001', '苏州区省公司', '320400', '常州市', '李荣华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '340000', '安徽省', '000019', '所在省', '张磊', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '340000', '安徽省', '340100', '合肥市', '张磊', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '370000', '山东省', '000020', '所在省', '孟朋武', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '370000', '山东省', '370100', '济南市', '孟朋武', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '370000', '山东省', '370200', '青岛市', '孟朋武', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '370000', '山东省', '371300', '临沂市', '孟朋武', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '江苏大区', '370000', '山东省', '370700', '潍坊市', '孟朋武', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330000', '浙江省', '000021', '所在省', '闫峻+潘玉华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330000', '浙南区省公司', '330700', '金华市', '闫峻', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330001', '浙南区省公司', '330300', '温州市', '闫峻', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330001', '浙南区省公司', '330200', '宁波市', '闫峻', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330001', '浙南区省公司', '331000', '台州市', '闫峻', '', '0000-00-00', '3', '3', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330002', '浙北区省公司', '330100', '杭州市', '潘玉华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330002', '浙北区省公司', '330400', '嘉兴市', '潘玉华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330002', '浙北区省公司', '330600', '绍兴市', '潘玉华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '330002', '浙北区省公司', '330500', '湖州市', '潘玉华', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '350000', '福建省', '000022', '所在省', '许玉锋', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '350000', '福建省', '350500', '泉州市', '许玉锋', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '350000', '福建省', '350100', '福州市', '许玉锋', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '350000', '福建省', '350200', '厦门市', '许玉锋', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '360000', '江西省', '000023', '所在省', '张明清', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '浙江大区', '360000', '江西省', '360100', '南昌市', '张明清', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '420000', '湖北省', '000024', '所在省', '陆登科', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '420000', '湖北省', '420100', '武汉市', '陆登科', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '430000', '湖南省', '000025', '所在省', '陈景鹏', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '430000', '湖南省', '430100', '长沙市', '陈景鹏', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '410000', '河南省', '000026', '所在省', '曾永刚', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '410000', '河南省', '410100', '郑州市', '曾永刚', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '510000', '四川省', '000027', '所在省', '马红平', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '510000', '四川省', '510100', '成都市', '马红平', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '500000', '重庆市', '000028', '所在省', '骆辉', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '500000', '重庆市', '500100', '重庆市', '骆辉', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '530000', '云南省', '000029', '所在省', '刘炎军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '530000', '云南省', '530100', '昆明市', '刘炎军', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '520000', '贵州省', '000030', '所在省', '朱友余', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})
+		,( '华中西南大区', '540000', '西藏', '000031', '所在省', '张小明', '', '0000-00-00', '3', '', '', '', '0', '0', '0', '0', '0','', '0000-00-00 00:00:00', '0', #{year}, #{month})	
+	</insert>
+	 
+	 
+	<update id="updateMarketData" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+	 	 UPDATE crmkhv2_market_occupancy_report SET order_jtzl_yd_sum =(SELECT sum(order_sum) FROM tmpv2_all_od_sum where qu_date 
+	 	 	 	 between date_format (
+					#{startDate},
+					'%Y-%m-%d'
+					)
+					AND
+					date_format (
+					#{endDate},
+					'%Y-%m-%d'
+					) ) WHERE provinceID = 440000 and cityName ='所在省' AND report_nian = #{year} AND report_yue = #{month}
+	 
+	 	</update>
+	 	
+	 	
+	 	    <select id="searchProvinceID" resultType="java.util.HashMap">
+	       	 	SELECT provinceID FROM crmkhv2_market_occupancy_report WHERE cityName ='所在省' AND report_nian = #{year} AND report_yue = #{month}   ORDER BY record_id
+		</select>
+	 
+	 
+			<update id="updateJiangSu">
+ 				UPDATE crmkhv2_market_occupancy_report SET order_province_yd_sum = 
+						(SELECT SUM(order_sum) order_sum FROM tmpv2_province_od_sum WHERE 
+						qu_date between date_format (
+						#{startDate},
+						'%Y-%m-%d'
+						)
+						AND
+						date_format (
+						#{endDate},
+						'%Y-%m-%d'
+						) and provinceid in('320001','320002'))
+						WHERE provinceID = #{provinceID} AND report_nian = #{year} AND report_yue = #{month}	
+			</update>	
+			
+			<update id="updateZheJiang">
+ 				UPDATE crmkhv2_market_occupancy_report SET order_province_yd_sum = 
+						(SELECT SUM(order_sum) order_sum FROM tmpv2_province_od_sum WHERE 
+						qu_date between date_format (
+						#{startDate},
+						'%Y-%m-%d'
+						)
+						AND
+						date_format (
+						#{endDate},
+						'%Y-%m-%d'
+						) and provinceid in('330001','330002'))
+						WHERE provinceID = #{provinceID} AND report_nian = #{year} AND report_yue = #{month}	
+			</update>
+			
+		    <update id="updateOther">
+ 				UPDATE crmkhv2_market_occupancy_report SET order_province_yd_sum = 
+						(SELECT SUM(order_sum) order_sum FROM tmpv2_province_od_sum WHERE 
+						qu_date between date_format (
+						#{startDate},
+						'%Y-%m-%d'
+						)
+						AND
+						date_format (
+						#{endDate},
+						'%Y-%m-%d'
+						) and provinceid = #{provinceID})
+						WHERE provinceID = #{provinceID} AND report_nian = #{year} AND report_yue = #{month}	
+			</update>	
+			
+			<select id="searchShengData" resultType="java.util.Map">
+				SELECT DISTINCT provinceID provinceid,provinceName provincename FROM crmkhv2_market_occupancy_report
+			</select>		
+				
+				
+				
+	<update id="upDataResult" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		update crmkhv2_market_occupancy_report 
+		<set>
+			<if test="proportionYd != null">`proportion_yd` = #{proportionYd}, </if>
+			<if test="proportionYt != null">`proportion_yt` = #{proportionYt}, </if>
+			<if test="proportionZt != null">`proportion_zt` = #{proportionZt}, </if>
+			<if test="proportionSt != null">`proportion_st` = #{proportionSt}, </if>
+			<if test="proportionBs != null">`proportion_bs` = #{proportionBs}</if>
+		
+		</set>
+		WHERE cityID = #{cityid}  and report_nian = #{reportNian} and report_yue = #{reportYue} ORDER BY record_id
+		
+	</update>					
+				
+   <update id="upDataShangBao" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		update crmkhv2_market_occupancy_report SET report_status = '2',audit_result ='4'
+		WHERE provinceID = #{provinceid}  and report_nian = #{reportNian} and report_yue = #{reportYue} ORDER BY record_id
+	</update>				
+							 
+	<update id="update" parameterType="com.yunda.base.feiniao.market.domain.MarketOccupancyReportDO">
+		update crmkhv2_market_occupancy_report 
+		<set>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="provinceid != null">`provinceID` = #{provinceid}, </if>
+			<if test="provincename != null">`provinceName` = #{provincename}, </if>
+			<if test="cityid != null">`cityID` = #{cityid}, </if>
+			<if test="cityname != null">`cityName` = #{cityname}, </if>
+			<if test="responsiblePeople != null">`responsible_people` = #{responsiblePeople}, </if>
+			<if test="containCity != null">`contain_city` = #{containCity}, </if>
+			<if test="reportDate != null">`report_date` = #{reportDate}, </if>
+			<if test="reportStatus != null">`report_status` = #{reportStatus}, </if>
+			<if test="auditResult != null">`audit_result` = #{auditResult}, </if>
+			<if test="auditRemarks != null">`audit_remarks` = #{auditRemarks}, </if>
+			<if test="regionGs != null">`region_gs` = #{regionGs}, </if>
+			<if test="proportionYd != null">`proportion_yd` = #{proportionYd}, </if>
+			<if test="proportionYt != null">`proportion_yt` = #{proportionYt}, </if>
+			<if test="proportionZt != null">`proportion_zt` = #{proportionZt}, </if>
+			<if test="proportionSt != null">`proportion_st` = #{proportionSt}, </if>
+			<if test="proportionBs != null">`proportion_bs` = #{proportionBs}, </if>
+			<if test="auditUser != null">`audit_user` = #{auditUser}, </if>
+			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
+			<if test="monthScore != null">`month_score` = #{monthScore}, </if>
+			<if test="reportNian != null">`report_nian` = #{reportNian}, </if>
+			<if test="reportYue != null">`report_yue` = #{reportYue}, </if>
+			<if test="orderProvinceYdSum != null">`order_province_yd_sum` = #{orderProvinceYdSum}, </if>
+			<if test="orderJtzlYdSum != null">`order_jtzl_yd_sum` = #{orderJtzlYdSum}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_market_occupancy_report where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_market_occupancy_report where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

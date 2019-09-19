@@ -1,0 +1,215 @@
+package ${package}import com.github.crab2died.ExcelUtils;
+import com.yunda.base.common.annotation.MethodLock;
+import com.yunda.base.common.utils.FileUtil;
+import com.yunda.base.common.utils.PageUtils;
+import com.yunda.base.common.utils.Query;
+import com.yunda.base.common.utils.R;
+import com.yunda.base.system.config.SysConfig;
+import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.*;
+
+.controller;
+    ${package}
+        .domain.${className}DO;
+    ${package}
+        .service.${className}Service;
+
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+ 
+@Controller
+@RequestMapping("/${pathName}/${classname}")
+public class ${className}Controller {
+	Logger log = Logger.getLogger(getClass());
+	@Autowired
+	private ${className}Service ${classname}Service;
+	
+	@GetMapping()
+	@RequiresPermissions("${pathName}:${classname}:${classname}")
+	String ${className}(){
+	    return "${pagePathName}/${classname}/${classname}";
+	}
+	
+	@ResponseBody
+	@GetMapping("/list")
+	@RequiresPermissions("${pathName}:${classname}:${classname}")
+	public PageUtils list(@RequestParam Map<String, Object> params){
+		//查询列表数据
+        Query query = new Query(params);
+		List<${className}DO> ${classname}List = ${classname}Service.list(query);
+		int total = ${classname}Service.count(query);
+		PageUtils pageUtils = new PageUtils(${classname}List, total);
+		return pageUtils;
+	}
+
+	// 导出excel
+	@RequestMapping("/exportExcel")
+	@MethodLock(key = "exportExcel")
+	@RequiresPermissions("${pathName}:${classname}:exportExcel")
+	public void exportExcel(HttpServletResponse response) {
+		Map<String, Object> params = new HashMap<>(16);
+		params.put("limit", "10000");// 上限保护
+		Query query = new Query(params);
+
+		//int nums = ${classname}Service.count(query);
+
+		List<${className}DO> result = ${classname}Service.list(query);
+		String targetFile = SysConfig.tempDownload + UUID.randomUUID().toString() + ".xlsx";
+
+		try {
+			ExcelUtils.getInstance().exportObjects2Excel(result, ${className}DO.class, targetFile);
+
+			// 写入response
+			File downloadFile = new File(targetFile);
+			FileUtil.downloadByResponse(response, downloadFile);
+			downloadFile.delete();
+		} catch (Exception e) {
+			//e.printStackTrace();
+			log.error(e.getMessage(), e);
+		}
+	}
+
+	// 下载excel模版
+	@RequestMapping("/downTemplate")
+	@MethodLock(key = "downTemplate")
+	// 下载模版和导入共用同一个权限
+	@RequiresPermissions("${pathName}:${classname}:importExcel")
+	public void downTemplate(HttpServletResponse response) {
+		String targetFile = SysConfig.tempDownload + UUID.randomUUID().toString() + ".xlsx";
+		try {
+			ExcelUtils.getInstance().exportObjects2Excel(new ArrayList<${className}DO>(), ${className}DO.class, targetFile);
+
+			// 写入response
+			File downloadFile = new File(targetFile);
+			FileUtil.downloadByResponse(response, downloadFile);
+			downloadFile.delete();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			//e.printStackTrace();
+		}
+	}
+
+	// 导入excel
+	@ResponseBody
+	@MethodLock(key = "importExcel")
+	@RequestMapping(value = "/importExcel", consumes = "multipart/*", headers = "content-type=mutipart/form-data", method = RequestMethod.POST)
+	@RequiresPermissions("${pathName}:${classname}:importExcel")
+	public R importExcel(MultipartFile file) {
+		List<${className}DO> list = null;
+
+		String fileKey = UUID.randomUUID().toString();
+		// 获取后缀
+		String fileName = file.getOriginalFilename();
+		if (fileName.lastIndexOf(".") != -1) {
+			String suffix = fileName.substring(fileName.lastIndexOf("."));
+			String uploadFile = SysConfig.uploadPath + fileKey + suffix;
+
+			File _f = new File(uploadFile);
+			if (!_f.getParentFile().exists()) {
+				_f.getParentFile().mkdirs();
+			}
+
+			BufferedOutputStream out = null;
+			try {
+				out = new BufferedOutputStream(new FileOutputStream(_f));
+				out.write(file.getBytes());
+				out.flush();
+
+				list = ExcelUtils.getInstance().readExcel2Objects(uploadFile, ${className}DO.class, 0, 0);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				//e.printStackTrace();
+			} finally {
+				try {
+					out.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+
+		if (list != null) {
+			for (${className}DO _do : list) {
+				${classname}Service.save(_do);
+			}
+		}
+
+		return R.ok();
+	}		
+	
+	@GetMapping("/add")
+	@RequiresPermissions("${pathName}:${classname}:add")
+	String add(){
+	    return "${pagePathName}/${classname}/add";
+	}
+
+	@GetMapping("/edit/{${pk.attrname}}")
+	@RequiresPermissions("${pathName}:${classname}:edit")
+	String edit(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname},Model model){
+		${className}DO ${classname} = ${classname}Service.get(${pk.attrname});
+		model.addAttribute("${classname}", ${classname});
+	    return "${pagePathName}/${classname}/edit";
+	}
+	
+	/**
+	 * 保存
+	 */
+	@ResponseBody
+	@PostMapping("/save")
+	@RequiresPermissions("${pathName}:${classname}:add")
+	public R save( ${className}DO ${classname}){
+		if(${classname}Service.save(${classname})>0){
+			return R.ok();
+		}
+		return R.error();
+	}
+	/**
+	 * 修改
+	 */
+	@ResponseBody
+	@RequestMapping("/update")
+	@RequiresPermissions("${pathName}:${classname}:edit")
+	public R update( ${className}DO ${classname}){
+		${classname}Service.update(${classname});
+		return R.ok();
+	}
+	
+	/**
+	 * 删除
+	 */
+	@PostMapping( "/remove")
+	@ResponseBody
+	@RequiresPermissions("${pathName}:${classname}:remove")
+	public R remove( ${pk.attrType} ${pk.attrname}){
+		if(${classname}Service.remove(${pk.attrname})>0){
+		return R.ok();
+		}
+		return R.error();
+	}
+	
+	/**
+	 * 删除
+	 */
+	@PostMapping( "/batchRemove")
+	@ResponseBody
+	@RequiresPermissions("${pathName}:${classname}:batchRemove")
+	public R remove(@RequestParam("ids[]") ${pk.attrType}[] ${pk.attrname}s){
+		${classname}Service.batchRemove(${pk.attrname}s);
+		return R.ok();
+	}
+	
+}

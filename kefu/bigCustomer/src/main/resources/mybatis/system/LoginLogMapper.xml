@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.system.dao.LoginLogDao">
+
+	<select id="listLog" resultType="com.yunda.base.system.domain.LoginLogDO">
+		select a.`id`,b.`name`,a.`user_id`,c.`role_name`,b.`organization_name` as org_name,b.`idcd_no`,b.`mac_adress`,b.`wireless_mac_adress` as w_mac_adress,b.`mobile`,a.`session_id`,a.`operation`,a.`user_ip`,a.`create_time`,d.`out_time`,(d.`out_time`-a.create_time) as time from crmkhv2_login_log a LEFT JOIN bootdo_sys_user b on a.user_id=b.username LEFT JOIN bootdo_sys_role c on a.user_id=c.role_sign LEFT JOIN crmkhv2_out_log d on a.session_id=d.session_id
+        <where>  
+		  <if test="id != null and id != ''"> and a.id = #{id} </if>
+		  <if test="userId != null and userId != ''"> and a.user_id = #{userId} </if>
+		  <if test="sessionId != null and sessionId != ''"> and a.session_id like '%${sessionId}%' </if>
+		  <if test="operation != null and operation != ''"> and a.operation like '%${operation}%' </if>
+		  <if test="mobile != null and mobile != ''"> and b.mobile = #{mobile} </if>
+		  <if test="userIp != null and userIp != ''"> and a.user_ip = #{userIp} </if>
+		  <if test="startTime != null and startTime != '' and endTime != null and endTime != ''"> and a.create_time <![CDATA[>=]]> date_format (#{startTime},'%Y-%m-%d 00:00:00') and create_time <![CDATA[<=]]> date_format (#{endTime},'%Y-%m-%d 23:59:59')</if>
+		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by a.id asc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="get" resultType="com.yunda.base.system.domain.LoginLogDO">
+		select (@i :=@i + 1) AS `id`,b.`name`,a.`user_id`,c.`role_name`,b.`organization_name` as org_name,b.`idcd_no`,b.`mac_adress`,b.`wireless_mac_adress` as w_mac_adress,b.`mobile`,a.`session_id`,a.`operation`,a.`user_ip`,a.`create_time`,d.`out_time`,(d.`out_time`-a.create_time) as time from crmkhv2_login_log a LEFT JOIN crmkhv2_login_user b on a.user_id=b.username LEFT JOIN bootdo_sys_role c on a.user_id=c.role_sign LEFT JOIN crmkhv2_out_log d on a.session_id=d.session_id,(SELECT @i := 0) AS it where a.id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.LoginLogDO">
+		select (@i :=@i + 1) AS `id`,b.`name`,a.`user_id`,c.`role_name`,b.`organization_name` as org_name,b.`idcd_no`,b.`mac_adress`,b.`wireless_mac_adress` as w_mac_adress,b.`mobile`,a.`session_id`,a.`operation`,a.`user_ip`,a.`create_time`,d.`out_time`,(d.`out_time`-a.create_time) as time,(CASE WHEN e.`alarm_type` is NULL THEN '否' ELSE '是' END) AS police,e.`alarm_type` AS police_typ from crmkhv2_login_log a LEFT JOIN crmkhv2_login_user b on a.user_id=b.username LEFT JOIN bootdo_sys_role c on a.user_id=c.role_sign LEFT JOIN crmkhv2_out_log d on a.session_id=d.session_id LEFT JOIN crmkhv2_alarm e ON a.session_id=e.session_id,(SELECT @i := 0) AS it
+        <where>  
+		  <if test="id != null and id != ''"> and a.id = #{id} </if>
+		  <if test="userId != null and userId != ''"> and a.user_id = #{userId} </if>
+		  <if test="sessionId != null and sessionId != ''"> and a.session_id = #{sessionId} </if>
+		  <if test="operation != null and operation != ''"> and a.operation = #{operation} </if>
+		  <if test="userIp != null and userIp != ''"> and a.user_ip = #{userIp} </if>
+		  <if test="mobile != null and mobile != ''"> and b.mobile = #{mobile} </if>
+		  <if test='"是".equals(police.toString())'> and e.`alarm_type` is not null</if>
+		  <if test='"否".equals(police.toString())'> and e.`alarm_type` is null</if>
+		  <if test="startTime != null and startTime != '' and endTime != null and endTime != ''"> and a.create_time <![CDATA[>=]]> date_format (#{startTime},'%Y-%m-%d 00:00:00') and create_time <![CDATA[<=]]> date_format (#{endTime},'%Y-%m-%d 23:59:59')</if>
+		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by a.create_time desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="java.lang.Integer">
+		select count(*) from crmkhv2_login_log a LEFT JOIN crmkhv2_login_user b on a.user_id=b.username LEFT JOIN bootdo_sys_role c on a.user_id=c.role_sign LEFT JOIN crmkhv2_out_log d on a.session_id=d.session_id LEFT JOIN crmkhv2_alarm e ON a.session_id=e.session_id
+		<where>
+			<if test="id != null and id != ''"> and a.id = #{id} </if>
+			<if test="userId != null and userId != ''"> and a.user_id = #{userId} </if>
+			<if test="sessionId != null and sessionId != ''"> and a.session_id = #{sessionId} </if>
+			<if test="operation != null and operation != ''"> and a.operation = #{operation} </if>
+			<if test="userIp != null and userIp != ''"> and a.user_ip = #{userIp} </if>
+			<if test="mobile != null and mobile != ''"> and b.mobile = #{mobile} </if>
+			<if test='"是".equals(police.toString())'> and e.`alarm_type` is not null</if>
+			<if test='"否".equals(police.toString())'> and e.`alarm_type` is null</if>
+			<if test="startTime != null and startTime != '' and endTime != null and endTime != ''"> and a.create_time <![CDATA[>=]]> date_format (#{startTime},'%Y-%m-%d 00:00:00') and create_time <![CDATA[<=]]> date_format (#{endTime},'%Y-%m-%d 23:59:59')</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.yunda.base.system.domain.LoginLogDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_login_log
+		(
+			`user_id`,
+			`session_id`,
+			`operation`,
+			`user_ip`,
+			`create_time`
+		)
+		values
+		(
+			#{userId},
+			#{sessionId},
+			#{operation},
+			#{userIp},
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.LoginLogDO">
+		update crmkhv2_login_log
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="sessionId != null">`session_id` = #{sessionId}, </if>
+			<if test="operation != null">`operation` = #{operation}, </if>
+			<if test="userIp != null">`user_ip` = #{userIp}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_login_log where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_login_log where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryPictureBySessionId" resultType="java.lang.String">
+		select img_address from crmkhv2_alarm where session_id = #{sessionId}
+	</select>
+
+</mapper>

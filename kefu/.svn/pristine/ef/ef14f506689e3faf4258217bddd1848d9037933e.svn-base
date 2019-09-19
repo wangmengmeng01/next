@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.bigcustomer.dao.OrderDao">
+
+    <select id="get" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		select `id`,`order_id`,`phone`,`waybill_num`,`logistic_order_num`,`merchant`,`consult_type`,`priority`,`organization_num`,`problem_description`,`send_name`,`send_phone`,`send_address`,`receiver_name`,`receiver_phone`,`receiver_address`,`consult_time`,`consult_source`,`deal_persion`,`state` from consult_order where id = #{value}
+	</select>
+
+    <select id="getByOrderId" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		select a.`id`,a.`order_id`,a.`phone`,a.`waybill_num`,a.`logistic_order_num`,a.`merchant`,a.`vip_code`,a.`branch_code`,IFNULL(CONCAT(b.`mc`,'(',a.`branch_code`,')'),a.`branch_code`) as `branch_name`,a.`consult_type`,a.`priority`,a.`organization_num`,a.`problem_description`,a.`send_name`,a.`send_phone`,a.`send_address`,a.`receiver_name`,a.`receiver_phone`,a.`receiver_address`,a.`consult_time`,a.`consult_source`,a.`deal_persion`,IFNULL(CONCAT(a.`faqi_org_name`,'(',a.`faqi_org_code`,')'),a.`faqi_org_code`) as `faqi_org_name`,a.`faqi_org_code`,a.`deal_code`,a.`state`,CONCAT(a.`customer_name`,'(',a.`customer_code`,')') as customer_name from consult_order a left join ydserver.gs b on a.`branch_code`=b.`bm` where `order_id` = #{orderId}
+	</select>
+
+    <select id="list" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+        select * from (select tb.*,d.deal_content,d.time AS deal_time,concat(d.operate_name,"-",d.operate_code) as deal_persion from (select
+        a.`id`,a.`order_id`,a.`phone`,a.`waybill_num`,a.`logistic_order_num`,a.`merchant`,a.`consult_type`,a.`priority`,a.`organization_num`,
+        concat(c.`organization_name`,"-",a.`organization_num`) as organization_name,a.`problem_description`,a.`send_name`,a.`send_phone`,a.`send_address`,
+        a.`receiver_name`,a.`receiver_phone`,a.`receiver_address`,a.`consult_time`,a.`consult_source`,a.`state`,a.`jie_dan_result`,a.`jie_dan_time`,
+        concat(a.`deal_persion`,"-",a.`deal_code`) AS deal_code,a.`faqi_code`,
+        b.`type`,b.`order_after_hours_t1`,b.`order_after_day_t2`,b.`order_after_time_t2`,b.`today_order_before_time_t31`,b.`order_after_day_t31`,b.`order_after_time_t31`,b.`today_order_after_time32`,b.`order_before_day_t32`,b.`order_before_time_t32`,b.`yujing_time`
+        from consult_order a left join organization_manage c on a.`organization_num` = c.`organization_num` left join
+        consult_config b on a.`consult_type`= b.`consult_type` and b.`state` <![CDATA[ <> ]]> '0'
+
+        <where>
+            <if test="dataPermissions2 != null and dataPermissions2 != '' and orgCode != null and orgCode != ''">
+                and a.`organization_num` = #{orgCode}
+            </if>
+            <if test="id != null and id != ''">and a.id = #{id}</if>
+            <if test="orderId != null and orderId != ''">and a.order_id = #{orderId}</if>
+            <if test="state != null and state != ''">and a.state = #{state}</if>
+            <if test="phone != null and phone != ''">and a.phone = #{phone}</if>
+            <if test="waybillNum != null and waybillNum != ''">and a.waybill_num in ${waybillNum}</if>
+            <if test="logisticOrderNum != null and logisticOrderNum != ''">and a.logistic_order_num =
+                #{logisticOrderNum}
+            </if>
+            <if test="merchant != null and merchant != ''">and a.merchant like '%${merchant}%'</if>
+            <if test="consultType != null and consultType != ''">and a.consult_type = #{consultType}</if>
+            <if test="priority != null and priority != ''">and a.priority = #{priority}</if>
+            <if test="problemDescription != null and problemDescription != ''">and a.problem_description =
+                #{problemDescription}
+            </if>
+            <if test="sendName != null and sendName != ''">and a.send_name = #{sendName}</if>
+            <if test="sendPhone != null and sendPhone != ''">and a.send_phone = #{sendPhone}</if>
+            <if test="sendAddress != null and sendAddress != ''">and a.send_address = #{sendAddress}</if>
+            <if test="receiverName != null and receiverName != ''">and a.receiver_name = #{receiverName}</if>
+            <if test="receiverPhone != null and receiverPhone != ''">and a.receiver_phone = #{receiverPhone}</if>
+            <if test="receiverAddress != null and receiverAddress != ''">and a.receiver_address = #{receiverAddress}</if>
+            <if test="organizationNum != null and organizationNum != ''">and a.organization_num = #{organizationNum}</if>
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.consult_time
+                <![CDATA[ >= ]]> #{startDate} and a.consult_time <![CDATA[ <= ]]> #{endDate}
+            </if>
+            <if test="jieDanStartDate != null and jieDanStartDate != '' and jieDanEndDate != null and jieDanEndDate != ''">and a.`jie_dan_time`
+                <![CDATA[ >= ]]> #{jieDanStartDate} and a.consult_time <![CDATA[ <= ]]> #{jieDanEndDate}
+            </if>
+            <if test="consultSource != null and consultSource != ''">and a.consult_source = #{consultSource}</if>
+            <if test="dealCode != null and dealCode != ''">and a.deal_code = #{dealCode}</if>
+            <if test="faqiCode != null and faqiCode != ''">and a.faqi_code = #{faqiCode}</if>
+            <if test="faqiOrgCode != null and faqiOrgCode != ''">and a.faqi_org_code = #{faqiOrgCode}</if>
+            <if test="dataPermissions1 != null and dataPermissions1 != ''">and a.deal_code = #{dataPermissions1}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>) tb left join
+        consult_operate d ON tb.`order_id` = d.`order_id` ORDER BY d.time desc  ) tab GROUP BY tab.order_id
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from consult_order a left join organization_manage c on a.`organization_num` = c.`organization_num` left join consult_config b on a.`consult_type`= b.`consult_type` and b.`state` <![CDATA[ <> ]]> '0'
+        <where>
+            <if test="dataPermissions2 != null and dataPermissions2 != '' and orgCode != null and orgCode != ''">
+                and  a.`organization_num` = #{orgCode}
+            </if>
+            <if test="dataPermissions1 != null and dataPermissions1 != ''">and a.deal_code = #{dataPermissions1}</if>
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.consult_time
+                <![CDATA[ >= ]]> #{startDate} and a.consult_time <![CDATA[ <= ]]> #{endDate}
+            </if>
+            <if test="jieDanStartDate != null and jieDanStartDate != '' and jieDanEndDate != null and jieDanEndDate != ''">and a.`jie_dan_time`
+                <![CDATA[ >= ]]> #{jieDanStartDate} and a.consult_time <![CDATA[ <= ]]> #{jieDanEndDate}
+            </if>
+            <if test="id != null and id != ''">and a.id = #{id}</if>
+            <if test="orderId != null and orderId != ''">and a.order_id = #{orderId}</if>
+            <if test="state != null and state != ''">and a.state = #{state}</if>
+            <if test="phone != null and phone != ''">and a.phone = #{phone}</if>
+            <if test="waybillNum != null and waybillNum != ''">and a.waybill_num in ${waybillNum}</if>
+            <if test="logisticOrderNum != null and logisticOrderNum != ''">and a.logistic_order_num =
+                #{logisticOrderNum}
+            </if>
+            <if test="merchant != null and merchant != ''">and a.merchant like '%${merchant}%'</if>
+            <if test="consultType != null and consultType != ''">and a.consult_type = #{consultType}</if>
+            <if test="priority != null and priority != ''">and a.priority = #{priority}</if>
+            <if test="problemDescription != null and problemDescription != ''">and a.problem_description =
+                #{problemDescription}
+            </if>
+            <if test="sendName != null and sendName != ''">and a.send_name = #{sendName}</if>
+            <if test="sendPhone != null and sendPhone != ''">and a.send_phone = #{sendPhone}</if>
+            <if test="sendAddress != null and sendAddress != ''">and a.send_address = #{sendAddress}</if>
+            <if test="receiverName != null and receiverName != ''">and a.receiver_name = #{receiverName}</if>
+            <if test="receiverPhone != null and receiverPhone != ''">and a.receiver_phone = #{receiverPhone}</if>
+            <if test="receiverAddress != null and receiverAddress != ''">and a.receiver_address = #{receiverAddress}</if>
+            <if test="organizationNum != null and organizationNum != ''">and a.organization_num = #{organizationNum}</if>
+            <if test="consultSource != null and consultSource != ''">and a.consult_source = #{consultSource}</if>
+            <if test="dealCode != null and dealCode != ''">and a.deal_code = #{dealCode}</if>
+            <if test="faqiCode != null and faqiCode != ''">and a.faqi_code = #{faqiCode}</if>
+            <if test="faqiOrgCode != null and faqiOrgCode != ''">and a.faqi_org_code = #{faqiOrgCode}</if>
+        </where>
+    </select>
+<!-- 批量保存 -->
+	<insert id="saveOrderList" parameterType="com.yunda.base.bigcustomer.domain.OrderTemplateDO" useGeneratedKeys="true" keyProperty="id">
+		insert into consult_order
+		(
+			`order_id`,
+			`phone`,
+			`waybill_num`,
+			`logistic_order_num`, 
+			`merchant`,
+			`consult_type`,
+
+			`priority`,
+			`organization_num`,
+			`problem_description`, 
+			`send_name`, 
+			`send_phone`, 
+			`send_address`,
+
+			`receiver_name`, 
+			`receiver_phone`, 
+			`receiver_address`, 
+			`consult_time`, 
+			`consult_source`,
+			`deal_persion`,
+
+			`deal_code`,
+			`faqi_code`,
+            `faqi_name`,
+            `faqi_org_code`,
+            `faqi_org_name`,
+			`customer_name`,
+			`customer_code`,
+			`state`,
+            `branch_code`
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.orderId,jdbcType=VARCHAR },
+			#{item.phone,jdbcType=VARCHAR },
+			#{item.waybillNum,jdbcType=VARCHAR },
+			#{item.logisticOrderNum,jdbcType=VARCHAR },
+			#{item.merchant,jdbcType=VARCHAR },
+			#{item.consultType,jdbcType=VARCHAR },
+
+			#{item.priority,jdbcType=VARCHAR },
+			#{item.organizationNum,jdbcType=VARCHAR },
+			#{item.problemDescription,jdbcType=VARCHAR },
+			#{item.sendName,jdbcType=VARCHAR },
+			#{item.sendPhone,jdbcType=VARCHAR },
+			#{item.sendAddress,jdbcType=VARCHAR },
+
+			#{item.receiverName,jdbcType=VARCHAR },
+			#{item.receiverPhone,jdbcType=VARCHAR },
+			#{item.receiverAddress,jdbcType=VARCHAR },
+			#{item.consultTime,jdbcType=VARCHAR },
+			#{item.consultSource,jdbcType=VARCHAR },
+			#{item.dealPersion,jdbcType=VARCHAR },
+
+			#{item.dealCode,jdbcType=VARCHAR },
+			#{item.faqiCode,jdbcType=VARCHAR },
+			#{item.faqiName,jdbcType=VARCHAR },
+			#{item.faqiOrgCode,jdbcType=VARCHAR },
+			#{item.faqiOrgName,jdbcType=VARCHAR },
+			#{item.customerName,jdbcType=VARCHAR },
+			#{item.customerCode,jdbcType=VARCHAR },
+			#{item.state,jdbcType=VARCHAR },
+			#{item.branchCode,jdbcType=VARCHAR }
+		)
+		</foreach>
+	</insert>
+	    <insert id="saveOperateList" parameterType="com.yunda.base.bigcustomer.domain.OperateDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into consult_operate
+		(
+			`order_id`,
+			`operate_name`,
+			`operate_code`,
+			`operate_organization`,
+			`time`,
+			`type`,
+			`deal_content`,
+			`upload_path`,
+			`file_name`,
+			`ze_ren_fang`
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.orderId,jdbcType=VARCHAR },
+			#{item.operateName,jdbcType=VARCHAR },
+			#{item.operateCode,jdbcType=VARCHAR },
+			#{item.operateOrganization,jdbcType=VARCHAR },
+			#{item.time,jdbcType=VARCHAR },
+			#{item.type,jdbcType=VARCHAR },
+			#{item.dealContent,jdbcType=VARCHAR },
+			#{item.uploadPath,jdbcType=VARCHAR },
+			#{item.fileName,jdbcType=VARCHAR },
+			#{item.zeRenFang,jdbcType=VARCHAR }
+		)
+		</foreach>
+		
+	</insert>
+	
+	
+    <insert id="save" parameterType="com.yunda.base.bigcustomer.domain.OrderDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into consult_order
+		(
+			`order_id`,
+			`phone`,
+			`waybill_num`,
+			`logistic_order_num`, 
+			`merchant`,
+			`consult_type`, 
+			`priority`,
+			`organization_num`,
+			`problem_description`, 
+			`send_name`, 
+			`send_phone`, 
+			`send_address`, 
+			`receiver_name`, 
+			`receiver_phone`, 
+			`receiver_address`, 
+			`consult_time`, 
+			`consult_source`,
+			`deal_persion`,
+			`deal_code`,
+			`faqi_code`,
+			`faqi_name`,
+			`faqi_org_code`,
+			`faqi_org_name`,
+			`customer_name`,
+			`customer_code`,
+			`state`,
+			`branch_code`
+		)
+		values
+		(
+			#{orderId},
+			#{phone},
+			#{waybillNum},
+			#{logisticOrderNum}, 
+			#{merchant}, 
+			#{consultType}, 
+			#{priority}, 
+			#{organizationNum},
+			#{problemDescription},
+			#{sendName}, 
+			#{sendPhone}, 
+			#{sendAddress}, 
+			#{receiverName}, 
+			#{receiverPhone}, 
+			#{receiverAddress}, 
+			#{consultTime}, 
+			#{consultSource},
+			#{dealPersion},
+			#{dealCode},
+			#{faqiCode},
+			#{faqiName},
+			#{faqiOrgCode},
+			#{faqiOrgName},
+			#{customerName},
+			#{customerCode},
+			#{state},
+			#{branchCode}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.yunda.base.bigcustomer.domain.OrderDO">
+        update consult_order
+        <set>
+            <if test="phone != null">`phone` = #{phone},</if>
+            <if test="waybillNum != null">`waybill_num` = #{waybillNum},</if>
+            <if test="logisticOrderNum != null">`logistic_order_num` = #{logisticOrderNum},</if>
+            <if test="merchant != null">`merchant` = #{merchant},</if>
+            <if test="consultType != null">`consult_type` = #{consultType},</if>
+            <if test="priority != null">`priority` = #{priority},</if>
+            <if test="problemDescription != null">`problem_description` = #{problemDescription},</if>
+            <if test="sendName != null">`send_name` = #{sendName},</if>
+            <if test="sendPhone != null">`send_phone` = #{sendPhone},</if>
+            <if test="sendAddress != null">`send_address` = #{sendAddress},</if>
+            <if test="receiverName != null">`receiver_name` = #{receiverName},</if>
+            <if test="receiverPhone != null">`receiver_phone` = #{receiverPhone},</if>
+            <if test="receiverAddress != null">`receiver_address` = #{receiverAddress},</if>
+            <if test="consultTime != null">`consult_time` = #{consultTime},</if>
+            <if test="consultSource != null">`consult_source` = #{consultSource}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from consult_order where id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from consult_order where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getMaxId" resultType="int">
+		select IFNULL(Max(id),0) from consult_order
+	</select>
+
+    <update id="shenLing">
+        update consult_order
+        <set>
+            `deal_code` = #{userName},`deal_persion` = #{name},`state`= #{state}
+        </set>
+        where order_id in
+        <foreach item="orderId" collection="orderIds" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </update>
+
+    <!-- 根据咨询订单号批量更新 -->
+    <update id="updateByOrderId">
+        update consult_order
+        <set>
+            <if test="state != null">`state` = #{state},</if>
+            <if test="jieDanCause != null">`jie_dan_cause` = #{jieDanCause},</if>
+            <if test="zeRenFang != null">`ze_ren_fang` = #{zeRenFang},</if>
+            <if test="uploadPath != null">`upload_path` = #{uploadPath},</if>
+            <if test="fileName != null and fileName != ''">`file_name` = #{fileName},</if>
+            <if test="jieDanResult != null and jieDanResult != ''">`jie_dan_result` = #{jieDanResult},</if>
+            <if test="jieDanTime != null and jieDanTime != ''">`jie_dan_time` = #{jieDanTime}</if>
+        </set>
+        where order_id = #{orderIds}
+    </update>
+    <!-- 根据咨询订单号更新 -->
+    <update id="updateByOrderIds">
+        update consult_order
+        <set>
+            <if test="state != null">`state` = #{state},</if>
+            <if test="jieDanCause != null">`jie_dan_cause` = #{jieDanCause},</if>
+            <if test="zeRenFang != null">`ze_ren_fang` = #{zeRenFang},</if>
+            <if test="uploadPath != null">`upload_path` = #{uploadPath},</if>
+            <if test="fileName != null and fileName != ''">`file_name` = #{fileName},</if>
+            <if test="jieDanResult != null and jieDanResult != ''">`jie_dan_result` = #{jieDanResult},</if>
+            <if test="jieDanTime != null and jieDanTime != ''">`jie_dan_time` = #{jieDanTime}</if>
+        </set>
+        where order_id in ${orderIds}
+        <!--<foreach item="orderId" collection="orderIds" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>-->
+    </update>
+
+    <!-- 转发根据咨询订单号批量更新 -->
+    <update id="updateOrganizationNumByOrderIds">
+        update consult_order
+        <set>
+            `organization_num` = #{organizationNum},
+            `state`=#{state},
+            `deal_code`=#{dealCode},
+            `deal_persion`=#{dealPersion}
+        </set>
+        where order_id in ${orderIds}
+    </update>
+    <!-- 转发根据咨询订单号更新 -->
+    <update id="updateOrganizationNumByOrderId">
+        update consult_order
+        <set>
+            `organization_num` = #{organizationNum},
+            `state`=#{state},
+            `deal_code`=#{dealCode},
+            `deal_persion`=#{dealPersion}
+        </set>
+        where order_id = #{orderIds}
+    </update>
+
+    <select id="getListByOrderId" resultType="com.yunda.base.bigcustomer.domain.OperateDO">
+        select `order_id`,`operate_name`,`operate_organization`,`time`,`type`,`deal_content`,`upload_path`,`file_name`,`ze_ren_fang`
+        from consult_operate
+        <where>
+            order_id = #{orderId}
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="countByOrderId" resultType="int">
+        select count(*) from consult_operate
+        <where>
+            order_id = #{orderId}
+        </where>
+    </select>
+
+    <select id="getListByWaybillNum" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+        select `id`,`order_id`,`logistic_order_num`,`waybill_num`,`consult_time`,`consult_type`,`priority`,`state` from
+        consult_order
+        <where>
+            `waybill_num` = #{waybillNum}
+            <if test="startDate != null and startDate != '' and endDate !=null and endDate !=''">
+               and `consult_time` <![CDATA[>=]]> #{startDate} and `consult_time` <![CDATA[<=]]> #{endDate}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="countByWaybillNum" resultType="int">
+        select count(*) from consult_order
+        <where>
+            `waybill_num` = #{waybillNum}
+        </where>
+    </select>
+    <!-- 获取所有的咨询单类型 -->
+    <select id="getAllConsultype" resultType="String">
+		select consult_type from consult_config where `state` <![CDATA[ <> ]]> '0'
+	</select>
+    <!-- 获取所有的咨询单类型 -->
+    <select id="getAllUserInfoByOrgCode" resultType="String">
+		select CONCAT(`name`,'-',`username`) as name from bootdo_sys_user
+		<where>
+            <if test="orgCode != null and orgCode != ''">`org_code`=#{orgCode}</if>
+        </where>
+	</select>
+    <!-- 获取所有的咨询单类型 -->
+    <select id="getUserByUserName" resultType="com.yunda.base.system.domain.UserDO">
+		select `name`,`username` from bootdo_sys_user
+        where `username`= #{dealCode}
+	</select>
+
+    <insert id="saveOperateInfo" parameterType="com.yunda.base.bigcustomer.domain.OperateDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into consult_operate
+		(
+			`order_id`,
+			`operate_name`,
+			`operate_code`,
+			`operate_organization`,
+			`time`,
+			`type`,
+			`deal_content`,
+			`upload_path`,
+			`file_name`,
+			`ze_ren_fang`
+		)
+		values
+		(
+			#{orderId},
+			#{operateName},
+			#{operateCode},
+			#{operateOrganization},
+			#{time},
+			#{type},
+			#{dealContent},
+			#{uploadPath},
+			#{fileName},
+			#{zeRenFang}
+		)
+	</insert>
+
+    <select id="countOrder" resultType="int">
+        select count(*) from consult_order where consult_time <![CDATA[>=]]> #{monthBegin} and consult_time <![CDATA[<=]]> #{monthEnd}
+    </select>
+
+    <select id="countByState" resultType="int">
+        select count(*) from consult_order where consult_time <![CDATA[>=]]> #{monthBegin} and consult_time <![CDATA[<=]]> #{monthEnd} and state=#{state}
+    </select>
+
+    <select id="getCustomerName" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+        select `gsmc` as customer_name,`BM` as customer_code from ydserver.cqkh where CONCAT(`BM`,`GS`)=#{res}
+    </select>
+
+    <select id="getOrgCodeByUserName" resultType="String">
+        select `org_code` from bootdo_sys_user where `username`=#{username} limit 1
+    </select>
+
+    <select id="getUserNameListByOrgCode" resultType="String">
+        select `username` from bootdo_sys_user where `org_code`=#{orgCode}
+    </select>
+
+    <select id="getRoleNameByUserName" resultType="String">
+        select `role_name` from bootdo_sys_user a left join bootdo_sys_user_role b on a.`user_id`=b.`user_id` left join bootdo_sys_role c on b.`role_id`=c.`role_id` where `username`=#{username} limit 1
+    </select>
+
+    <select id="countByConsultType" resultType="int">
+        select count(1) from consult_config where consult_type=#{consultType}
+    </select>
+
+    <!-- 提交咨询单时，校验是否在10天内发起过【运单号】相同的咨询单（不限制咨询类型） -->
+    <select id="checkOrder"  resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+        select order_id,consult_time from consult_order where waybill_num = #{waybillNum} and consult_time <![CDATA[ >= ]]> #{consultTime} order by consult_time desc limit 1
+    </select>
+</mapper>

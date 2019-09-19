@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.bigcustomer.dao.CustomerManageDao">
+
+	<select id="get" resultType="com.yunda.base.bigcustomer.domain.CustomerManageDO">
+		select `id`,`customer_name`,`platform`,`branch`,`branch_num`,`vip_name`,`vip_num`,`organization` from customer_manage where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.bigcustomer.domain.CustomerManageDO">
+		select `id`,`customer_name`,`platform`,CONCAT(`branch`,'-',`branch_num`) as `branch`,`branch_num`,`vip_name`,`vip_num`,`organization`,`state` from customer_manage
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="platform != null and platform != ''"> and platform = #{platform} </if>
+		  		  <if test="branch != null and branch != ''"> and branch = #{branch} </if>
+		  		  <if test="vipName != null and vipName != ''"> and vip_name = #{vipName} </if>
+		  		  <if test="vipNum != null and vipNum != ''"> and vip_num = #{vipNum} </if>
+		  		  <if test="organization != null and organization != ''"> and organization = #{organization} </if>
+		  		  <if test="branchNum != null and branchNum != ''"> and branch_num = #{branchNum} </if>
+		  		  <if test="organizationNum != null and organizationNum != ''"> and organization_num = #{organizationNum} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from customer_manage
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="platform != null and platform != ''"> and platform = #{platform} </if>
+		  		  <if test="branch != null and branch != ''"> and branch = #{branch} </if>
+		  		  <if test="vipName != null and vipName != ''"> and vip_name = #{vipName} </if>
+		  		  <if test="vipNum != null and vipNum != ''"> and vip_num = #{vipNum} </if>
+		  		  <if test="organization != null and organization != ''"> and organization = #{organization} </if>
+				  <if test="branchNum != null and branchNum != ''"> and branch_num = #{branchNum} </if>
+				  <if test="organizationNum != null and organizationNum != ''"> and organization_num = #{organizationNum} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.bigcustomer.domain.CustomerManageDO" useGeneratedKeys="true" keyProperty="id">
+		insert into customer_manage
+		(
+			`customer_id`,
+			`customer_name`, 
+			`platform`, 
+			`branch`, 
+			`branch_num`,
+			`vip_name`,
+			`vip_num`, 
+			`organization`
+		)
+		values
+		(
+			#{customerId},
+			#{customerName}, 
+			#{platform}, 
+			#{branch}, 
+			#{branchNum},
+			#{vipName},
+			#{vipNum}, 
+			#{organization}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.bigcustomer.domain.CustomerManageDO">
+		update customer_manage 
+		<set>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="platform != null">`platform` = #{platform}, </if>
+			<if test="branch != null">`branch` = #{branch}, </if>
+			<if test="branchNum != null">`branch_num` = #{branchNum}, </if>
+			<if test="vipName != null">`vip_name` = #{vipName}, </if>
+			<if test="vipNum != null">`vip_num` = #{vipNum}, </if>
+			<if test="organization != null">`organization` = #{organization}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from customer_manage where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from customer_manage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- 获取所有的咨询单类型 -->
+	<select id="getOrganizationInfo" resultType="String">
+		select CONCAT(`organization`,'-',`organization_num`) from customer_manage WHERE `organization_num` != ''
+	</select>
+
+	<update id="stateUpdate">
+		update customer_manage
+		<set>
+			`state` = #{state}
+		</set>
+		where id = #{id}
+	</update>
+	<!-- 检查所属网点编码是否存在 -->
+	<select id="getBranchName" resultType="String">
+		select mc from ydserver.gs where bm=#{branch} and bm!='0' limit 1
+	</select>
+	<!-- 检查vip账号是否存在 -->
+	<select id="checkVipNum" resultType="int">
+		select count(1) from ydserver.cqkh where BM=#{vipNum}
+	</select>
+	<!-- 根据vip账号获取vip名称 -->
+	<select id="getVipNameByVipNum" resultType="String">
+		select `gsmc` from ydserver.cqkh where BM=#{vipNum} limit 1;
+	</select>
+
+	<select id="getCustomerAll" resultType="com.yunda.base.bigcustomer.domain.CustomerManageDO">
+		select `id`,`customer_id`,`customer_name` ,`platform`,`branch`,`branch_num`,`vip_name`,`vip_num`,`organization`,`state` from customer_manage where state=1
+	</select>
+
+	<select id="countByCustomerName" resultType="int">
+		select count(1) from customer_manage where `customer_name`=#{customerName}
+	</select>
+</mapper>

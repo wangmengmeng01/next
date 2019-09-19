@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.costreport.dao.CostreportCustRouteIncomeDao">
+	
+	<select id="getIncomelist" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustRouteIncomeDO">
+	SELECT account_dt,customer_id, start_province_id ,end_province_id ,order_sum ,weight,branch_code, fee from  crmkh_costreport_cust_route_income_finish
+	<where>
+		1 = 1
+		<if test="accountDt != null and accountDt != ''">and `account_dt` = #{accountDt} </if>
+		<if test="customerId != null and customerId != ''">and `customer_id` = #{customerId} </if>
+		<if test="startProvinceId != null and startProvinceId != ''">and  `start_province_id` = #{startProvinceId} </if>
+		<if test="endProvinceId != null and endProvinceId != ''">and  `end_province_id` = #{endProvinceId} </if>
+	</where>
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+	</select>
+	
+	<select id="getIncomeCount" resultType="int">
+		SELECT count(*) from  crmkh_costreport_cust_route_income_finish
+	<where>
+		1 = 1
+		<if test="accountDt != null and accountDt != ''">and `account_dt` = #{accountDt} </if>
+		<if test="customerId != null and customerId != ''">and `customer_id` = #{customerId} </if>
+		<if test="startProvinceId != null and startProvinceId != ''">and  `start_province_id` = #{startProvinceId} </if>
+		<if test="endProvinceId != null and endProvinceId != ''">and  `end_province_id` = #{endProvinceId} </if>
+	</where>
+	</select>
+	
+	<select id="getIncomeDetailList" resultType="com.yunda.base.feiniao.costreport.domain.CostreportCustRouteIncomeDO">
+	SELECT date_format(sender_account_dt,'%Y-%m-%d %H:%i:%s') as sender_account_dt, date_format(order_account_dt,'%Y-%m-%d %H:%i:%s') as order_account_dt ,shipment_no ,start_province_id,customer_id,end_province_id ,weight, fee from  crmkh_costreport_order_cost
+	<where>
+		1 = 1
+		<if test="accountDt != null and accountDt != ''">and account_dt between DATE_FORMAT(#{accountDtStart},'%Y-%m-%d') and DATE_FORMAT(#{accountDtEnd},'%Y-%m-%d') </if>
+		<if test="customerId != null and customerId != ''">and `customer_id` = #{customerId} </if>
+		<if test="branchCode != null and branchCode != ''">and  `branch_code` = #{branchCode} </if>
+		<if test="shipmentNo != null and shipmentNo != ''">and `shipment_no` = #{shipmentNo}</if>
+		<if test="startProvinceId != null and startProvinceId != '' and startProvinceId != 'null'">and  `start_province_id` = #{startProvinceId} </if>
+		<if test="endProvinceId != null and endProvinceId != '' and endProvinceId != 'null'">and  `end_province_id` = #{endProvinceId} </if>
+	</where>
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+	</select>
+	
+	<select id="getIncomeDetailCount" resultType="int">
+		SELECT count(*) from  crmkh_costreport_order_cost
+	<where>
+		1 = 1
+		<if test="accountDt != null and accountDt != ''">and account_dt between DATE_FORMAT(#{accountDtStart},'%Y-%m-%d') and DATE_FORMAT(#{accountDtEnd},'%Y-%m-%d') </if>
+		<if test="customerId != null and customerId != ''">and `customer_id` = #{customerId} </if>
+		<if test="branchCode != null and branchCode != ''">and  `branch_code` = #{branchCode} </if>
+		<if test="shipmentNo != null and shipmentNo != ''">and `shipment_no` = #{shipmentNo}</if>
+		<if test="startProvinceId != null and startProvinceId != '' and startProvinceId != 'null'">and  `start_province_id` = #{startProvinceId} </if>
+		<if test="endProvinceId != null and endProvinceId != '' and endProvinceId != 'null'">and  `end_province_id` = #{endProvinceId} </if>
+	</where>
+	</select>
+	
+	
+	
+	
+</mapper>

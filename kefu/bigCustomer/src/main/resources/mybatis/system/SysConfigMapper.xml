@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunda.base.system.dao.SysConfigDao">
+	
+	<select id="queryAll" resultType="com.yunda.base.system.domain.SysConfigDO">
+		SELECT
+			`id`,
+			`key`,
+			`value`,
+			`info`
+		FROM
+		sys_config
+	</select>
+
+	<select id="get" resultType="com.yunda.base.system.domain.SysConfigDO">
+		select `id`,`key`,`value`,`info` from sys_config where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.system.domain.SysConfigDO">
+		select `id`,`key`,`value`,`info` from sys_config
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="key != null and key != ''"> and key = #{key} </if>
+		  		  <if test="value != null and value != ''"> and value = #{value} </if>
+		  		  <if test="info != null and info != ''"> and info = #{info} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort} ,#{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sys_config
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="key != null and key != ''"> and key = #{key} </if>
+		  		  <if test="value != null and value != ''"> and value = #{value} </if>
+		  		  <if test="info != null and info != ''"> and info = #{info} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.system.domain.SysConfigDO" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_config
+		(
+			`key`, 
+			`value`, 
+			`info`
+		)
+		values
+		(
+			#{key}, 
+			#{value}, 
+			#{info}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.system.domain.SysConfigDO">
+		update sys_config 
+		<set>
+			<if test="key != null">`key` = #{key}, </if>
+			<if test="value != null">`value` = #{value}, </if>
+			<if test="info != null">`info` = #{info}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from sys_config where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sys_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+</mapper>

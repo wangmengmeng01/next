@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="record_id" name="record_id" th:value="${marketOccupancyReport.recordId}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">大区：</label>
+								<div class="col-sm-8">
+									<input id="bigarea" name="bigarea" th:value="${marketOccupancyReport.bigarea}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省ID：</label>
+								<div class="col-sm-8">
+									<input id="provinceid" name="provinceid" th:value="${marketOccupancyReport.provinceid}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省名称：</label>
+								<div class="col-sm-8">
+									<input id="provincename" name="provincename" th:value="${marketOccupancyReport.provincename}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">城市ID：</label>
+								<div class="col-sm-8">
+									<input id="cityid" name="cityid" th:value="${marketOccupancyReport.cityid}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">城市名称：</label>
+								<div class="col-sm-8">
+									<input id="cityname" name="cityname" th:value="${marketOccupancyReport.cityname}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">负责人：</label>
+								<div class="col-sm-8">
+									<input id="responsiblePeople" name="responsiblePeople" th:value="${marketOccupancyReport.responsiblePeople}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">所含重点城市：</label>
+								<div class="col-sm-8">
+									<input id="containCity" name="containCity" th:value="${marketOccupancyReport.containCity}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上报月份：</label>
+								<div class="col-sm-8">
+									<input id="reportDate" name="reportDate" th:value="${marketOccupancyReport.reportDate}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上报状态：</label>
+								<div class="col-sm-8">
+									<input id="reportStatus" name="reportStatus" th:value="${marketOccupancyReport.reportStatus}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">审核结果：</label>
+								<div class="col-sm-8">
+									<input id="auditResult" name="auditResult" th:value="${marketOccupancyReport.auditResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">审核备注：</label>
+								<div class="col-sm-8">
+									<input id="auditRemarks" name="auditRemarks" th:value="${marketOccupancyReport.auditRemarks}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">地区/公司：</label>
+								<div class="col-sm-8">
+									<input id="regionGs" name="regionGs" th:value="${marketOccupancyReport.regionGs}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">韵达占有率：</label>
+								<div class="col-sm-8">
+									<input id="proportionYd" name="proportionYd" th:value="${marketOccupancyReport.proportionYd}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">圆通占有率：</label>
+								<div class="col-sm-8">
+									<input id="proportionYt" name="proportionYt" th:value="${marketOccupancyReport.proportionYt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">中通占有率：</label>
+								<div class="col-sm-8">
+									<input id="proportionZt" name="proportionZt" th:value="${marketOccupancyReport.proportionZt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">申通占有率：</label>
+								<div class="col-sm-8">
+									<input id="proportionSt" name="proportionSt" th:value="${marketOccupancyReport.proportionSt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">百世占有率：</label>
+								<div class="col-sm-8">
+									<input id="proportionBs" name="proportionBs" th:value="${marketOccupancyReport.proportionBs}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">审核人：</label>
+								<div class="col-sm-8">
+									<input id="auditUser" name="auditUser" th:value="${marketOccupancyReport.auditUser}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">更新时间：</label>
+								<div class="col-sm-8">
+									<input id="updateTime" name="updateTime" th:value="${marketOccupancyReport.updateTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本月得分：</label>
+								<div class="col-sm-8">
+									<input id="monthScore" name="monthScore" th:value="${marketOccupancyReport.monthScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上报年份：</label>
+								<div class="col-sm-8">
+									<input id="reportNian" name="reportNian" th:value="${marketOccupancyReport.reportNian}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上报月份：</label>
+								<div class="col-sm-8">
+									<input id="reportYue" name="reportYue" th:value="${marketOccupancyReport.reportYue}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">省--韵达量：</label>
+								<div class="col-sm-8">
+									<input id="orderProvinceYdSum" name="orderProvinceYdSum" th:value="${marketOccupancyReport.orderProvinceYdSum}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">集团总量：</label>
+								<div class="col-sm-8">
+									<input id="orderJtzlYdSum" name="orderJtzlYdSum" th:value="${marketOccupancyReport.orderJtzlYdSum}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/market/marketOccupancyReport/edit.js}">
+	</script>
+</body>
+</html>

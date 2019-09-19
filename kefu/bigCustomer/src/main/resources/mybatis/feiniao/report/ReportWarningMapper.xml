@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.report.dao.ReportWarningDao">
+<!-- 网点权限的主页面sql -->
+<select id="queryWangdian" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.bigarea,a.ProvinceID,a.ProvinceName,a.CityID,a.CityName,a.branch_code,a.branch_name,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   	from tmpv2_cust_od_week_sum a
+		   	left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					a.branch_code = #{BranchCode}
+				</where>
+	</select>
+	
+	<!--预警/波动月基础表 task抽数前  先判断是否存在这个时间段的数据 -->
+	<select id="countTask"  resultType="java.lang.Integer">
+		SELECT count(*) from tmpv2_cust_od_month_sum where search_month = #{search_month}
+	</select>
+	
+ <!-- task抽数的sql -->
+<insert id="saveYjByAll" parameterType="Map">
+  
+  insert into tmpv2_cust_od_month_sum(
+   `branch_code`,
+    `customer_id`,
+    `customer_name` ,
+    `customer_source_type`,
+    `gs`,
+    `order_sum`,
+    `order_avg`,
+    `bigarea`,
+    `ProvinceID`,
+    `ProvinceName`,
+    `CityID`,
+    `CityName`,
+    `branch_name`,
+    `gsmc`,
+    `price_level`,
+    `search_month`
+  )
+  select          
+   a.branch_code,a.customer_id,a.customer_name,a.customer_source_type,a.gs,
+   (sum(a.order_sum)) order_sum,
+   (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) order_avg, 
+
+   t4.bigarea,                                                                                                 
+   t4.ProvinceID,                                                                                              
+   t4.ProvinceName,                                                                                            
+   t4.CityID,                                                                                                      
+   t4.CityName,                                                                                                    
+   gs.mc branch_name,yjwd.mc gsmc, 
+  case                                                                                                                
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 50                             then 'a'                                                                           
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=50   and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 200  then 'b'                                                           
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=200  and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 1000 then 'c'                                                          
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=1000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 2000 then 'd'                                                           
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=2000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 3000 then 'e'                                                           
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=3000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt; 5000 then 'f'                                                           
+   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;=5000                           then 'g'                                                           
+   else '' end as price_level  ,
+   
+   #{search_month}
+  FROM  tmpv2_cust_od_sum a   
+         
+   left join ydserver.gs gs on a.branch_code = gs.bm                                                                              
+   LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm                                                                              
+	LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{endDatenum},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+  <where>
+   a.qu_date BETWEEN
+    date_format (#{startDatenum},'%Y-%m-%d')
+    AND
+    date_format (#{endDatenum},'%Y-%m-%d')
+  </where>       
+  GROUP BY a.customer_id,a.branch_code,customer_source_type,gs
+   
+ </insert>
+ 
+ <insert id="saveYjByAllNew" parameterType="Map">
+  
+	  insert into tmpv2_cust_od_month_sum(
+	   `branch_code`,
+	    `customer_id`,
+	    `customer_name` ,
+	    `customer_source_type`,
+	    `gs`,
+	    `order_sum`,
+	    `order_avg`,
+	    `bigarea`,
+	    `ProvinceID`,
+	    `ProvinceName`,
+	    `CityID`,
+	    `CityName`,
+	    `branch_name`,
+	    `gsmc`,
+	    `price_level`,
+	    `search_month`
+	  )
+	  select          
+	   a.branch_code,a.customer_id,a.customer_name,a.customer_source_type,a.gs,
+	   (sum(a.order_sum)) order_sum,
+	   (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) order_avg, 
+	
+	   t4.bigarea,                                                                                                 
+	   t4.ProvinceID,                                                                                              
+	   t4.ProvinceName,                                                                                            
+	   t4.CityID,                                                                                                      
+	   t4.CityName,                                                                                                    
+	   gs.mc branch_name,yjwd.mc gsmc, 
+	  case                                                                                                                
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;= 0   and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 50   then 'a'                                                                                                                                   
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 50   and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 100  then 'b'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 100  and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 500 then 'c'                                                          
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 500 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 1000 then 'd'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 1000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 3000 then 'e'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 3000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 5000 then 'f'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 5000                           then 'g'                                                           
+	   else '' end as price_level  ,
+	   
+	   #{search_month}
+	  FROM  tmpv2_cust_od_sum a   
+	         
+	   left join ydserver.gs gs on a.branch_code = gs.bm                                                                              
+	   LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm                                                                              
+		LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{endDatenum},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+
+	  <where>
+	   a.qu_date BETWEEN
+	    date_format (#{startDatenum},'%Y-%m-%d')
+	    AND
+	    date_format (#{endDatenum},'%Y-%m-%d')
+	  </where>       
+	  GROUP BY a.customer_id,a.branch_code,customer_source_type,gs
+   
+ </insert>
+	 	
+		<delete id="removeYjByAll" parameterType="String">
+				delete from tmpv2_cust_od_month_sum where search_month = #{search_month}
+		</delete>
+	<!-- 预警周基础表   task抽数前  先判断是否存在这个时间段的数据 -->
+	<select id="countYJWeekTask"  parameterType="String" resultType="java.lang.Integer">
+		SELECT count(*) from tmpv2_cust_od_week_sum where search_week = #{searchWeek}
+	</select>
+		
+ <insert id="saveYjByWeek" parameterType="Map">
+  
+	  insert into tmpv2_cust_od_week_sum(
+	   `branch_code`,
+	    `customer_id`,
+	    `customer_name` ,
+	    `customer_source_type`,
+	    `gs`,
+	    `order_sum`,
+	    `order_avg`,
+	    `bigarea`,
+	    `ProvinceID`,
+	    `ProvinceName`,
+	    `CityID`,
+	    `CityName`,
+	    `branch_name`,
+	    `gsmc`,
+	    `price_level`,
+	    `search_week`
+	  )
+	  select          
+	   a.branch_code,a.customer_id,a.customer_name,a.customer_source_type,a.gs,
+	   (sum(a.order_sum)) order_sum,
+	   (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) order_avg, 
+	
+	   t4.bigarea,                                                                                                 
+	   t4.ProvinceID,                                                                                              
+	   t4.ProvinceName,                                                                                            
+	   t4.CityID,                                                                                                      
+	   t4.CityName,                                                                                                    
+	   gs.mc branch_name,yjwd.mc gsmc, 
+	  case                                                                                                                
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt;= 0   and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 50   then 'a'                                                                                                                                   
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 50   and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 100  then 'b'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 100  and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 500 then 'c'                                                          
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 500 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 1000 then 'd'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 1000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 3000 then 'e'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 3000 and (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &lt;= 5000 then 'f'                                                           
+	   when (sum(a.order_sum)/(datediff(#{endDatenum},#{startDatenum})+1)) &gt; 5000                           then 'g'                                                           
+	   else '' end as price_level  ,
+	   
+	   #{searchWeek}
+	  FROM  tmpv2_cust_od_sum a   
+	         
+	   left join ydserver.gs gs on a.branch_code = gs.bm                                                                              
+	   LEFT JOIN ydserver.gs yjwd ON a.gs = yjwd.bm                                                                              
+		LEFT JOIN crmkhv2_regional_basic_information t4 ON gs.szd = t4.CountyID  and date_format (#{endDatenum},'%Y-%m-%d') BETWEEN t4.start_date AND t4.end_date                                                              
+
+	  <where>
+	   a.qu_date BETWEEN
+	    date_format (#{startDatenum},'%Y-%m-%d')
+	    AND
+	    date_format (#{endDatenum},'%Y-%m-%d')
+	  </where>       
+	  GROUP BY a.customer_id,a.branch_code,customer_source_type,gs
+   
+ </insert>
+	 	
+		<delete id="removeYjByWeek" parameterType="String">
+				delete from tmpv2_cust_od_week_sum where search_week = #{searchWeek}
+		</delete>
+	
+	<!-- 查询客户名称   ydserver.cqkh -->
+	<!--  <select id = "getCustomerInfo"  parameterType="Map"></select>  -->
+	
+	<!-- doWithCustPronumber()方法的sql -->
+	<select id="doWithCustPronumbercust" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,a.price_level,a.order_avg,a.customer_source_type,a.gs yjbm,a.gsmc yjmc,
+				ifnull(a.last_order_avg,0) last_order_avg,ifnull(a.last_order_sum,0) last_order_sum,
+				a.ProvinceID,a.ProvinceName,CASE a.customer_source_type WHEN 1 THEN '菜鸟' WHEN 2 THEN '二维码' WHEN 4 THEN '京东' ELSE '拼多多' END customer_source_type   
+				, concat(round(cast(ifnull(cast(last_order_avg*1.0/order_avg as decimal(10,2)),0)*100 as decimal),2),'%') as '月环比' 
+			from
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   		from tmpv2_cust_od_week_sum a
+		   		left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+			   <![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				and a.price_level = #{price_level}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					
+					<if test="type == 'custpronumber' ">
+		                AND a.ProvinceID= #{ProvinceId}
+			        </if>
+			        <if test="type == 'custcitnumber' ">
+			            AND a.CityID= #{CityId}
+			        </if>
+			        <if test="type == 'custbranumber' ">
+			            AND a.branch_code= #{BranchCode}
+			        </if>
+			        <if test="type == 'custbignumber' ">
+			            AND a.bigarea= #{RegionId}
+			        </if>
+			        <if test="type == 'custallnumber' ">
+			        
+			        </if>		
+				</where>
+					<if test="offset != null and limit != null">
+			 	  		limit #{offset}, #{limit}
+			 		</if>
+	</select>
+	
+	
+	<!-- doWithCustomer()方法的sql -->
+	<select id="doWithCustomercust" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT   a.gsmc as yjmc,a.gs as yjbm,                
+				a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,a.price_level,order_avg,a.customer_source_type,a.gs,
+				ifnull(a.last_order_avg,0) last_order_avg,
+				ifnull(a.last_order_sum,0) last_order_sum,
+				ifnull(a.order_sum,0) order_sum,
+				a.ProvinceID,a.ProvinceName,CASE a.customer_source_type WHEN 1 THEN '菜鸟' WHEN 2 THEN '二维码' WHEN 4 THEN '京东' ELSE '拼多多'  END customer_source_type 
+			from 
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+           	 	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   	from tmpv2_cust_od_week_sum a
+		   	left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					a.branch_code = #{BranchCode}
+				</where>
+			    GROUP BY a.customer_id
+			    <if test="offset != null and limit != null">
+			 	  	limit #{offset}, #{limit}
+			 	</if>
+		
+	</select>
+	
+	<!-- doWithBranch()方法的sql -->
+	<select id="doWithBranchshi" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.CityID,a.CityName,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from 
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   	from tmpv2_cust_od_week_sum a
+		   	left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					a.CityID = #{CityId}
+				</where>
+				GROUP BY a.CityID,a.CityName
+	</select>
+	
+	<select id="doWithBranchgs" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.bigarea,a.ProvinceID,a.ProvinceName,a.CityID,a.CityName,a.branch_code,a.branch_name,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   	from tmpv2_cust_od_week_sum a
+		   	left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					a.CityID = #{CityId}
+				</where>
+				GROUP BY a.branch_code,a.branch_name
+		
+	</select>
+	
+	<!-- doWithCity()方法的sql -->
+	<select id="doWithCityprovince" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.ProvinceName,a.ProvinceID,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from 
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		  	 from tmpv2_cust_od_week_sum a
+		  	 left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+				<where>
+					a.ProvinceID = #{ProvinceId}
+				</where>
+				GROUP BY a.ProvinceID,a.ProvinceName
+				
+	</select>
+	
+	<select id="doWithCitycity" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.ProvinceID,a.bigarea,a.CityID,a.CityName,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+           		 a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		   		from tmpv2_cust_od_week_sum a
+		   		left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a 
+
+				<where>
+					a.ProvinceID = #{ProvinceId}
+				</where>
+				GROUP BY a.CityID,a.CityName 
+				
+	</select>
+	
+<!-- doWithProvince()方法的sql -->
+	<select id="queryallcount" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            a.customer_source_type,a.gs,ifnull(a.last_order_avg,0) last_order_avg,ifnull(a.last_order_sum,0) last_order_sum,ifnull(a.order_sum,0) order_sum,a.ProvinceID,a.ProvinceName, 
+			COUNT(customer_id) customer_sum,                                     
+			ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum, 
+			ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum, 
+			ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum, 
+			ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum, 
+			ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum, 
+			ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum, 							 
+			ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+		from 
+			(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+			(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+			a.ProvinceID,a.ProvinceName,a.price_level,
+			(sum(ifnull(b.order_sum,0))) last_order_sum
+		   from tmpv2_cust_od_week_sum a
+		   left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+			<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+			where
+				a.search_week = #{search_week}
+				
+			group by a.customer_id, a.branch_code,a.customer_source_type
+			HAVING (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+						
+	</select>
+	<select id="querybigarea" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.bigarea,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                              
+			ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+			ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+			ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+			ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+			ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+			ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+			ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+		from 
+			(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+			(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+			a.ProvinceID,a.ProvinceName,a.price_level,
+			(sum(ifnull(b.order_sum,0))) last_order_sum
+		   from tmpv2_cust_od_week_sum a
+		   left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+			<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+			where
+				a.search_week = #{search_week}
+				
+			group by a.customer_id, a.branch_code,a.customer_source_type
+			HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+			where 1=1
+		        <if test=' type == "D" '>						
+					<if test="RegionId!=null and RegionId.size>0">
+			   			and a.bigarea in 
+			   			<foreach collection="RegionId" item="RegionId" index="index" open="(" close=")" separator=",">
+			   				'${RegionId}'
+			   			</foreach>
+			   		</if>		
+				</if>
+			GROUP BY bigarea
+			ORDER BY case when bigarea='广东大区' then 1 when bigarea='上海大区' then 2 when bigarea='北京大区' then 3 when bigarea='江苏大区' then 4 when bigarea='浙江大区' then 5 when bigarea='华中西南大区' then 6 else 7 end
+			
+	</select>
+	<select id="queryprovince" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		SELECT  a.ProvinceName,a.ProvinceID,a.bigarea,sum(ifnull(a.last_order_avg,0)) last_order_avg,sum(ifnull(a.last_order_sum,0)) last_order_sum,sum(ifnull(a.order_sum,0)) order_sum,                                               
+				ifnull(sum(case when a.price_level = 'a' then 1 else 0 end),0) a_customer_sum,
+				ifnull(sum(case when a.price_level = 'b' then 1 else 0 end),0) b_customer_sum,
+				ifnull(sum(case when a.price_level = 'c' then 1 else 0 end),0) c_customer_sum,
+				ifnull(sum(case when a.price_level = 'd' then 1 else 0 end),0) d_customer_sum,
+				ifnull(sum(case when a.price_level = 'e' then 1 else 0 end),0) e_customer_sum,
+				ifnull(sum(case when a.price_level = 'f' then 1 else 0 end),0) f_customer_sum,
+				ifnull(sum(case when a.price_level = 'g' then 1 else 0 end),0) g_customer_sum 
+			from 
+				(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		  	  from tmpv2_cust_od_week_sum a
+		  	  left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+				) a
+				where 1=1
+			        <if test=' type == "D" '>						
+						<if test="RegionId!=null and RegionId.size>0">
+				   			and a.bigarea in 
+				   			<foreach collection="RegionId" item="RegionId" index="index" open="(" close=")" separator=",">
+				   				'${RegionId}'
+				   			</foreach>
+				   		</if>		
+				   </if>
+			        <if test=' type == "S" '>						
+						<if test="ProvinceId!=null and ProvinceId.size>0">
+				   			and a.ProvinceID in 
+				   			<foreach collection="ProvinceId" item="ProvinceId" index="index" open="(" close=")" separator=",">
+				   				'${ProvinceId}'
+				   			</foreach>
+				   		</if>		
+				   </if>
+				GROUP BY a.ProvinceName,a.ProvinceID 
+	</select>
+
+	<select id="get" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		select `bigarea`,`province_id`,`province_name`,`city_id`,`city_name`,`branch_code`,`branch_name`,`customer_id`,`yjbm`,`yjmc`,`customer_name`,`price_level`,`customer_source_type`,`create_date`,`order_sum`,`last_order_sum`,`last_order_avg`,`qrcode_order_sum`,`cainiao_order_sum`,`ordinary_order_sum`,`order_avg`,`price_num`,`dianzi_order_sum`,`dianzi_num_percent`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`customer_sum`,`customer_waring_sum`,`customer_totalWaring_sum` from crmkhv2_report_warning where bigarea = #{value}
+	</select>
+	
+	<select id="list" resultType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		select `bigarea`,`province_id`,`province_name`,`city_id`,`city_name`,`branch_code`,`branch_name`,`customer_id`,`yjbm`,`yjmc`,`customer_name`,`price_level`,`customer_source_type`,`create_date`,`order_sum`,`last_order_sum`,`last_order_avg`,`qrcode_order_sum`,`cainiao_order_sum`,`ordinary_order_sum`,`order_avg`,`price_num`,`dianzi_order_sum`,`dianzi_num_percent`,`a_customer_sum`,`b_customer_sum`,`c_customer_sum`,`d_customer_sum`,`e_customer_sum`,`f_customer_sum`,`g_customer_sum`,`a_order_avg`,`b_order_avg`,`c_order_avg`,`d_order_avg`,`e_order_avg`,`f_order_avg`,`g_order_avg`,`a_order_sum`,`b_order_sum`,`c_order_sum`,`d_order_sum`,`e_order_sum`,`f_order_sum`,`g_order_sum`,`a_price_sum`,`b_price_sum`,`c_price_sum`,`d_price_sum`,`e_price_sum`,`f_price_sum`,`g_price_sum`,`customer_sum`,`customer_waring_sum`,`customer_totalWaring_sum` from crmkhv2_report_warning
+        <where>  
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="provinceId != null and provinceId != ''"> and province_id = #{provinceId} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and province_name = #{provinceName} </if>
+		  		  <if test="cityId != null and cityId != ''"> and city_id = #{cityId} </if>
+		  		  <if test="cityName != null and cityName != ''"> and city_name = #{cityName} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+		  		  <if test="yjbm != null and yjbm != ''"> and yjbm = #{yjbm} </if>
+		  		  <if test="yjmc != null and yjmc != ''"> and yjmc = #{yjmc} </if>
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="numberLevel != null and numberLevel != ''"> and price_level = #{numberLevel} </if>
+		  		  <if test="customerSourceType != null and customerSourceType != ''"> and customer_source_type = #{customerSourceType} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="orderSum != null and orderSum != ''"> and order_sum = #{orderSum} </if>
+		  		  <if test="lastOrderSum != null and lastOrderSum != ''"> and last_order_sum = #{lastOrderSum} </if>
+		  		  <if test="lastOrderAvg != null and lastOrderAvg != ''"> and last_order_avg = #{lastOrderAvg} </if>
+		  		  <if test="qrcodeOrderSum != null and qrcodeOrderSum != ''"> and qrcode_order_sum = #{qrcodeOrderSum} </if>
+		  		  <if test="cainiaoOrderSum != null and cainiaoOrderSum != ''"> and cainiao_order_sum = #{cainiaoOrderSum} </if>
+		  		  <if test="ordinaryOrderSum != null and ordinaryOrderSum != ''"> and ordinary_order_sum = #{ordinaryOrderSum} </if>
+		  		  <if test="orderAvg != null and orderAvg != ''"> and order_avg = #{orderAvg} </if>
+		  		  <if test="priceNum != null and priceNum != ''"> and price_num = #{priceNum} </if>
+		  		  <if test="dianziOrderSum != null and dianziOrderSum != ''"> and dianzi_order_sum = #{dianziOrderSum} </if>
+		  		  <if test="dianziNumPercent != null and dianziNumPercent != ''"> and dianzi_num_percent = #{dianziNumPercent} </if>
+		  		  <if test="aCustomerSum != null and aCustomerSum != ''"> and a_customer_sum = #{aCustomerSum} </if>
+		  		  <if test="bCustomerSum != null and bCustomerSum != ''"> and b_customer_sum = #{bCustomerSum} </if>
+		  		  <if test="cCustomerSum != null and cCustomerSum != ''"> and c_customer_sum = #{cCustomerSum} </if>
+		  		  <if test="dCustomerSum != null and dCustomerSum != ''"> and d_customer_sum = #{dCustomerSum} </if>
+		  		  <if test="eCustomerSum != null and eCustomerSum != ''"> and e_customer_sum = #{eCustomerSum} </if>
+		  		  <if test="fCustomerSum != null and fCustomerSum != ''"> and f_customer_sum = #{fCustomerSum} </if>
+		  		  <if test="gCustomerSum != null and gCustomerSum != ''"> and g_customer_sum = #{gCustomerSum} </if>
+		  		  <if test="aOrderAvg != null and aOrderAvg != ''"> and a_order_avg = #{aOrderAvg} </if>
+		  		  <if test="bOrderAvg != null and bOrderAvg != ''"> and b_order_avg = #{bOrderAvg} </if>
+		  		  <if test="cOrderAvg != null and cOrderAvg != ''"> and c_order_avg = #{cOrderAvg} </if>
+		  		  <if test="dOrderAvg != null and dOrderAvg != ''"> and d_order_avg = #{dOrderAvg} </if>
+		  		  <if test="eOrderAvg != null and eOrderAvg != ''"> and e_order_avg = #{eOrderAvg} </if>
+		  		  <if test="fOrderAvg != null and fOrderAvg != ''"> and f_order_avg = #{fOrderAvg} </if>
+		  		  <if test="gOrderAvg != null and gOrderAvg != ''"> and g_order_avg = #{gOrderAvg} </if>
+		  		  <if test="aOrderSum != null and aOrderSum != ''"> and a_order_sum = #{aOrderSum} </if>
+		  		  <if test="bOrderSum != null and bOrderSum != ''"> and b_order_sum = #{bOrderSum} </if>
+		  		  <if test="cOrderSum != null and cOrderSum != ''"> and c_order_sum = #{cOrderSum} </if>
+		  		  <if test="dOrderSum != null and dOrderSum != ''"> and d_order_sum = #{dOrderSum} </if>
+		  		  <if test="eOrderSum != null and eOrderSum != ''"> and e_order_sum = #{eOrderSum} </if>
+		  		  <if test="fOrderSum != null and fOrderSum != ''"> and f_order_sum = #{fOrderSum} </if>
+		  		  <if test="gOrderSum != null and gOrderSum != ''"> and g_order_sum = #{gOrderSum} </if>
+		  		  <if test="aPriceSum != null and aPriceSum != ''"> and a_price_sum = #{aPriceSum} </if>
+		  		  <if test="bPriceSum != null and bPriceSum != ''"> and b_price_sum = #{bPriceSum} </if>
+		  		  <if test="cPriceSum != null and cPriceSum != ''"> and c_price_sum = #{cPriceSum} </if>
+		  		  <if test="dPriceSum != null and dPriceSum != ''"> and d_price_sum = #{dPriceSum} </if>
+		  		  <if test="ePriceSum != null and ePriceSum != ''"> and e_price_sum = #{ePriceSum} </if>
+		  		  <if test="fPriceSum != null and fPriceSum != ''"> and f_price_sum = #{fPriceSum} </if>
+		  		  <if test="gPriceSum != null and gPriceSum != ''"> and g_price_sum = #{gPriceSum} </if>
+		  		  <if test="customerSum != null and customerSum != ''"> and customer_sum = #{customerSum} </if>
+		  		  <if test="customerWaringSum != null and customerWaringSum != ''"> and customer_waring_sum = #{customerWaringSum} </if>
+		  		  <if test="customerTotalwaringSum != null and customerTotalwaringSum != ''"> and customer_totalWaring_sum = #{customerTotalwaringSum} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by bigarea desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="java.lang.Integer">
+		select count(*) 
+		from 
+			(SELECT a.bigarea,a.branch_code,a.branch_name,a.CityID,a.CityName,a.customer_id,a.customer_name,
+            	a.customer_source_type,a.gs,a.gsmc,a.order_sum,a.order_avg,
+				(sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1)) last_order_avg,
+				a.ProvinceID,a.ProvinceName,a.price_level,
+				(sum(ifnull(b.order_sum,0))) last_order_sum
+		  	  from tmpv2_cust_od_week_sum a
+		  	  left join tmpv2_cust_od_sum b ON a.customer_id = b.customer_id AND a.customer_source_type = b.customer_source_type 
+				<![CDATA[ and b.qu_date >= #{startDate} and b.qu_date <= #{endDate}]]>
+				where
+				a.search_week = #{search_week}
+				group by a.customer_id, a.branch_code,a.customer_source_type
+				HAVING  (sum(ifnull(b.order_sum,0))/(datediff(#{endDate},#{startDate})+1))/a.order_avg &lt; 1/2
+			) a
+		 <where>  
+		  		  <if test="provinceId != null and provinceId != '' and provinceId != 0"> and ProvinceID = #{provinceId} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and ProvinceName = #{provinceName} </if>
+		  		  <if test="cityId != null and cityId != ''"> and CityID = #{cityId} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="priceLevel != null and priceLevel != ''"> and price_level = #{priceLevel} </if>
+		 </where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		insert into crmkhv2_report_warning
+		(
+			`bigarea`, 
+			`province_id`, 
+			`province_name`, 
+			`city_id`, 
+			`city_name`, 
+			`branch_code`, 
+			`branch_name`, 
+			`customer_id`, 
+			`yjbm`, 
+			`yjmc`, 
+			`customer_name`, 
+			`price_level`, 
+			`customer_source_type`, 
+			`create_date`, 
+			`order_sum`, 
+			`last_order_sum`, 
+			`last_order_avg`, 
+			`qrcode_order_sum`, 
+			`cainiao_order_sum`, 
+			`ordinary_order_sum`, 
+			`order_avg`, 
+			`price_num`, 
+			`dianzi_order_sum`, 
+			`dianzi_num_percent`, 
+			`a_customer_sum`, 
+			`b_customer_sum`, 
+			`c_customer_sum`, 
+			`d_customer_sum`, 
+			`e_customer_sum`, 
+			`f_customer_sum`, 
+			`g_customer_sum`, 
+			`a_order_avg`, 
+			`b_order_avg`, 
+			`c_order_avg`, 
+			`d_order_avg`, 
+			`e_order_avg`, 
+			`f_order_avg`, 
+			`g_order_avg`, 
+			`a_order_sum`, 
+			`b_order_sum`, 
+			`c_order_sum`, 
+			`d_order_sum`, 
+			`e_order_sum`, 
+			`f_order_sum`, 
+			`g_order_sum`, 
+			`a_price_sum`, 
+			`b_price_sum`, 
+			`c_price_sum`, 
+			`d_price_sum`, 
+			`e_price_sum`, 
+			`f_price_sum`, 
+			`g_price_sum`, 
+			`customer_sum`, 
+			`customer_waring_sum`, 
+			`customer_totalWaring_sum`
+		)
+		values
+		(
+			#{bigarea}, 
+			#{provinceId}, 
+			#{provinceName}, 
+			#{cityId}, 
+			#{cityName}, 
+			#{branchCode}, 
+			#{branchName}, 
+			#{customerId}, 
+			#{yjbm}, 
+			#{yjmc}, 
+			#{customerName}, 
+			#{numberLevel}, 
+			#{customerSourceType}, 
+			#{createDate}, 
+			#{orderSum}, 
+			#{lastOrderSum}, 
+			#{lastOrderAvg}, 
+			#{qrcodeOrderSum}, 
+			#{cainiaoOrderSum}, 
+			#{ordinaryOrderSum}, 
+			#{orderAvg}, 
+			#{priceNum}, 
+			#{dianziOrderSum}, 
+			#{dianziNumPercent}, 
+			#{aCustomerSum}, 
+			#{bCustomerSum}, 
+			#{cCustomerSum}, 
+			#{dCustomerSum}, 
+			#{eCustomerSum}, 
+			#{fCustomerSum}, 
+			#{gCustomerSum}, 
+			#{aOrderAvg}, 
+			#{bOrderAvg}, 
+			#{cOrderAvg}, 
+			#{dOrderAvg}, 
+			#{eOrderAvg}, 
+			#{fOrderAvg}, 
+			#{gOrderAvg}, 
+			#{aOrderSum}, 
+			#{bOrderSum}, 
+			#{cOrderSum}, 
+			#{dOrderSum}, 
+			#{eOrderSum}, 
+			#{fOrderSum}, 
+			#{gOrderSum}, 
+			#{aPriceSum}, 
+			#{bPriceSum}, 
+			#{cPriceSum}, 
+			#{dPriceSum}, 
+			#{ePriceSum}, 
+			#{fPriceSum}, 
+			#{gPriceSum}, 
+			#{customerSum}, 
+			#{customerWaringSum}, 
+			#{customerTotalwaringSum}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.report.domain.ReportWarningDO">
+		update crmkhv2_report_warning 
+		<set>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="provinceName != null">`province_name` = #{provinceName}, </if>
+			<if test="cityId != null">`city_id` = #{cityId}, </if>
+			<if test="cityName != null">`city_name` = #{cityName}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="yjbm != null">`yjbm` = #{yjbm}, </if>
+			<if test="yjmc != null">`yjmc` = #{yjmc}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="numberLevel != null">`price_level` = #{numberLevel}, </if>
+			<if test="customerSourceType != null">`customer_source_type` = #{customerSourceType}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="orderSum != null">`order_sum` = #{orderSum}, </if>
+			<if test="lastOrderSum != null">`last_order_sum` = #{lastOrderSum}, </if>
+			<if test="lastOrderAvg != null">`last_order_avg` = #{lastOrderAvg}, </if>
+			<if test="qrcodeOrderSum != null">`qrcode_order_sum` = #{qrcodeOrderSum}, </if>
+			<if test="cainiaoOrderSum != null">`cainiao_order_sum` = #{cainiaoOrderSum}, </if>
+			<if test="ordinaryOrderSum != null">`ordinary_order_sum` = #{ordinaryOrderSum}, </if>
+			<if test="orderAvg != null">`order_avg` = #{orderAvg}, </if>
+			<if test="priceNum != null">`price_num` = #{priceNum}, </if>
+			<if test="dianziOrderSum != null">`dianzi_order_sum` = #{dianziOrderSum}, </if>
+			<if test="dianziNumPercent != null">`dianzi_num_percent` = #{dianziNumPercent}, </if>
+			<if test="aCustomerSum != null">`a_customer_sum` = #{aCustomerSum}, </if>
+			<if test="bCustomerSum != null">`b_customer_sum` = #{bCustomerSum}, </if>
+			<if test="cCustomerSum != null">`c_customer_sum` = #{cCustomerSum}, </if>
+			<if test="dCustomerSum != null">`d_customer_sum` = #{dCustomerSum}, </if>
+			<if test="eCustomerSum != null">`e_customer_sum` = #{eCustomerSum}, </if>
+			<if test="fCustomerSum != null">`f_customer_sum` = #{fCustomerSum}, </if>
+			<if test="gCustomerSum != null">`g_customer_sum` = #{gCustomerSum}, </if>
+			<if test="aOrderAvg != null">`a_order_avg` = #{aOrderAvg}, </if>
+			<if test="bOrderAvg != null">`b_order_avg` = #{bOrderAvg}, </if>
+			<if test="cOrderAvg != null">`c_order_avg` = #{cOrderAvg}, </if>
+			<if test="dOrderAvg != null">`d_order_avg` = #{dOrderAvg}, </if>
+			<if test="eOrderAvg != null">`e_order_avg` = #{eOrderAvg}, </if>
+			<if test="fOrderAvg != null">`f_order_avg` = #{fOrderAvg}, </if>
+			<if test="gOrderAvg != null">`g_order_avg` = #{gOrderAvg}, </if>
+			<if test="aOrderSum != null">`a_order_sum` = #{aOrderSum}, </if>
+			<if test="bOrderSum != null">`b_order_sum` = #{bOrderSum}, </if>
+			<if test="cOrderSum != null">`c_order_sum` = #{cOrderSum}, </if>
+			<if test="dOrderSum != null">`d_order_sum` = #{dOrderSum}, </if>
+			<if test="eOrderSum != null">`e_order_sum` = #{eOrderSum}, </if>
+			<if test="fOrderSum != null">`f_order_sum` = #{fOrderSum}, </if>
+			<if test="gOrderSum != null">`g_order_sum` = #{gOrderSum}, </if>
+			<if test="aPriceSum != null">`a_price_sum` = #{aPriceSum}, </if>
+			<if test="bPriceSum != null">`b_price_sum` = #{bPriceSum}, </if>
+			<if test="cPriceSum != null">`c_price_sum` = #{cPriceSum}, </if>
+			<if test="dPriceSum != null">`d_price_sum` = #{dPriceSum}, </if>
+			<if test="ePriceSum != null">`e_price_sum` = #{ePriceSum}, </if>
+			<if test="fPriceSum != null">`f_price_sum` = #{fPriceSum}, </if>
+			<if test="gPriceSum != null">`g_price_sum` = #{gPriceSum}, </if>
+			<if test="customerSum != null">`customer_sum` = #{customerSum}, </if>
+			<if test="customerWaringSum != null">`customer_waring_sum` = #{customerWaringSum}, </if>
+			<if test="customerTotalwaringSum != null">`customer_totalWaring_sum` = #{customerTotalwaringSum}</if>
+		</set>
+		where bigarea = #{bigarea}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_report_warning where bigarea = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_report_warning where bigarea in 
+		<foreach item="bigarea" collection="array" open="(" separator="," close=")">
+			#{bigarea}
+		</foreach>
+	</delete>
+
+</mapper>

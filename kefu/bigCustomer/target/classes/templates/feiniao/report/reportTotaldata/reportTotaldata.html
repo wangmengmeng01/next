@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group group-query" id="group_query">
+								<div class="query-time group-select" id="group_select">
+									<label class="col-sm-2 col-md-2 control-label label-time" id="lable-time">查询时间：</label>
+								    <div class="col-sm-2" >
+									     <select id = "date_style" name="date_style" class="form-control">
+									     	  <option value="0">请选择</option>
+									          <option value="1">日</option>
+									          <option value="2">月</option>
+									          <option value="3">季度</option>
+									          <option value="4">年</option>
+									          <option value="5">时间段</option>
+									     </select>
+								   </div>
+								</div>
+								<div class="group-date col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-1" id="group_date" style="display:none;">
+									<input type="text" class="form-control" id="qu_date" name="qu_date" placeholder="日">
+								</div>
+								<div class="group-date col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-1" id="group_month" style="display:none;">
+									<input type="text" class="form-control" id="month_year" name="month_year"  placeholder="月">
+								</div>
+								<div class="group-quarter" id="group_quarter" style="display:none;">
+									<div class="col-sm-2 col-md-2 col-md-offset-1 col-sm-offset-1">
+										<input type="text" class="form-control" id="quarter_year" name="quarter_year"  placeholder="年">
+									</div>
+									<div class="col-sm-2 col-md-2">
+										<select id="quarter_date" name="quarter_date" class="form-control">
+										<option value="0">请选择</option>
+										<option value="1">第一季度</option>
+								        <option value="2">第二季度</option>
+								        <option value="3">第三季度</option>
+								        <option value="4">第四季度</option>
+									</select>
+									</div>
+								</div>
+								<div class="group-date col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-1" id="group_year" style="display:none;">
+									<input type="text" class="form-control" id="year" name="year"  placeholder="年">
+								</div>
+								<div class="group-time" id="group_time" style="display:none;">
+									<div class=" time-bucket" id="time_bucket">
+										<label class="control-label col-sm-2 col-md-1">时间段：</label>
+										 <div class="col-sm-2">
+											<input id="start_date" name="start_date" class="form-control" type="text"  placeholder="开始时间">
+										</div>
+										<div style="float:left;margin-top: 6px;">—</div>
+										<div class="col-sm-2">
+											<input id="end_date" name="end_date" class="form-control" type="text" placeholder="结束时间">
+										</div>
+									</div>
+								</div>
+								<div class="group-querybtn col-sm-offset-1" id="group-querybtn" style="text-align:right;">
+									<input type="button" value="查询" id="queryData"  onclick="query()" class="btn btn-warning" style="margin-left:20px;margin-right:20px;background-color:#1E9FFF;border:1px solid #1E9FFF;">
+									<input type="button" value="重置" onclick="resetForm()" class="btn  btn-success" style="margin-right:20px;">
+									<button shiro:hasPermission="report:reportTotaldata:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" style="margin-right:50px;">
+										<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+									</button>
+									 <div style="color:red; margin:20px 30px; text-align:left;">备注：
+2018年及以前年份客户类别划分为：A类：0-50票；B类：50-200票；C类：200-1000票；D类：1000-2000票；E类：2000-3000票 ；F类：3000-5000票；G类：5000票以上
+2019年及以后年份客户类别划分为：A类：0-50票；B类：50-100票；C类：100-500票；D类：500-1000票；E类：1000-3000票 ；F类：3000-5000票；G类：5000票以上</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			<div class="ibox">
+				<div class="ibox-body">
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="report:reportTotaldata:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="report:reportTotaldata:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="report:reportTotaldata:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="report:reportTotaldata:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版1
+                        	</button>
+							<!--<button shiro:hasPermission="report:reportTotaldata:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" >
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							 <button id="refresh" type="button" class="btn btn-primary">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>
+							 -->
+						</div>
+					</div>
+					<table id="exampleTable" data-mobile-responsive="true" class="text-nowrap"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_cityData_h = 'hidden';
+
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotaldata:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotaldata:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotaldata:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="report:reportTotal:reportTotalCity">
+			<script type="text/javascript">
+				var s_cityData_h = '';
+			</script>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/report/reportTotaldata/reportTotaldata.js?v=4}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+
+</body>
+</html>

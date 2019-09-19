@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include::header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="roleId" name="roleId" type="hidden"
+                               th:value="${role.roleId}"> <input id="menuIds"
+                                                                 name="menuIds" type="hidden">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据权限：</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    <input id="benRen" name="dataPermissions" value="1"
+                                           type="radio">本人
+                                </label>
+                                <label class="radio-inline">
+                                    <input id="benBuMen" name="dataPermissions" value="2"
+                                           type="radio">本部门
+                                </label>
+                                <label class="radio-inline">
+                                    <input id="all" name="dataPermissions" value="3"
+                                           type="radio">全部
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">菜单权限：</label>
+                            <div class="col-sm-8">
+                                <div id="menuTree"></div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:src="@{/js/appjs/sys/role/fenpei.js}"></script>
+</body>
+
+</html>

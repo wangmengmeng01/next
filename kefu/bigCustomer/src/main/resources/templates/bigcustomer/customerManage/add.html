@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+    <style>
+        .form-control {
+            display: inline-block;
+            width: 66%;
+        }
+
+        ul li {
+            list-style-type: none;
+        }
+
+        .es-list {
+            display: none;
+        }
+
+        input.es-input {
+            padding-right: 0px !important;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG2YAABzjgAA4DIAAIM2AAB5CAAAxgwAADT6AAAgbL5TJ5gAAABGSURBVHjaYvz//z8DOYCJgUzA0tnZidPK8vJyRpw24pLEpwnuVHRFhDQxMDAwMPz//x+OOzo6/iPz8WFGuocqAAAA//8DAD/sORHYg7kaAAAAAElFTkSuQmCC) right center no-repeat
+        }
+
+        input.es-input:focus {
+            -webkit-border-bottom-left-radius: 0;
+            -moz-border-radius-bottomleft: 0;
+            border-bottom-left-radius: 0;
+            -webkit-border-bottom-right-radius: 0;
+            -moz-border-radius-bottomright: 0;
+            border-bottom-right-radius: 0
+        }
+
+        .es-list {
+            display: block;
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #d1d1d1;
+            display: none;
+            z-index: 1000;
+            background: #fff;
+            max-height: 260px;
+            overflow-y: auto;
+            -moz-box-shadow: 0 2px 3px #ccc;
+            -webkit-box-shadow: 0 2px 3px #ccc;
+            box-shadow: 0 2px 3px #ccc
+        }
+
+        .es-list li {
+            display: block;
+            padding: 5px 0 0 10px;
+            box-sizing: border-box;
+            margin: 0;
+            width: 100%;
+            cursor: pointer
+        }
+
+        .es-list li.selected {
+            background: #19AEFE;
+            color: #fff
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form autocomplete="off" class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">客户名称：</label>
+                            <div class="col-sm-8">
+                                <input required id="customerName" name="customerName" class="form-control" type="text" placeholder="请输入客户名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属平台：</label>
+                            <div class="col-sm-8">
+                                <select required id="platform" name="platform" class="form-control">
+                                    <option value="">请选择</option>
+                                    <option value="二维码">二维码</option>
+                                    <option value="菜鸟">菜鸟</option>
+                                    <option value="京东">京东</option>
+                                    <option value="拼多多">拼多多</option>
+                                    <option value="门店调拨">门店调拨</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 后台校验 -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属网点：</label>
+                            <div class="col-sm-8">
+                                <input required id="branchNum" name="branchNum" class="form-control" type="text" placeholder="请输入网点编码" oninput="value=value.replace(/[^\d]/g,'')">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">vip编号：</label>
+                            <div class="col-sm-8">
+                                <input required id="vipNum" name="vipNum" class="form-control" type="text" placeholder="请输入vip编号" onchange="getVipNameByVipNum(this.value)">
+                            </div>
+                        </div>
+                        <!-- vip名称通过vip编码动态获取到 -->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">vip名称：</label>
+                            <div class="col-sm-8">
+                                <input required id="vipName" name="vipName" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <label class="col-sm-3 control-label">所属机构：</label>
+                            <div class="col-sm-8">
+                                &lt;!&ndash;<select required id="organization" class="form-control organization"
+                                        onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+                                    <option value="">请选择</option>
+                                </select>&ndash;&gt;
+                                <select id="organization" name="organization" class="form-control organization" onkeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+                                    <option value="">请选择</option>
+                                    <optgroup th:each="organization:${organizationList}">
+                                        <option th:value="${organization}" th:text="${organization}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3" style="margin-top: 50px;">
+                                <button type="submit" style="width: 20%" class="btn btn-primary">确认</button>
+                                <button type="button" style="width: 20%;margin-left: 20%" class="btn btn-primary"
+                                        onclick="quitAudit()">取消
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" th:src="@{/js/jquery.editable-select.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bigcustomer/customerManage/add.js}"></script>
+</body>
+</html>

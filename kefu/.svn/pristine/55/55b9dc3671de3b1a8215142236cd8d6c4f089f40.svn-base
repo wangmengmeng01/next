@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+	<div style="margin-left: 50px;margin-top: 50px">
+		<input id="path1" type="text" style="width: 300px" placeholder="请输入类的全路径" />
+		<input type="button" id="path1btn" value="查看等级" onclick="path1btn()"/>
+	</div>
+	
+	<div style="margin-left: 50px;margin-top: 50px"
+		<input id="path2" type="text" style="width: 300px" placeholder="请输入类的全路径" /> 
+		<input id="level" type="text" style="width: 150px" placeholder="日志等级：DEBUG,INFO" />
+		<input type="button" id="path2btn" value="调整等级" onclick="path2btn()"/>
+	</div>
+
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript"
+		th:src="@{/js/appjs/system/logger/logger.js?v=1}"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.log.dao.LogSuckdataDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.log.domain.LogSuckdataDO">
+		select `id`,`creat_time`,`log_info`,`log_type`,`event_type` from crmkhv2_log_suckdata where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.log.domain.LogSuckdataDO">
+		select `id`,`creat_time`,`log_info`,`log_type`,`event_type` from crmkhv2_log_suckdata
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="creatTime != null and creatTime != ''"> and creat_time = #{creatTime} </if>
+		  		  <if test="logInfo != null and logInfo != ''"> and log_info = #{logInfo} </if>
+		  		  <if test="logType != null and logType != ''"> and log_type = #{logType} </if>
+		  		  <if test="eventType != null and eventType != ''"> and event_type = #{eventType} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_log_suckdata
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="creatTime != null and creatTime != ''"> and creat_time = #{creatTime} </if>
+		  		  <if test="logInfo != null and logInfo != ''"> and log_info = #{logInfo} </if>
+		  		  <if test="logType != null and logType != ''"> and log_type = #{logType} </if>
+		  		  <if test="eventType != null and eventType != ''"> and event_type = #{eventType} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.log.domain.LogSuckdataDO" useGeneratedKeys="true" keyProperty="id">
+		insert into crmkhv2_log_suckdata
+		(
+			`creat_time`, 
+			`log_info`, 
+			`log_type`, 
+			`event_type`
+		)
+		values
+		(
+			#{creatTime}, 
+			#{logInfo}, 
+			#{logType}, 
+			#{eventType}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.log.domain.LogSuckdataDO">
+		update crmkhv2_log_suckdata 
+		<set>
+			<if test="creatTime != null">`creat_time` = #{creatTime}, </if>
+			<if test="logInfo != null">`log_info` = #{logInfo}, </if>
+			<if test="logType != null">`log_type` = #{logType}, </if>
+			<if test="eventType != null">`event_type` = #{eventType}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_log_suckdata where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_log_suckdata where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

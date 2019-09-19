@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/css/bootstrapzidingyi.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+	<div class="col-sm-12">
+		<div class="ibox">
+			<div class="ibox-body">
+				<form id="searchLog">
+					<img id="img" src="">
+					<div class="row"
+						 style="margin: 0; padding: 20px 15px; background-color: #fff; border: 1px solid #e4dce4;">
+						<div class="col-md-4" style="width:170px;">
+							<label>登录人账号：</label> <input type="text" name="userId"
+													   id="userId" class="form-control">
+						</div>
+						<div class="col-md-4" style="width:170px;">
+							<label>手机号：</label> <input type="text" name="mobile"
+													  id="mobile" class="form-control">
+						</div>
+						<div class="col-md-4" style="width:150px;">
+							<label>登录时间：</label>
+							<input type="text" name="startTime" id="startTime" class="form-control">
+						</div>
+						<div class="col-md-4" style="width:150px;">
+							<label>至：</label>
+							<input type="text" name="endTime" id="endTime" class="form-control">
+						</div>
+						<div class="query-time group-select" id="group_select">
+								<label class="col-sm-2 col-md-4 control-label label-time">是否报警：</label>
+							<div class="col-md-2">
+								<select id = "police" name="police" class="form-control">
+									<option value="">请选择</option>
+									<option value="是">是</option>
+									<option value="否">否</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="fixed-table-toolbar">
+					<!--<div class="columns pull-left">
+                        <button type="button" class="btn  btn-danger"
+                                onclick="batchRemove()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>删除
+                        </button>
+                    </div>-->
+					<div class="col-md-9">
+						<input type="button" value="查询"
+							   onclick="search()" class="btn  btn-warning">
+						<input type="button"
+							   value="重置" onclick="resetForm()"
+							   class="btn  btn-success">
+						<button shiro:hasPermission="system:loginLog:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" style="margin-right:50px;">
+							<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+						</button>
+					</div>
+				</div>
+				<table id="exampleTable" data-mobile-responsive="true">
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<div>
+	<script type="text/javascript">
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+        var s_resetPwd_h = 'hidden';
+	</script>
+</div>
+<div shiro:hasPermission="system:loginLog:edit">
+	<script type="text/javascript">
+        s_edit_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="system:loginLog:remove">
+	<script type="text/javascript">
+        var s_remove_h = '';
+	</script>
+</div>
+<div shiro:hasPermission="system:loginLog:resetPwd">
+	<script type="text/javascript">
+        var s_resetPwd_h = '';
+	</script>
+</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" th:src="@{/js/loginLog/loginLog.js}"></script>
+<script th:src="@{/js/layui.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.js}"></script>
+</body>
+</html>

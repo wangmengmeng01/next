@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.customer.dao.CustomerPotentialPersonNewDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.customer.domain.CustomerPotentialPersonNewDO">
+		select `record_id`,`customer_name`,`send_number`,`shop_name`,`product`,`bulky_cargo`,`weight`,`daily_order_avg`,`express_company`,`unit_price`,`send_address`,`branch_code`,`branch_name`,`city_name`,`province_id`,`province_name`,`bigarea`,`handler_id`,`handler_name`,`update_time` from crmkhv2_customer_potential_person_new where record_id = #{value}
+	</select>
+
+	<select id="searchCustomerName" resultType="java.util.Map">
+		SELECT DISTINCT customer_name as customerName,shop_name as shopName,province_name as provinceName , bigarea as bigarea FROM crmkhv2_customer_potential_person_new
+	</select>	
+	
+	<select id="list" resultType="com.yunda.base.feiniao.customer.domain.CustomerPotentialPersonNewDO">
+		select `record_id`,`customer_name`,`send_number`,`shop_name`,`product`,`bulky_cargo`,`weight`,`daily_order_avg`,`express_company`,`unit_price`,`send_address`,`branch_code`,`branch_name`,`city_name`,`province_id`,`province_name`,`bigarea`,`handler_id`,`handler_name`,`update_time` from crmkhv2_customer_potential_person_new
+        <where> 
+	        <if test="branchCodeQX != null and branchCodeQX != ''">
+	        	and sjwd = #{branchCodeQX} 
+	        </if>
+	        <if test="provinceids!=null and provinceids.size>0">
+	            and province_id in 
+	              	<foreach collection="provinceids" item="provinceids"  index="index" open="(" close=")" separator=",">
+		           '${provinceids}'
+		       	</foreach>	
+	       	</if>
+	        <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if> 
+	        <if test="shopName != null and shopName != ''"> and shop_name = #{shopName} </if>
+		  	<if test="startDailyOrderAvg != null and startDailyOrderAvg != '' and endDailyOrderAvg != null and endDailyOrderAvg != ''"> and daily_order_avg &gt;= #{startDailyOrderAvg} and daily_order_avg &lt;= #{endDailyOrderAvg}</if>
+
+		  	<if test="provinceId != null and provinceId != ''"> and province_id = #{provinceId} </if>
+		  	<if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  	<if test="handlerId != null and handlerId != ''"> and handler_id = #{handlerId} </if>
+		  	<if test="startupdateTime != null and startupdateTime != '' and endupdateTime != null and endupdateTime != ''"> and update_time &gt;= date_format (#{startupdateTime},'%Y-%m-%d 00:00:00') and update_time &lt;= date_format (#{endupdateTime},'%Y-%m-%d 23:59:59')</if>
+		  	
+		  			 
+		  		  <if test="sendNumber != null and sendNumber != ''"> and send_number = #{sendNumber} </if>
+		  		  <if test="product != null and product != ''"> and product = #{product} </if>
+		  		  <if test="bulkyCargo != null and bulkyCargo != ''"> and bulky_cargo = #{bulkyCargo} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  <if test="expressCompany != null and expressCompany != ''"> and express_company = #{expressCompany} </if>
+		  		  <if test="unitPrice != null and unitPrice != ''"> and unit_price = #{unitPrice} </if>
+		  		  <if test="sendAddress != null and sendAddress != ''"> and send_address = #{sendAddress} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="cityName != null and cityName != ''"> and city_name = #{cityName} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and province_name = #{provinceName} </if>
+		  		  <if test="handlerName != null and handlerName != ''"> and handler_name = #{handlerName} </if>
+		  		  </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_customer_potential_person_new
+		 <where>
+			<if test="branchCodeQX != null and branchCodeQX != ''">
+	        	and sjwd = #{branchCodeQX} 
+	        </if>
+	        <if test="provinceids!=null and provinceids.size>0">
+	            and province_id in 
+	              	<foreach collection="provinceids" item="provinceids"  index="index" open="(" close=")" separator=",">
+		           '${provinceids}'
+		       	</foreach>	
+	       	</if>
+	       	<if test="startDailyOrderAvg != null and startDailyOrderAvg != '' and endDailyOrderAvg != null and endDailyOrderAvg != ''"> and daily_order_avg &gt;= #{startDailyOrderAvg} and daily_order_avg &lt;= #{endDailyOrderAvg}</if>
+	       	<if test="startupdateTime != null and startupdateTime != '' and endupdateTime != null and endupdateTime != ''"> and update_time &gt;= date_format (#{startupdateTime},'%Y-%m-%d 00:00:00') and update_time &lt;= date_format (#{endupdateTime},'%Y-%m-%d 23:59:59')</if>
+		  	
+		  		  <if test="customerName != null and customerName != ''"> and customer_name = #{customerName} </if>
+		  		  <if test="sendNumber != null and sendNumber != ''"> and send_number = #{sendNumber} </if>
+		  		  <if test="shopName != null and shopName != ''"> and shop_name = #{shopName} </if>
+		  		  <if test="product != null and product != ''"> and product = #{product} </if>
+		  		  <if test="bulkyCargo != null and bulkyCargo != ''"> and bulky_cargo = #{bulkyCargo} </if>
+		  		  <if test="weight != null and weight != ''"> and weight = #{weight} </if>
+		  		  
+		  		  <if test="expressCompany != null and expressCompany != ''"> and express_company = #{expressCompany} </if>
+		  		  <if test="unitPrice != null and unitPrice != ''"> and unit_price = #{unitPrice} </if>
+		  		  <if test="sendAddress != null and sendAddress != ''"> and send_address = #{sendAddress} </if>
+		  		  <if test="branchCode != null and branchCode != ''"> and branch_code = #{branchCode} </if>
+		  		  <if test="branchName != null and branchName != ''"> and branch_name = #{branchName} </if>
+		  		  <if test="cityName != null and cityName != ''"> and city_name = #{cityName} </if>
+		  		  <if test="provinceId != null and provinceId != ''"> and province_id = #{provinceId} </if>
+		  		  <if test="provinceName != null and provinceName != ''"> and province_name = #{provinceName} </if>
+		  		  <if test="bigarea != null and bigarea != ''"> and bigarea = #{bigarea} </if>
+		  		  <if test="handlerId != null and handlerId != ''"> and handler_id = #{handlerId} </if>
+		  		  <if test="handlerName != null and handlerName != ''"> and handler_name = #{handlerName} </if>
+		  		  
+		 </where>
+	</select>
+	 
+	<select id="countwd" resultType="int">
+		SELECT COUNT(1) FROM ydserver.gs WHERE bm = #{branchcode}
+		
+	</select>
+	<select id="searchYdserver" resultType="com.yunda.base.feiniao.customer.domain.CustomerPotentialPersonNewDO">
+		select gs.bm as branch_code ,gs.mc as branch_name ,city.CityName as city_name, 
+			province.ProvinceID as province_id, province.ProvinceName as province_name, 
+			province.bigarea as bigarea ,gs.sjdw as sjwd
+			from ydserver.gs gs 
+			left join ydserver.county county on gs.szd = county.countyid                                                          
+   			left join sys_city city on city.cityid = county.cityid 
+   			left join sys_province province on province.provinceid = city.provinceid 
+		where gs.bm = #{branchcode}
+		
+	</select>
+	
+	<insert id="save" parameterType="com.yunda.base.feiniao.customer.domain.CustomerPotentialPersonNewDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkhv2_customer_potential_person_new
+		(
+			`customer_name`, 
+			`send_number`, 
+			`shop_name`, 
+			`product`, 
+			`bulky_cargo`, 
+			`weight`, 
+			`daily_order_avg`, 
+			`express_company`, 
+			`unit_price`, 
+			`send_address`, 
+			`branch_code`, 
+			`branch_name`, 
+			`city_name`, 
+			`province_id`, 
+			`province_name`, 
+			`bigarea`, 
+			`handler_id`, 
+			`handler_name`, 
+			`update_time`,
+			`sjwd`
+		)
+		values
+		(
+			#{customerName}, 
+			#{sendNumber}, 
+			#{shopName}, 
+			#{product}, 
+			#{bulkyCargo}, 
+			#{weight}, 
+			#{dailyOrderAvg}, 
+			#{expressCompany}, 
+			#{unitPrice}, 
+			#{sendAddress}, 
+			#{branchCode}, 
+			#{branchName}, 
+			#{cityName}, 
+			#{provinceId}, 
+			#{provinceName}, 
+			#{bigarea}, 
+			#{handlerId}, 
+			#{handlerName}, 
+			date_format (#{updateTime},'%Y-%m-%d %H:%m:%s'),
+			#{sjwd}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.customer.domain.CustomerPotentialPersonNewDO">
+		update crmkhv2_customer_potential_person_new 
+		<set>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="sendNumber != null">`send_number` = #{sendNumber}, </if>
+			<if test="shopName != null">`shop_name` = #{shopName}, </if>
+			<if test="product != null">`product` = #{product}, </if>
+			<if test="bulkyCargo != null">`bulky_cargo` = #{bulkyCargo}, </if>
+			<if test="weight != null">`weight` = #{weight}, </if>
+			<if test="dailyOrderAvg != null">`daily_order_avg` = #{dailyOrderAvg}, </if>
+			<if test="expressCompany != null">`express_company` = #{expressCompany}, </if>
+			<if test="unitPrice != null">`unit_price` = #{unitPrice}, </if>
+			<if test="sendAddress != null">`send_address` = #{sendAddress}, </if>
+			<if test="branchCode != null">`branch_code` = #{branchCode}, </if>
+			<if test="branchName != null">`branch_name` = #{branchName}, </if>
+			<if test="cityName != null">`city_name` = #{cityName}, </if>
+			<if test="provinceId != null">`province_id` = #{provinceId}, </if>
+			<if test="provinceName != null">`province_name` = #{provinceName}, </if>
+			<if test="bigarea != null">`bigarea` = #{bigarea}, </if>
+			<if test="handlerId != null">`handler_id` = #{handlerId}, </if>
+			<if test="handlerName != null">`handler_name` = #{handlerName}, </if>
+			<if test="updateTime != null">`update_time` = date_format (#{updateTime},'%Y-%m-%d %H:%m:%s'), </if>
+			<if test="sjwd != null">`sjwd` = #{sjwd}</if>
+		
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_customer_potential_person_new where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_customer_potential_person_new where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

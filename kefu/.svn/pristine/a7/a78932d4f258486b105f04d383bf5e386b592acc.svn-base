@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+
+<link th:href="@{/css/layui.css}" rel="stylesheet">
+<link th:href="@{/js/lay/laydate/theme/default/laydate.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<link th:href="@{/js/plugins/magicsuggest/magicsuggest-min.css}" rel="stylesheet">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<div class="form-group group-query" id="group_query">
+
+								<!-- <label class="control-label col-md-3 col-sm-3 col-xs-12">省份: </label>  -->
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<label class="control-label" style="float:left;width:70px;margin-top:20px;text-align: left;">省份: </label>
+									<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:20px;">
+
+											<div id="provinceID" class="form-control" >
+											</div>
+									</div>
+								</div>
+
+
+								<!-- <label class="control-label col-md-3 col-sm-3 col-xs-12"> 上报状态: </label> -->
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<label class=" control-label" style="float:left; width:70px;margin-top:20px;text-align: left;"> 上报状态: </label>
+									<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:20px;">
+										     <select id = "report_status" name="report_status" class="form-control">
+										     	  <option value="">请选择</option>
+										          <option value="1">已审核</option>
+										          <option value="2">待审核</option>
+										          <option value="3">未上报</option>
+										     </select>
+									</div>
+								</div>
+
+
+								<!-- <label class="control-label col-md-3 col-sm-3 col-xs-12"> 审核结果: </label> -->
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<label class=" control-label" style="float:left; width:70px;margin-top:20px;text-align: left;"> 审核结果: </label>
+									<div class="col-md-9 col-sm-9 col-xs-12" style="margin-top:20px;">
+										     <select id = "audit_result" name="audit_result" class="form-control">
+										     	  <option value="">请选择</option>
+										          <option value="1">如实上报</option>
+										          <option value="2">虚假上报</option>
+										          <option value="3">未上报</option>
+										     </select>
+									</div>
+								</div>
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<label class="control-label label-time" id="lable-time" style="float:left; width:70px;margin-top:20px;text-align: left;">月份:</label>
+
+									<div class="group-date col-sm-6 col-md-4 " id="group_month" style="margin-top:20px;">
+										<input type="text" class="form-control" id="month_year" name="month_year"  placeholder="">
+									</div>
+								</div>
+
+
+
+							</div>
+							<div class="group-querybtn" id="group-querybtn" style="text-align:right;">
+								<input type="button" value="查询" onclick="query()" class="btn btn-success" style="margin-right:20px;background-color:#1E9FFF;border:1px solid #1E9FFF;">
+							    <input type="button" onclick="resetval()" value="重置" class="btn btn-success" style="margin-right:20px;">
+								<input type="button" value="导出Excel" id="exportExcelbtn" class="btn btn-warning" style="margin-right:50px;">
+							</div>
+						</form>
+					</div>
+				</div>
+
+			<div class="ibox">
+				<div class="ibox-body">
+				<!--
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button shiro:hasPermission="market:marketOccupancyReport:add" type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus" aria-hidden="true"></i>添加
+							</button>
+							<button shiro:hasPermission="market:marketOccupancyReport:batchRemove" type="button" class="btn  btn-danger"
+								onclick="batchRemove()">
+								<i class="fa fa-trash" aria-hidden="true"></i>删除
+							</button>
+							<button shiro:hasPermission="market:marketOccupancyReport:importExcel" type="button" class="btn btn-info" id="uploadbtn" >
+                            	<i class="fa fa-file-excel-o"></i>导入Excel
+                        	</button>
+                        	<button shiro:hasPermission="market:marketOccupancyReport:importExcel" type="button" class="btn btn-success" onclick="exportExcel('/downTemplate')">
+                            	<i class="fa fa-file-code-o"></i>下载模版
+                        	</button>
+							<button shiro:hasPermission="market:marketOccupancyReport:exportExcel" type="button" class="btn btn-warning" id="exportExcelbtn" onclick="exportExcel('/exportExcel')">
+								<i class="fa fa-anchor" aria-hidden="true"></i>导出Excel
+							</button>
+							<button id="refresh" type="button" class="btn btn-default">
+								<i class="fa fa-refresh" aria-hidden="true"></i>刷新
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="searchName" type="text" class="form-control"
+								placeholder="">
+						</div>
+					</div>
+					 -->
+					<table id="exampleTable" data-mobile-responsive="true">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+		<div>
+			<script type="text/javascript">
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
+				var s_resetPwd_h = 'hidden';
+				var s_doReport_h = 'hidden'; //上报权限
+				var s_auditReport_h = 'hidden'; //审核权限
+				var s_doEdit_h = 'hidden'; //修改权限
+				var s_seeReport_h = 'hidden'; //查看权限
+
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:edit">
+			<script type="text/javascript">
+				s_edit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:remove">
+			<script type="text/javascript">
+				var s_remove_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:resetPwd">
+			<script type="text/javascript">
+				var s_resetPwd_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:doReport">
+			<script type="text/javascript">
+			s_doReport_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:auditReport">
+			<script type="text/javascript">
+			s_auditReport_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:doEdit">
+			<script type="text/javascript">
+			s_doEdit_h = '';
+			</script>
+		</div>
+		<div shiro:hasPermission="market:marketOccupancyReport:seeReport">
+			<script type="text/javascript">
+			s_seeReport_h = '';
+			</script>
+		</div>
+	<div th:include="include :: footer"></div>
+	<script type="text/javascript" th:src="@{/js/appjs/feiniao/market/marketOccupancyReport/marketOccupancyReport.js?v=4}"></script>
+	<script th:src="@{/js/layui.js}"></script>
+	<script th:src="@{/js/lay/laydate/laydate.js}"></script>
+	<script th:src="@{/js/plugins/magicsuggest/magicsuggest-min.js}"></script>
+	<script th:src="@{/js/bootstrap3-editable/js/bootstrap-editable.js}"></script>
+
+</body>
+</html>

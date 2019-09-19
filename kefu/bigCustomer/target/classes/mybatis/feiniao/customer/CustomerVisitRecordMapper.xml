@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.feiniao.customer.dao.CustomerVisitRecordDao">
+
+	<select id="get" resultType="com.yunda.base.feiniao.customer.domain.CustomerVisitRecordDO">
+		select `record_id`,`visit_id`,`creater_name`,`belong_branch`,`visit_time`,`customer_id`,`customer_name`,`customer_linkman`,`customer_phonenum`,`customer_area`,`customer_province`,`customer_city`,`customer_detailaddress`,`visit_perpose`,`customer_feedback`,`visit_result`,`creat_time` from crmkhv2_customer_visit_record where record_id = #{value}
+	</select>
+
+	<select id="list" resultType="com.yunda.base.feiniao.customer.domain.CustomerVisitRecordDO">
+		select `record_id`,`visit_id`,`creater_name`,`belong_branch`,`visit_time`,`customer_id`,`customer_name`,`customer_linkman`,`customer_phonenum`,`customer_area`,`customer_province`,`customer_city`,`customer_detailaddress`,`visit_perpose`,`customer_feedback`,`visit_result`,`creat_time` from crmkhv2_customer_visit_record
+        <where>  
+	  		  <if test="visitId != null and visitId != ''"> and visit_id = #{visitId} </if>
+
+	  		  <if test="branchCode != null and branchCode != ''"> and belong_branch = #{branchCode} </if>
+	  		  <if test="startVisitDate != null and startVisitDate != '' and endVisitDate != null and endVisitDate != ''"> 
+			  		  and visit_time BETWEEN
+				date_format (
+				#{startVisitDate},
+				'%Y-%m-%d'
+				)
+				AND
+				date_format (
+				#{startVisitDate},
+				'%Y-%m-%d'
+				) 		
+			 </if>
+ 		  		 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> 
+			  		  and creat_time BETWEEN
+				date_format (
+				#{startDate},
+				'%Y-%m-%d'
+				)
+				AND
+				date_format (
+				#{endDate},
+				'%Y-%m-%d'
+				) 		
+			 </if>
+		    <if test="provinceId != null and provinceId != ''"> and customer_province = #{provinceId} </if>		  		
+  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by #{sort}, #{order}
+            </when>
+			<otherwise>
+                order by record_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from crmkhv2_customer_visit_record
+		 <where>  
+	  		  <if test="visitId != null and visitId != ''"> and visit_id = #{visitId} </if>
+
+	  		  <if test="branchCode != null and branchCode != ''"> and belong_branch = #{branchCode} </if>
+	  		  <if test="startVisitDate != null and startVisitDate != '' and endVisitDate != null and endVisitDate != ''"> 
+			  		  and visit_time BETWEEN
+				date_format (
+				#{startVisitDate},
+				'%Y-%m-%d'
+				)
+				AND
+				date_format (
+				#{startVisitDate},
+				'%Y-%m-%d'
+				) 		
+			 </if>
+ 		  		 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''"> 
+			  		  and creat_time BETWEEN
+				date_format (
+				#{startDate},
+				'%Y-%m-%d'
+				)
+				AND
+				date_format (
+				#{endDate},
+				'%Y-%m-%d'
+				) 		
+			 </if>
+		    <if test="provinceId != null and provinceId != ''"> and customer_province = #{provinceId} </if>		  		
+  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.yunda.base.feiniao.customer.domain.CustomerVisitRecordDO" useGeneratedKeys="true" keyProperty="recordId">
+		insert into crmkhv2_customer_visit_record
+		(
+			`visit_id`, 
+			`creater_name`, 
+			`belong_branch`, 
+			`visit_time`, 
+			`customer_id`, 
+			`customer_name`, 
+			`customer_linkman`, 
+			`customer_phonenum`, 
+			`customer_area`, 
+			`customer_province`, 
+			`customer_city`, 
+			`customer_detailaddress`, 
+			`visit_perpose`, 
+			`customer_feedback`, 
+			`visit_result`, 
+			`creat_time`
+		)
+		values
+		(
+			#{visitId}, 
+			#{createrName}, 
+			#{belongBranch}, 
+			#{visitTime}, 
+			#{customerId}, 
+			#{customerName}, 
+			#{customerLinkman}, 
+			#{customerPhonenum}, 
+			#{customerArea}, 
+			#{customerProvince}, 
+			#{customerCity}, 
+			#{customerDetailaddress}, 
+			#{visitPerpose}, 
+			#{customerFeedback}, 
+			#{visitResult}, 
+			#{creatTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.yunda.base.feiniao.customer.domain.CustomerVisitRecordDO">
+		update crmkhv2_customer_visit_record 
+		<set>
+			<if test="visitId != null">`visit_id` = #{visitId}, </if>
+			<if test="createrName != null">`creater_name` = #{createrName}, </if>
+			<if test="belongBranch != null">`belong_branch` = #{belongBranch}, </if>
+			<if test="visitTime != null">`visit_time` = #{visitTime}, </if>
+			<if test="customerId != null">`customer_id` = #{customerId}, </if>
+			<if test="customerName != null">`customer_name` = #{customerName}, </if>
+			<if test="customerLinkman != null">`customer_linkman` = #{customerLinkman}, </if>
+			<if test="customerPhonenum != null">`customer_phonenum` = #{customerPhonenum}, </if>
+			<if test="customerArea != null">`customer_area` = #{customerArea}, </if>
+			<if test="customerProvince != null">`customer_province` = #{customerProvince}, </if>
+			<if test="customerCity != null">`customer_city` = #{customerCity}, </if>
+			<if test="customerDetailaddress != null">`customer_detailaddress` = #{customerDetailaddress}, </if>
+			<if test="visitPerpose != null">`visit_perpose` = #{visitPerpose}, </if>
+			<if test="customerFeedback != null">`customer_feedback` = #{customerFeedback}, </if>
+			<if test="visitResult != null">`visit_result` = #{visitResult}, </if>
+			<if test="creatTime != null">`creat_time` = #{creatTime}</if>
+		</set>
+		where record_id = #{recordId}
+	</update>
+	
+	<delete id="remove">
+		delete from crmkhv2_customer_visit_record where record_id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from crmkhv2_customer_visit_record where record_id in 
+		<foreach item="recordId" collection="array" open="(" separator="," close=")">
+			#{recordId}
+		</foreach>
+	</delete>
+
+</mapper>

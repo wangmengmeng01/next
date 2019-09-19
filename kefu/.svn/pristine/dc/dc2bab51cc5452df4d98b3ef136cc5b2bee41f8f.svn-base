@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yunda.base.api.dao.OrderAppDao">
+	<!-- 通过ID获取咨询单详情 -->
+	<select id="getOrderDetailByOrderId" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		SELECT
+			   a.`id`,
+			   a.`order_id`,
+			   a.`phone`,
+			   a.`waybill_num`,
+			   a.`logistic_order_num`,
+			   a.`merchant`,
+			   a.`vip_code`,
+			   a.`branch_code`,
+			   CONCAT(
+				   c.`mc`,
+				   '(',
+				   a.`branch_code`,
+				   ')'
+					   ) AS `branch_name`,
+			   a.`consult_type`,
+			   a.`priority`,
+			   a.`organization_num`,
+			   a.`problem_description`,
+			   a.`send_name`,
+			   a.`send_phone`,
+			   a.`send_address`,
+			   a.`receiver_name`,
+			   a.`receiver_phone`,
+			   a.`receiver_address`,
+			   a.`consult_time`,
+			   a.`consult_source`,
+			   a.`deal_persion`,
+			   concat(a.`deal_persion`,"-",a.`deal_code`) AS deal_code,
+			   a.`faqi_code`,
+			   a.`state`,
+			   CONCAT(
+				   a.`customer_name`,
+				   '(',
+				   a.`customer_code`,
+				   ')'
+					   ) AS customer_name
+		FROM
+			 consult_order a
+		LEFT JOIN ydserver.gs c ON a.`branch_code` = c.`bm`
+		WHERE
+			 a.`order_id` = #{orderId,jdbcType=INTEGER};
+	</select>
+
+	<!-- 通过ID获取咨询单详情 -->
+	<select id="getOrderByOrderId" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		SELECT
+			*
+		FROM
+			 consult_order a
+		WHERE
+			 a.`order_id` = #{orderId,jdbcType=INTEGER};
+	</select>
+
+	<!-- 获取所有的咨询单类型 -->
+	<select id="getAllConsultType" resultType="java.lang.String">
+		SELECT
+		     consult_type
+		FROM
+		     consult_config
+		WHERE
+		     `state` <![CDATA[ <> ]]> '0';
+	</select>
+
+	<!-- 获取所有的咨询单列表 -->
+	<select id="list" resultType="com.yunda.base.bigcustomer.domain.OrderDO" parameterType="com.yunda.base.api.domain.OrderDTO">
+		select * from (select tb.*,d.deal_content,d.time AS deal_time,concat(d.operate_name,"-",d.operate_code) as deal_persion from (select
+		a.`id`,a.`order_id`,a.`phone`,a.`waybill_num`,a.`logistic_order_num`,a.`merchant`,a.`consult_type`,a.`priority`,a.`organization_num`,
+		concat(c.`organization_name`,"-",a.`organization_num`) as organization_name,a.`problem_description`,a.`send_name`,a.`send_phone`,a.`send_address`,
+		a.`receiver_name`,a.`receiver_phone`,a.`receiver_address`,a.`consult_time`,a.`consult_source`,a.`state`,a.`jie_dan_result`,a.`jie_dan_time`,
+		concat(a.`deal_persion`,"-",a.`deal_code`) AS deal_code,a.`faqi_code`,
+		b.`type`,b.`order_after_hours_t1`,b.`order_after_day_t2`,b.`order_after_time_t2`,b.`today_order_before_time_t31`,b.`order_after_day_t31`,b.`order_after_time_t31`,b.`today_order_after_time32`,b.`order_before_day_t32`,b.`order_before_time_t32`,b.`yujing_time`
+		from consult_order a left join organization_manage c on a.`organization_num` = c.`organization_num` left join
+		consult_config b on a.`consult_type`= b.`consult_type` and b.`state` = '1'
+		<where>
+			<if test="dataPermissions2 != null and dataPermissions2 != '' and orgCode != null and orgCode != ''">
+				and a.`organization_num` = #{orgCode}
+			</if>
+			<if test="dataPermissions1 != null and dataPermissions1 != ''">and a.deal_code = #{dataPermissions1}</if>
+			<if test="faqiCode != null and faqiCode != ''">and a.faqi_code = #{faqiCode}</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.consult_time
+				<![CDATA[ >= ]]> #{startDate} and a.consult_time <![CDATA[ <= ]]> #{endDate}
+			</if>
+			<choose>
+				<when test="shenLingI == 'true'">
+					<if test="state != null and state != ''">and a.state != #{state}</if>
+				</when>
+				<otherwise>
+					<if test="state != null and state != ''">and a.state = #{state}</if>
+				</otherwise>
+			</choose>
+			<if test="consultType != null and consultType != ''">and a.consult_type = #{consultType}</if>
+			<if test="priority != null and priority != ''">and a.priority = #{priority}</if>
+			<if test="waybillNum != null and waybillNum != ''">
+				and (a.waybill_num = ${waybillNum} or a.logistic_order_num = ${waybillNum})
+			</if>
+			<if test="orderId != null and orderId != ''">and a.order_id = #{orderId}</if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by ${sort} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>) tb left join
+		consult_operate d ON tb.`order_id` = d.`order_id` ORDER BY d.id desc ) tab GROUP BY tab.order_id
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from consult_order a left join organization_manage c on a.`organization_num` = c.`organization_num` left join consult_config b on a.`consult_type`= b.`consult_type` and b.`state` <![CDATA[ <> ]]> '0'
+		<where>
+			<if test="dataPermissions2 != null and dataPermissions2 != '' and orgCode != null and orgCode != ''">
+				and a.`organization_num` = #{orgCode}
+			</if>
+			<if test="dataPermissions1 != null and dataPermissions1 != ''">and a.deal_code = #{dataPermissions1}</if>
+			<if test="faqiCode != null and faqiCode != ''">and a.faqi_code = #{faqiCode}</if>
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">and a.consult_time
+				<![CDATA[ >= ]]> #{startDate} and a.consult_time <![CDATA[ <= ]]> #{endDate}
+			</if>
+			<choose>
+				<when test="shenLingI == 'true'">
+					<if test="state != null and state != ''">and a.state != #{state}</if>
+				</when>
+				<otherwise>
+					<if test="state != null and state != ''">and a.state = #{state}</if>
+				</otherwise>
+			</choose>
+			<if test="consultType != null and consultType != ''">and a.consult_type = #{consultType}</if>
+			<if test="priority != null and priority != ''">and a.priority = #{priority}</if>
+			<if test="waybillNum != null and waybillNum != ''">
+				and (a.waybill_num = ${waybillNum} or a.logistic_order_num = ${waybillNum})
+			</if>
+			<if test="orderId != null and orderId != ''">and a.order_id = #{orderId}</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="com.yunda.base.bigcustomer.domain.OrderDO" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO consult_order (
+				`order_id`,
+				`phone`,
+				`waybill_num`,
+				`logistic_order_num`,
+				`merchant`,
+				`consult_type`,
+				`priority`,
+				`organization_num`,
+				`problem_description`,
+				`send_name`,
+				`send_phone`,
+				`send_address`,
+				`receiver_name`,
+				`receiver_phone`,
+				`receiver_address`,
+				`consult_time`,
+				`consult_source`,
+				`deal_persion`,
+				`deal_code`,
+				`faqi_code`,
+				`faqi_name`,
+				`faqi_org_code`,
+				`faqi_org_name`,
+				`customer_name`,
+				`customer_code`,
+				`state`)
+		VALUES (
+			    #{orderId},
+			    #{phone},
+			    #{waybillNum},
+			    #{logisticOrderNum},
+			    #{merchant},
+			    #{consultType},
+			    #{priority},
+			    #{organizationNum},
+			    #{problemDescription},
+			    #{sendName},
+			    #{sendPhone},
+			    #{sendAddress},
+			    #{receiverName},
+			    #{receiverPhone},
+			    #{receiverAddress},
+			    #{consultTime},
+			    #{consultSource},
+			    #{dealPersion},
+			    #{dealCode},
+			    #{faqiCode},
+			    #{faqiName},
+				#{faqiOrgCode},
+				#{faqiOrgName},
+			    #{customerName},
+			    #{customerCode},
+			    #{state})
+	</insert>
+
+	<select id="getCustomerName" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		select `gsmc` as customer_name,`BM` as customer_code from ydserver.cqkh where CONCAT(`BM`,`GS`)=#{res}
+	</select>
+
+	<insert id="saveOperateInfo" parameterType="com.yunda.base.bigcustomer.domain.OperateDO" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO consult_operate (
+				`order_id`,
+				`operate_name`,
+				`operate_code`,
+				`operate_organization`,
+				`time`,
+				`type`,
+				`deal_content`,
+				`upload_path`,
+				`file_name`,
+				`ze_ren_fang`
+				)
+		VALUES (
+			    #{orderId},
+				#{operateName},
+				#{operateCode},
+				#{operateOrganization},
+				#{time},
+				#{type},
+				#{dealContent},
+				#{uploadPath},
+				#{fileName},
+				#{zeRenFang}
+				)
+	</insert>
+
+	<select id="getOrgCodeByUserName" resultType="String">
+		select `org_code` from bootdo_sys_user where `username`=#{username} limit 1
+	</select>
+
+	<select id="getUserNameListByOrgCode" resultType="String">
+		select `username` from bootdo_sys_user where `org_code`=#{orgCode}
+	</select>
+
+	<select id="getAllUserInfoByOrgCode" resultType="String">
+		select CONCAT(`name`,'-',`username`) as name from bootdo_sys_user
+		<where>
+			<if test="orgCode != null and orgCode != ''">`org_code`=#{orgCode}</if>
+			<if test="name != null and name != ''">and `name` LIKE CONCAT('%',#{name},'%')</if>
+		</where>
+	</select>
+
+	<select id="getRoleNameByUserName" resultType="String">
+		select `role_name` from bootdo_sys_user a left join bootdo_sys_user_role b on a.`user_id`=b.`user_id` left join bootdo_sys_role c on b.`role_id`=c.`role_id` where `username`=#{username} limit 1
+	</select>
+
+	<select id="getUserByUserName" resultType="com.yunda.base.system.domain.UserDO">
+		select `name`,`username` from bootdo_sys_user
+		where `username`= #{dealCode}
+	</select>
+
+	<update id="shenLing">
+		update consult_order
+		<set>
+			`deal_code` = #{userName},`deal_persion` = #{name},`state`= #{state}
+		</set>
+		where order_id = #{orderId}
+	</update>
+
+	<select id="getListByOrderId" resultType="com.yunda.base.bigcustomer.domain.OperateDO">
+		select `order_id`,`operate_name`,`operate_organization`,`time`,`type`,`deal_content`,`upload_path`,`file_name`,`ze_ren_fang`
+		from consult_operate
+		<where>
+			order_id = #{orderId}
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by #{sort}, #{order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="countByOrderId" resultType="int">
+		select count(*) from consult_operate
+		<where>
+			order_id = #{orderId}
+		</where>
+	</select>
+
+	<select id="getListByWaybillNum" resultType="com.yunda.base.bigcustomer.domain.OrderDO">
+		select `id`,`order_id`,`logistic_order_num`,`waybill_num`,`consult_time`,`consult_type`,`priority`,`state` from
+		consult_order
+		<where>
+			`waybill_num` = #{waybillNum}
+			<if test="startDate != null and startDate != '' and endDate !=null and endDate !=''">
+				and `consult_time` <![CDATA[>=]]> #{startDate} and `consult_time` <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+		<choose>
+			<when test="sort != null and sort.trim() != ''">
+				order by #{sort}, #{order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="countByWaybillNum" resultType="int">
+		select count(*) from consult_order
+		<where>
+			`waybill_num` = #{waybillNum}
+		</where>
+	</select>
+
+	<update id="updateOrderByDeal">
+		update consult_order
+		<set>
+			<if test="state != null">`state` = #{state},</if>
+			<if test="jieDanCause != null">`jie_dan_cause` = #{jieDanCause},</if>
+			<if test="zeRenFang != null">`ze_ren_fang` = #{zeRenFang},</if>
+			<if test="jieDanResult != null and jieDanResult != ''">`jie_dan_result` = #{jieDanResult},</if>
+			<if test="jieDanTime != null and jieDanTime != ''">`jie_dan_time` = #{jieDanTime}</if>
+		</set>
+		where order_id = #{orderIds}
+	</update>
+    <select id="findOrderMenuByParam" resultType="java.lang.Long">
+		SELECT
+			menu_id
+		FROM
+			bootdo_sys_menu
+		WHERE
+			parent_id IN (
+			SELECT
+				c.menu_id
+			FROM
+				bootdo_sys_user a
+			LEFT JOIN bootdo_sys_user_role b ON a.user_id = b.user_id
+			LEFT JOIN bootdo_sys_role_menu c ON b.role_id = c.role_id
+			LEFT JOIN bootdo_sys_menu d ON c.menu_id = d.menu_id
+			WHERE
+				a.user_id = #{userId}
+			AND d.parent_id = #{parentId}
+		)
+		AND parent_id = #{subId};
+	</select>
+	<select id="findOrderMenuByUserIdAndParentId" resultType="java.lang.Long">
+		SELECT
+			c.menu_id
+		FROM
+			bootdo_sys_user a
+		LEFT JOIN bootdo_sys_user_role b ON a.user_id = b.user_id
+		LEFT JOIN bootdo_sys_role_menu c ON b.role_id = c.role_id
+		LEFT JOIN bootdo_sys_menu d ON c.menu_id = d.menu_id
+		WHERE
+			a.user_id = #{userId}
+		AND d.parent_id = #{parentId};
+	</select>
+	<select id="getRoleByUserId" resultType="com.yunda.base.api.domain.RoleDTO">
+		SELECT
+			tb.*, c.org_code
+		FROM
+			(
+				SELECT
+					a.*, b.user_id
+				FROM
+					bootdo_sys_role a
+				LEFT JOIN bootdo_sys_user_role b ON a.role_id = b.role_id
+				WHERE
+					b.user_id = #{userId}
+			) tb
+		LEFT JOIN bootdo_sys_user c ON tb.user_id = c.user_id;
+	</select>
+	<select id="findAllOrgInfo" resultType="com.yunda.base.bigcustomer.domain.OrganizationManageDO">
+		SELECT
+			*
+		FROM
+			organization_manage
+		WHERE
+			state = '1'
+		<if test="organizationNum != null and organizationNum != ''">and `organization_num` LIKE CONCAT('%',#{organizationNum},'%')</if>
+	</select>
+	<select id="zhuanFa">
+		update consult_order
+		<set>
+			`organization_num` = #{organizationNum},
+			`state`=#{state}
+		</set>
+		where order_id = #{orderId};
+	</select>
+</mapper>
