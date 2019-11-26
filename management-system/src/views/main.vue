@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="bg">
   	<el-container>
 		  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
@@ -6,6 +6,7 @@
 		    	:unique-opened="false"
 		    	:default-active="activeMenu"
 		    	:default-openeds="showArr"
+          active-text-color="#F56C6C"
         >
 					<my-side v-for="(item,i) in option" :item="item" :base="item.path"
 					:key="item.path" popper-append-to-body></my-side>
@@ -19,6 +20,7 @@
 						  <el-breadcrumb-item v-for="(item) in breadcrumb">{{item}}</el-breadcrumb-item>
 						</el-breadcrumb>
 		    	</div>
+          {{activeMenu}}
 		    	<el-alert>222222222</el-alert>
 		      <router-view :key="key"></router-view>
 		    </el-main>
@@ -54,10 +56,11 @@ export default {
       const route = this.$route
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu
-      }
-      return path
+      // if (meta.activeMenu) {
+      //   return meta.activeMenu
+      // }
+      console.log(this.$route.path,6)
+      return this.$route.path
     },
   },
   watch:{

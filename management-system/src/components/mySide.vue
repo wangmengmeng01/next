@@ -1,12 +1,12 @@
 <template>
   <div class="bg" v-if="!item.hidden">
-  	<el-menu-item v-if="!item.children"  :index="item.path" :y='item.path'>
-			<router-link :to="resolveP()">
+  	<router-link v-if="!item.children" :to="resolveP()">
+			<el-menu-item :index="resolveP()">
 				<svg-icon iconClass="date"></svg-icon>
-				<span class="name">{{item.meta.title}}</span>
-			</router-link>
-  	</el-menu-item>
-		<el-submenu v-else :index="item.path" :y='item.path'>
+				<span class="name">{{item.meta.title+resolveP()}}</span>
+			</el-menu-item>
+  	</router-link>
+		<el-submenu v-else :index="resolveP()">
       <template slot="title" >
 	      <svg-icon iconClass="date"></svg-icon>
 				<span class="name">{{item.meta.title}}</span>
@@ -66,6 +66,6 @@ export default {
 <style lang="scss" scoped>
 .name {
 	margin-left: 10px;
-	color: #303133;
+	// color: #303133;
 }
 </style>
