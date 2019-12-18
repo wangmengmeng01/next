@@ -1,0 +1,247 @@
+.el-dropdown-menu__item {
+  font-size: 12px !important;
+  line-height: 28px !important;
+}
+
+.el-card.is-always-shadow {
+  box-shadow: none;
+  border: none !important;
+}
+
+.el-scrollbar__view {
+  height: 100%;
+}
+
+.el-menu--horizontal {
+  border-bottom: none !important;
+}
+
+.el-menu {
+  border-right: none !important;
+}
+
+.el-menu--display,
+.el-menu--display + .el-submenu__icon-arrow {
+  display: none;
+}
+
+.el-message__icon,
+.el-message__content {
+  display: inline-block;
+}
+
+.el-date-editor .el-range-input,
+.el-date-editor .el-range-separator {
+  height: auto;
+  overflow: hidden;
+}
+
+.el-dialog__wrapper {
+  z-index: 2048;
+}
+
+.el-col {
+  margin-bottom: 8px;
+}
+
+.el-main {
+  padding: 0 !important;
+}
+
+.el-dropdown-menu__item--divided:before,
+.el-menu,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background-color: transparent;
+}
+
+.el-dropdown-menu__item--divided:before,
+.el-menu,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background-color: transparent !important;
+}
+
+.el-tree-node__label {
+  padding: 8px;
+}
+.el-table--small {
+  font-size: 12px;
+}
+.el-table th {
+  height: 42px;
+  background-color: $t-header-bg;
+  text-align: center;
+}
+.el-table thead {
+  color: $color66;
+  font-weight: normal;
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td,
+.el-table__body tr:hover > td {
+  background-color: $tr-hover-bg;
+  border-color: $disable-color;
+}
+.el-table td {
+  height: 40px;
+  padding: 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.el-form-item.is-error .el-input__inner {
+  border-color: #dcdfe6;
+}
+.el-input.is-disabled .el-input__inner {
+  cursor: default;
+  border: none;
+  color: $color99;
+}
+.el-form-item__label,
+.el-radio__label,
+.el-select-dropdown__item {
+  font-size: $size12;
+}
+.el-input--small {
+  height: 32px;
+  font-size: $size12;
+}
+.el-dialog__header {
+  font-size: $size16;
+}
+
+.el-button {
+  height: $height;
+  font-size: $size12;
+  color: $color33;
+  background-color: $themeColor;
+  border-color: $themeColor;
+}
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:hover {
+  background-color: $disable-color;
+  border-color: $disable-color;
+}
+.el-button--primary:focus,
+.el-button--primary:hover,
+.el-button--default:hover {
+  color: $color33;
+  background: $hoverColor;
+  border-color: $hoverColor;
+}
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  color: $color33;
+  background-color: $hoverColor;
+}
+.el-select .el-input.is-focus .el-input__inner,
+.el-select .el-input__inner:focus {
+  border-color: $themeColor;
+}
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  color: $color33;
+  background: $hoverColor;
+}
+.el-select-dropdown__item.selected {
+  color: $color33;
+  font-weight: 600;
+}
+.el-icon-circle-close::before {
+  color: $themeColor;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: $color33;
+  border-color: $color33;
+}
+.el-checkbox__inner::after,
+.el-checkbox__inner:hover {
+  border-color: $themeColor;
+}
+.el-checkbox__inner:hover {
+  border-color: $color33;
+}
+.el-radio-button__inner {
+  border-color: $themeColor;
+  height: $height;
+  // font-size: $size14;
+  color: $color66;
+}
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+  background-color: $themeColor;
+  border-color: $themeColor;
+  box-shadow: -1px 0 0 0 $themeColor;
+  color: $color33;
+}
+.el-radio-button__inner:hover {
+  color: $color33;
+}
+.el-radio-button:first-child .el-radio-button__inner {
+  border-left-color: $themeColor;
+}
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
+  border-color: $themeColor;
+}
+.el-pager li.active,
+.el-pager li:hover {
+  color: $themeColor;
+}
+.el-date-table td.current:not(.disabled) span {
+  color: $color33;
+  background-color: $themeColor;
+}
+.el-date-table td.available:hover,
+.el-date-table td.today span {
+  color: $themeColor;
+  font-weight: 700;
+}
+.el-picker-panel__icon-btn:hover,
+.el-date-picker__header-label.active,
+.el-date-picker__header-label:hover,
+.el-year-table td .cell:hover,
+.el-year-table td.today .cell,
+.el-month-table td .cell:hover,
+.el-month-table td.today .cell {
+  color: $themeColor;
+}
+
+.el-form-item.is-error .el-input__inner:focus,
+.el-radio__inner:hover {
+  border-color: $themeColor;
+}
+.el-radio__input.is-checked .el-radio__inner {
+  background: $color33;
+  border-color: $color33;
+}
+.el-radio__inner::after {
+  background-color: $themeColor;
+}
+.el-radio__label {
+  color: $color99;
+}
+.el-radio__input.is-checked + .el-radio__label {
+  color: $color33;
+}
+.el-pagination__sizes .el-input .el-input__inner:hover {
+  border-color: $themeColor;
+}
+.el-loading-spinner .path {
+  stroke: $color66;
+}
+.el-loading-spinner .el-loading-text {
+  color: $color66;
+}
+.el-message-box__close:hover {
+  color: $themeColor;
+}
+.el-submenu,
+.el-submenu__title:hover {
+  background-color: #20222a;
+}
+.el-submenu__title {
+  color: rgba(255, 255, 255, 0.7);
+}

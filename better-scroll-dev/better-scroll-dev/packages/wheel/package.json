@@ -1,0 +1,35 @@
+{
+  "name": "@better-scroll/wheel",
+  "version": "2.0.0-beta.2",
+  "description": "a BetterScroll plugin to imitate IOS Picker",
+  "author": {
+    "name": "huangyi",
+    "email": "ustbhuangyi@gmail.com"
+  },
+  "main": "dist/wheel.min.js",
+  "module": "dist/wheel.esm.js",
+  "typings": "dist/types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/ustbhuangyi/better-scroll/issues"
+  },
+  "homepage": "https://github.com/ustbhuangyi/better-scroll",
+  "keywords": [
+    "scroll",
+    "iscroll",
+    "javascript",
+    "typescript",
+    "ios"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ustbhuangyi/better-scroll.git"
+  },
+  "dependencies": {
+    "@better-scroll/core": "^2.0.0-beta.2"
+  },
+  "gitHead": "8a74faf5dcaaf37b9722eab2d45228a3b885b76c"
+}

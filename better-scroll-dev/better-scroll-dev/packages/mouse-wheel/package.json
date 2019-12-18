@@ -1,0 +1,33 @@
+{
+  "name": "@better-scroll/mouse-wheel",
+  "version": "2.0.0-beta.2",
+  "description": "support for MouseWheel in PC",
+  "author": "huangyi <ustbhuangyi@gmail.com>",
+  "main": "dist/mouse-wheel.min.js",
+  "module": "dist/mouse-wheel.esm.js",
+  "typings": "dist/types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/ustbhuangyi/better-scroll/issues"
+  },
+  "homepage": "https://github.com/ustbhuangyi/better-scroll",
+  "keywords": [
+    "scroll",
+    "iscroll",
+    "javascript",
+    "typescript",
+    "ios"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ustbhuangyi/better-scroll.git",
+    "directory": "packages/mouse-wheel"
+  },
+  "dependencies": {
+    "@better-scroll/core": "^2.0.0-beta.2"
+  },
+  "gitHead": "8a74faf5dcaaf37b9722eab2d45228a3b885b76c"
+}

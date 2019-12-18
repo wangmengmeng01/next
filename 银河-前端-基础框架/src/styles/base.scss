@@ -1,0 +1,173 @@
+/*css 初始化 */
+body,
+dl,
+dd,
+ul,
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+input,
+textarea,
+p,
+hr,
+thead,
+tbody,
+tfoot,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+ul,
+ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+html {
+  -ms-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Microsoft YaHei", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
+    sans-serif;
+}
+b,
+strong {
+  font-weight: bold;
+}
+i,
+em {
+  font-style: normal;
+}
+img {
+  vertical-align: middle;
+}
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
+  vertical-align: baseline;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+input:focus {
+  outline: none;
+}
+select[size],
+select[multiple],
+select[size][multiple] {
+  border: 1px solid #aaa;
+  padding: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+video,
+progress {
+  display: inline-block;
+}
+body {
+  overflow: auto;
+}
+input::-webkit-input-speech-button {
+  display: none;
+}
+button,
+input,
+textarea {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  outline: 0 none;
+}
+.clearfix:before {
+  clear: both;
+  height: 0;
+  width: 0;
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+  height: 0;
+  width: 0;
+  content: "";
+  display: table;
+}
+.clearfix {
+  *zoom: 1;
+  /*IE/7/6*/ /*兼容IE6下的写法*/
+}
+/*单行溢出*/
+
+.one-txt-cut {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*多行溢出 手机端使用*/
+
+.txt-cut {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; */
+  -webkit-box-orient: vertical;
+}
+/*取消滚动条*/
+
+// ::-webkit-scrollbar {
+//   display: none;
+// }
+/*css初始化完成*/
