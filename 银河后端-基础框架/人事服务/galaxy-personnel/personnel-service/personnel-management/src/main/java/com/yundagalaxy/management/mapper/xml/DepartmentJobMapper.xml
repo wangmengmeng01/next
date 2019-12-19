@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.DepartmentJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="departmentJobResultMap" type="com.yundagalaxy.management.entity.DepartmentJob">
+        <id column="job_id" property="jobId"/>
+        <result column="job_code" property="jobCode"/>
+        <result column="job_name" property="jobName"/>
+        <result column="job_type" property="jobType"/>
+        <result column="dpment_code" property="dpmentCode"/>
+        <result column="job_level" property="jobLevel"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="last_update" property="lastUpdate"/>
+        <result column="final_by" property="finalBy"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="cp_code" property="cpCode"/>
+    </resultMap>
+
+
+    <select id="selectDepartmentJobPage" resultMap="departmentJobResultMap">
+        select
+        *
+        from
+        pc_department_job
+        <where>
+         del_flag = 0
+        <if test="rq!=null and rq.dpmentCode != null and rq.dpmentCode!=''">
+            and `dpment_code`= #{rq.dpmentCode,jdbcType=VARCHAR}
+        </if>
+        <if test="rq!=null and rq.cpCode != null">
+            and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+        </if>
+        <if test="rq!=null and rq.jobType != null">
+            and `job_type`= #{rq.jobType,jdbcType=NUMERIC}
+        </if>
+        <if test="rq!=null and rq.jobLevel != null">
+            and `job_level`= #{rq.jobLevel,jdbcType=NUMERIC}
+        </if>
+        </where>
+    </select>
+    <select id="selectDepartmentJobList" resultType="com.yundagalaxy.management.vo.DepartmentJobVO">
+        select
+        *
+        from
+        pc_department_job
+        <where>
+         del_flag = 0
+        <if test="rq!=null and rq.dpmentCode != null and rq.dpmentCode!=''">
+            and `dpment_code`= #{rq.dpmentCode,jdbcType=VARCHAR}
+        </if>
+        <if test="rq!=null and rq.cpCode != null">
+            and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+        </if>
+        <if test="rq!=null and rq.jobType != null">
+            and `job_type`= #{rq.jobType,jdbcType=NUMERIC}
+        </if>
+        <if test="rq!=null and rq.jobLevel != null">
+            and `job_level`= #{rq.jobLevel,jdbcType=NUMERIC}
+        </if>
+        </where>
+        ORDER BY `last_update` DESC
+    </select>
+    <!-- 查询最大编号 -->
+    <select id="findMaxJobCode" resultType="string">
+        select
+        max(job_code)
+        from
+        pc_department_job
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.EmployeeDetailInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="employeeDetailInfoResultMap" type="com.yundagalaxy.management.entity.EmployeeDetailInfo">
+        <id column="empd_id" property="empdId"/>
+        <result column="emp_code" property="empCode"/>
+        <result column="marital_status" property="maritalStatus"/>
+        <result column="household_type" property="householdType"/>
+        <result column="household_province" property="householdProvince"/>
+        <result column="household_city" property="householdCity"/>
+        <result column="household_county" property="householdCounty"/>
+        <result column="household_street" property="householdStreet"/>
+        <result column="current_province" property="currentProvince"/>
+        <result column="current_city" property="currentCity"/>
+        <result column="current_county" property="currentCounty"/>
+        <result column="current_street" property="currentStreet"/>
+        <result column="emg_contact" property="emgContact"/>
+        <result column="emg_contact_rlp" property="emgContactRlp"/>
+        <result column="emg_contact_mobile" property="emgContactMobile"/>
+        <result column="exp_ccie_level" property="expCcieLevel"/>
+        <result column="exp_ccie_no" property="expCcieNo"/>
+        <result column="skills_speciality" property="skillsSpeciality"/>
+        <result column="work_exp" property="workExp"/>
+    </resultMap>
+
+
+    <select id="selectEmployeeDetailInfoPage" resultMap="employeeDetailInfoResultMap">
+        select * from pc_employee_detail_info where is_deleted = 0
+    </select>
+
+</mapper>

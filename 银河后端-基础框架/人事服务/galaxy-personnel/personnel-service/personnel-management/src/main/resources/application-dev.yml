@@ -1,0 +1,21 @@
+#服务器端口
+server:
+  port: 8107
+
+#数据源配置
+spring:
+  datasource:
+    url: ${blade.datasource.dev.url}
+    username: ${blade.datasource.dev.username}
+    password: ${blade.datasource.dev.password}
+blade:
+  mybatis-plus:
+    sql-log:
+      enable: true
+# redisson lock 单机模式
+#redisson:address: redis://127.0.0.1:6379
+#redisson.password:
+#哨兵模式
+#redisson.master-name= master
+#redisson.password=
+#redisson.sentinel-addresses=10.47.91.83:26379,10.47.91.83:26380,10.47.91.83:26381

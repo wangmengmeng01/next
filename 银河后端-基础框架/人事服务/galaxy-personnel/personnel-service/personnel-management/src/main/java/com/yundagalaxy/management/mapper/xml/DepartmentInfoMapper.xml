@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.DepartmentInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="departmentInfoResultMap" type="com.yundagalaxy.management.entity.DepartmentInfo">
+        <id column="dpment_id" property="dpmentId"/>
+        <result column="dpment_name" property="dpmentName"/>
+        <result column="dpment_code" property="dpmentCode"/>
+        <result column="parent_dpment_code" property="parentDpmentCode"/>
+        <result column="business_model" property="businessModel"/>
+        <result column="dpment_level" property="dpmentLevel"/>
+        <result column="dpment_head" property="dpmentHead"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_update" property="lastUpdate"/>
+        <result column="final_by" property="finalBy"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="cp_code" property="cpCode"/>
+        <result column="is_default" property="isDefault"/>
+    </resultMap>
+
+
+    <select id="selectDepartmentInfoPage" resultMap="departmentInfoResultMap">
+        select
+        *
+        from
+        pc_department_info
+        <where>
+        del_flag = 0
+        <if test="rq.dpmentName != null and rq.dpmentName!=''">
+            and `dpment_name`= #{rq.dpmentName,jdbcType=VARCHAR}
+        </if>
+        <if test="rq.cpCode != null and rq.cpCode!=''">
+            and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+        </if>
+        </where>
+    </select>
+
+    <resultMap id="treeNodeResultMap" type="com.yundagalaxy.management.node.TreeNode">
+        <id column="dpment_code" property="dpmentCode"/>
+        <result column="parent_dpment_code" property="parentDpmentCode"/>
+        <result column="dpment_level" property="dpmentLevel"/>
+        <result column="title" property="title"/>
+        <result column="value" property="value"/>
+        <result column="key" property="key"/>
+    </resultMap>
+
+    <select id="tree" resultMap="treeNodeResultMap">
+        select
+        dpment_code,
+        parent_dpment_code,
+        dpment_level,
+        dpment_name as title,
+        dpment_code as "value",
+        dpment_code as "key"
+        from
+        pc_department_info
+        <where>
+        del_flag = 0
+        <if test ="map.dpmentLevel!=null">
+            and dpment_level = #{map.dpmentLevel,jdbcType=NUMERIC}
+        </if>
+        <if test ="map.cpCode!=null">
+            and cp_code = #{map.cpCode,jdbcType=NUMERIC}
+        </if>
+        </where>
+    </select>
+
+    <insert id="saveDepartmentInfo" parameterType="com.yundagalaxy.management.entity.DepartmentInfo" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO pc_department_info (
+            dpment_id,/*示例：YH00000001*/
+            dpment_code,/*示例：YH00000001*/
+            dpment_name,/*人事行政后勤、业务部、操作部、车队、财务部、客服部、经理室*/
+            parent_dpment_code,/*部门层级为一级时，该值为0；部门层级为二级，三级时为对应的上级部门编码*/
+            business_model,/*经营模式*/
+            dpment_head,/*部门负责人*/
+            dpment_level,/*部门负责人*/
+            create_time,/*创建时间*/
+            create_by,/*创建人*/
+            last_update,/*最后更新时间*/
+            final_by, /*最终更新人*/
+            del_flag, /*最终更新人*/
+            is_default, /*系统默认部门：1-默认，2-非默认*/
+            cp_code /*最终更新人*/
+            ) VALUES (
+            #{dpmentId},
+            #{dpmentCode},
+            #{dpmentName},
+            #{parentDpmentCode},
+            #{businessModel},
+            #{dpmentHead},
+            #{dpmentLevel},
+            #{createTime},
+            #{createBy},
+            #{lastUpdate},
+            #{finalBy},
+            #{delFlag},
+            #{isDefault},
+            #{cpCode}
+        );
+    </insert>
+
+    <update id="updateDepartmentInfo">
+		UPDATE
+		pc_department_info
+		<set>
+        <if test="dpmentName != null">
+            `dpment_name`= #{dpmentName,jdbcType=VARCHAR},
+        </if>
+        <if test="parentDpmentCode != null">
+            `parent_dpment_code`= #{parentDpmentCode,jdbcType=VARCHAR},
+        </if>
+        <if test="businessModel != null">
+            `business_model`= #{businessModel,jdbcType=NUMERIC},
+        </if>
+        <if test="dpmentHead != null">
+            `dpment_head`= #{dpmentHead,jdbcType=VARCHAR},
+        </if>
+        <if test="lastUpdate != null">
+            `last_update`= #{lastUpdate,jdbcType=DATE},
+        </if>
+        <if test="finalBy != null">
+            `final_by`= #{finalBy,jdbcType=VARCHAR},
+        </if>
+        <if test="delFlag != null">
+            `del_flag`= #{delFlag,jdbcType=NUMERIC},
+        </if>
+        <if test="cpCode != null">
+            `cp_code`= #{cpCode,jdbcType=VARCHAR},
+        </if>
+        <if test="isDefault != null">
+            `is_default`= #{isDefault,jdbcType=NUMERIC}
+        </if>
+        </set>
+		WHERE
+		`dpment_id`= #{dpmentId,jdbcType=NUMERIC}
+	</update>
+    <!-- 查询最大编号 -->
+    <select id="findMaxDpmentCode" resultType="string">
+        select
+        max(dpment_code)
+        from
+        pc_department_info
+
+    </select>
+
+
+    <select id="selectDepartmentInfoList" resultType="com.yundagalaxy.management.vo.DepartmentInfoVO">
+        select
+        *
+        from
+        pc_department_info
+        <where>
+            del_flag = 0
+            <if test="rq.dpmentName != null and rq.dpmentName!=''">
+                and `dpment_name`= #{rq.dpmentName,jdbcType=VARCHAR}
+            </if>
+            <if test="rq.dpmentCode != null and rq.dpmentCode!=''">
+                and `dpment_code`= #{rq.dpmentCode,jdbcType=VARCHAR}
+            </if>
+            <!--<if test="rq.dpmentLevel != null and rq.dpmentLevel!=''">-->
+                <!--and `dpment_level`= #{rq.dpmentLevel,jdbcType=NUMERIC}-->
+            <!--</if>-->
+
+            <!--<if test="rq!=null and rq.dpmentLevel != null">-->
+                <!--AND dpment_level <![CDATA[ >= ]]> #{map.startWorkingState,jdbcType=NUMERIC}-->
+            <!--</if>-->
+            <if test="rq!=null and rq.dpmentLevel != null">
+                AND dpment_level  <![CDATA[ <= ]]>  #{rq.dpmentLevel,jdbcType=NUMERIC}
+            </if>
+
+            <if test="rq.cpCode != null and rq.cpCode!=''">
+                and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+            </if>
+        </where>
+        ORDER BY `last_update` DESC
+    </select>
+    <select id="findYdserverCpName" resultType="string">
+        select
+        gs.mc as mc
+        from
+        ydserver.gs as gs
+        <where>
+            <if test="cpCode!=null">
+                and gs.bm = #{cpCode}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

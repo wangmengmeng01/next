@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.EmployeeStatisticsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="employeeStatisticsResultMap" type="com.yundagalaxy.management.entity.EmployeeStatistics">
+        <id column="emps_id" property="empsId"/>
+        <result column="everyday_time" property="everydayTime"/>
+        <result column="in_cnt" property="inCnt"/>
+        <result column="leave_cnt" property="leaveCnt"/>
+        <result column="total_cnt" property="totalCnt"/>
+        <result column="del_flag" property="delFlag"/>
+    </resultMap>
+
+
+    <select id="selectEmployeeStatisticsPage" resultMap="employeeStatisticsResultMap">
+        select
+        *
+        from
+        pc_employee_statistics
+        where
+        del_flag = 0
+    </select>
+    <select id="selectEmployeeStatisticsAll" resultType="com.yundagalaxy.management.vo.EmployeeStatisticsVO">
+        select
+        e.in_cnt as inCnt,
+        e.leave_cnt as leaveCnt,
+        e.total_cnt as totalCnt,
+        date_format( e.everyday_time, '%Y-%m-%d') as everydayTime
+        from
+        pc_employee_statistics e
+        <where>
+        e.del_flag = 0
+        <if test="map!=null and map.cpCode != null">
+            and e.cp_code = #{map.cpCode,jdbcType=NUMERIC}
+        </if>
+        <if test="map!=null and map.startTime != null">
+            <![CDATA[ AND DATE_FORMAT(e.everyday_time, '%Y-%m-%d') >= DATE_FORMAT(#{map.startTime}, '%Y-%m-%d')   ]]>
+        </if>
+        <if test="map!=null and map.endTime != null">
+            <![CDATA[ AND DATE_FORMAT(e.everyday_time, '%Y-%m-%d')<=  DATE_FORMAT(#{map.endTime}, '%Y-%m-%d')  ]]>
+        </if>
+        </where>
+        ORDER BY e.everyday_time ASC
+    </select>
+
+
+
+
+</mapper>

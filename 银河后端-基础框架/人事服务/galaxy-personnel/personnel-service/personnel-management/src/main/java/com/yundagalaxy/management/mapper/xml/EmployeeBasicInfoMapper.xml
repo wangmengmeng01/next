@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.EmployeeBasicInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="employeeBasicInfoResultMap" type="com.yundagalaxy.management.entity.EmployeeBasicInfo">
+        <id column="emp_id" property="empId"/>
+        <result column="emp_code" property="empCode"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="id_type" property="idType"/>
+        <result column="id_code" property="idCode"/>
+        <result column="birthday" property="birthday"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="phone_no" property="phoneNo"/>
+        <result column="nation" property="nation"/>
+        <result column="education" property="education"/>
+        <result column="major" property="major"/>
+        <result column="graduate_school" property="graduateSchool"/>
+        <result column="politics_status" property="politicsStatus"/>
+        <result column="hiredate" property="hiredate"/>
+        <result column="period" property="period"/>
+        <result column="working_state" property="workingState"/>
+        <result column="dpment_code" property="dpmentCode"/>
+        <result column="job_code" property="jobCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="last_update" property="lastUpdate"/>
+        <result column="final_by" property="finalBy"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="cp_code" property="cpCode"/>
+        <result column="soa_code" property="soaCode"/>
+        <result column="leaveing_date" property="leaveingDate"/>
+        <result column="handover" property="handover"/>
+        <result column="positive_date" property="positiveDate"/>
+    </resultMap>
+
+
+    <select id="selectEmployeeBasicInfoPage" resultMap="employeeBasicInfoResultMap">
+        select
+        *
+        from
+        pc_employee_basic_info
+        where
+        del_flag = 0
+    </select>
+
+    <update id="updateDateTimeByEmpCode">
+        UPDATE
+        pc_employee_basic_info
+        SET
+        create_by = #{updateBy},
+        create_time = #{localDateTime}
+        WHERE
+        emp_code = #{empCode}
+    </update>
+    <!-- 查询最大编号 -->
+    <select id="findMaxEmpCode" resultType="string">
+        select
+        max(emp_code)
+        from
+        pc_employee_basic_info
+    </select>
+
+    <!-- 根据相关条件统计数量 -->
+    <select id="selectEmployeeCount" resultType="long">
+        select
+        count(*)
+        from
+        pc_employee_basic_info eb
+        <where>
+            eb.del_flag = 0
+            <if test="map!=null and map.sex != null">
+                and eb.sex= #{map.sex,jdbcType=NUMERIC}
+            </if>
+            <if test="map!=null and map.cpCode != null">
+                and eb.cp_code = #{map.cpCode,jdbcType=NUMERIC}
+            </if>
+            <if test="map!=null and map.jobCode != null and map.jobCode != ''">
+                and eb.job_code = #{map.jobCode,jdbcType=VARCHAR}
+            </if>
+            <if test="map!=null and map.dpmentCode != null and map.dpmentCode != ''">
+                and eb.dpment_code = #{map.dpmentCode,jdbcType=VARCHAR}
+            </if>
+
+            <if test="map!=null and map.inStartTime != null">
+                <![CDATA[ AND DATE_FORMAT(eb.hiredate, '%Y-%m-%d') > DATE_FORMAT(#{map.inStartTime}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test="map!=null and map.inEndTime != null">
+                <![CDATA[ AND DATE_FORMAT(eb.hiredate, '%Y-%m-%d')<=  DATE_FORMAT(#{map.inEndTime}, '%Y-%m-%d')  ]]>
+            </if>
+
+            <if test="map!=null and map.leaveStartTime != null">
+                <![CDATA[ AND DATE_FORMAT(eb.leaveing_date, '%Y-%m-%d') > DATE_FORMAT(#{map.leaveStartTime}, '%Y-%m-%d')   ]]>
+            </if>
+            <if test="map!=null and map.leaveEndTime != null">
+                <![CDATA[ AND DATE_FORMAT(eb.leaveing_date, '%Y-%m-%d')<=  DATE_FORMAT(#{map.leaveEndTime}, '%Y-%m-%d')  ]]>
+            </if>
+
+            <if test="map!=null and map.startAge != null">
+                 AND eb.age <![CDATA[ >= ]]> #{map.startAge,jdbcType=NUMERIC}
+            </if>
+            <if test="map!=null and map.endAge != null">
+                 AND eb.age  <![CDATA[ <= ]]>  #{map.endAge,jdbcType=NUMERIC}
+            </if>
+
+            <if test="map!=null and map.startWorkingState != null">
+                 AND eb.working_state <![CDATA[ >= ]]> #{map.startWorkingState,jdbcType=NUMERIC}
+            </if>
+            <if test="map!=null and map.endWorkingState != null">
+                 AND eb.working_state  <![CDATA[ <= ]]>  #{map.endWorkingState,jdbcType=NUMERIC}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="selectEmpBasicInfoPage" resultType="com.yundagalaxy.management.vo.EmployeeBasicInfoVO">
+        select
+        *
+        from
+        pc_employee_basic_info eb
+        where
+        del_flag = 0
+        <if test="rq.dpmentCode != null and rq.dpmentCode!=''">
+            and eb.dpment_code= #{rq.dpmentCode,jdbcType=VARCHAR}
+        </if>
+        <if test="rq!=null and rq.startWorkingState != null">
+            AND  eb.working_state <![CDATA[ >= ]]> #{rq.startWorkingState,jdbcType=NUMERIC}
+        </if>
+        <if test="rq!=null and rq.endWorkingState != null">
+            AND  eb.working_state  <![CDATA[ <= ]]>  #{rq.endWorkingState,jdbcType=NUMERIC}
+        </if>
+        <if test="rq.cpCode != null and rq.cpCode!=''">
+            and eb.cp_code= #{rq.cpCode,jdbcType=NUMERIC}
+        </if>
+        ORDER BY eb.last_update DESC
+    </select>
+</mapper>

@@ -1,0 +1,80 @@
+/*
+ *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  Redistributions of source code must retain the above copyright notice,
+ *  this list of conditions and the following disclaimer.
+ *  Redistributions in binary form must reproduce the above copyright
+ *  notice, this list of conditions and the following disclaimer in the
+ *  documentation and/or other materials provided with the distribution.
+ *  Neither the name of the dreamlu.net developer nor the names of its
+ *  contributors may be used to endorse or promote products derived from
+ *  this software without specific prior written permission.
+ *  Author: Chill 庄骞 (smallchill@163.com)
+ */
+package com.yundagalaxy.common.constant;
+
+/**
+ * Nacos常量.
+ *
+ * @author Chill
+ */
+public interface NacosConstant {
+
+	/**
+	 * nacos 地址
+	 */
+//	String NACOS_ADDR = "10.19.157.219:30813";
+
+	/**
+	 * nacos 配置前缀
+	 */
+//	String NACOS_CONFIG_PREFIX = "galaxy";
+	String NACOS_CONFIG_PREFIX = "personnel";
+
+	/**
+	 * nacos 配置文件类型
+	 */
+	String NACOS_CONFIG_FORMAT = "yaml";
+
+	/**
+	 * nacos json配置文件类型
+	 */
+	String NACOS_CONFIG_JSON_FORMAT = "json";
+
+	/**
+	 * nacos 是否刷新
+	 */
+	String NACOS_CONFIG_REFRESH = "true";
+
+	/**
+	 * nacos 分组
+	 */
+	String NACOS_CONFIG_GROUP = "DEFAULT_GROUP";
+
+	/**
+	 * 构建服务对应的 dataId
+	 *
+	 * @param appName 服务名
+	 * @param profile 环境变量
+	 * @return dataId
+	 */
+	static String dataId(String appName, String profile) {
+		return dataId(appName, profile, NACOS_CONFIG_FORMAT);
+	}
+
+	/**
+	 * 构建服务对应的 dataId
+	 *
+	 * @param appName 服务名
+	 * @param profile 环境变量
+	 * @param format 文件类型
+	 * @return dataId
+	 */
+	static String dataId(String appName, String profile, String format) {
+		return appName + "-" + profile + "." + format;
+	}
+
+}

@@ -1,0 +1,21 @@
+#mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath:com/yundagalaxy/**/mapper/xml/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.yundagalaxy.**.entity
+demo.nacos: ${demo.nacos}
+#swagger扫描路径配置
+swagger:
+  base-packages:
+    - com.yundagalaxy
+    - com.yundagalaxy
+
+#oss配置
+#oss:
+#  enable: true
+#  name: minio
+#  tenant-mode: false
+#  endpoint: http://127.0.0.1:9000
+#  access-key: D99KGE6ZTQXSATTJWU24
+#  secret-key: QyVqGnhIQQE734UYSUFlGOZViE6+ZlDEfUG3NjhJ
+#  bucket-name: bladex

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.TmpEmployeeInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="tmpEmployeeInfoResultMap" type="com.yundagalaxy.management.entity.TmpEmployeeInfo">
+        <id column="tmp_emp_id" property="tmpEmpId"/>
+        <result column="tmp_emp_code" property="tmpEmpCode"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="account_no" property="accountNo"/>
+        <result column="account_type" property="accountType"/>
+        <result column="id_type" property="idType"/>
+        <result column="id_code" property="idCode"/>
+        <result column="phone_no" property="phoneNo"/>
+        <result column="cust_code" property="custCode"/>
+        <result column="cust_name" property="custName"/>
+        <result column="hiredate" property="hiredate"/>
+        <result column="working_state" property="workingState"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="last_update" property="lastUpdate"/>
+        <result column="final_operator" property="finalOperator"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="cp_code" property="cpCode"/>
+        <result column="soa_code" property="soaCode"/>
+        <result column="leaveing_date" property="leaveingDate"/>
+        <result column="handover" property="handover"/>
+    </resultMap>
+
+
+    <select id="selectTmpEmployeeInfoPage" resultType="com.yundagalaxy.management.vo.TmpEmployeeInfoVO">
+        select
+        *
+        from
+        pc_tmp_employee_info
+        <where>
+            del_flag = 0
+            <if test="rq!=null and rq.soaCode != null and rq.soaCode!=''">
+                and `soa_code`= #{rq.soaCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.tmpEmpCode != null and rq.tmpEmpCode!=''">
+                and `tmp_emp_code`= #{rq.tmpEmpCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.idCode != null and rq.idCode!=''">
+                and `id_code`= #{rq.idCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.phoneNo != null and rq.phoneNo!=''">
+                and `phone_no`= #{rq.phoneNo,jdbcType=VARCHAR}
+            </if>
+            <if test="rq.cpCode != null and rq.cpCode!=''">
+                and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+            </if>
+            <if test="rq.accountNo != null and rq.accountNo!=''">
+                and `account_no`= #{rq.accountNo,jdbcType=NUMERIC}
+            </if>
+            <if test="rq.workingState != null and rq.workingState!=''">
+                and `working_state`= #{rq.workingState,jdbcType=NUMERIC}
+            </if>
+
+        </where>
+
+        ORDER BY `last_update` DESC
+    </select>
+
+    <select id="selectTmpEmployeeInfoList" resultType="com.yundagalaxy.management.vo.TmpEmployeeInfoVO">
+        select
+        *
+        from
+        pc_tmp_employee_info
+        <where>
+            del_flag = 0
+            <if test="rq!=null and rq.soaCode != null and rq.soaCode!=''">
+                and `soa_code`= #{rq.soaCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.tmpEmpCode != null and rq.tmpEmpCode!=''">
+                and `tmp_emp_code`= #{rq.tmpEmpCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.idCode != null and rq.idCode!=''">
+                and `id_code`= #{rq.idCode,jdbcType=VARCHAR}
+            </if>
+            <if test="rq!=null and rq.phoneNo != null and rq.phoneNo!=''">
+                and `phone_no`= #{rq.phoneNo,jdbcType=VARCHAR}
+            </if>
+            <if test="rq.cpCode != null and rq.cpCode!=''">
+                and `cp_code`= #{rq.cpCode,jdbcType=NUMERIC}
+            </if>
+            <if test="rq.accountNo != null and rq.accountNo!=''">
+                and `account_no`= #{rq.accountNo,jdbcType=NUMERIC}
+            </if>
+            <if test="rq.workingState != null and rq.workingState!=''">
+                and `working_state`= #{rq.workingState,jdbcType=NUMERIC}
+            </if>
+
+        </where>
+        ORDER BY `last_update` DESC
+    </select>
+
+    <!-- 查询最大编号 -->
+    <select id="findMaxTmpEmpCode" resultType="string">
+        select
+        max(tmp_emp_code)
+        from
+        pc_tmp_employee_info
+
+    </select>
+
+</mapper>

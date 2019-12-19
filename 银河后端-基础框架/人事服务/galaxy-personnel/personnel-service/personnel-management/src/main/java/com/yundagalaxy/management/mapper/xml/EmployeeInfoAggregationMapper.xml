@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.EmployeeInfoAggregationMapper">
+
+    <select id="empList" resultType="com.yundagalaxy.management.vo.ExcelEmployeeInfoVO">
+        SELECT
+        t1.*,
+        IFNULL(t2.business_model,0) business_model,
+        t2.dpment_name dpment_name,
+        t3.job_name job_name,
+        IFNULL(t3.job_level,0) job_level,
+        IFNULL(t3.job_type,0) job_type,
+        IFNULL(t4.marital_status,0) marital_status,
+        IFNULL(t4.household_type,0) household_type,
+        t4.household_street household_street,
+        t4.current_street current_street,
+        t4.emg_contact emg_contact,
+        t4.emg_contact_rlp emg_contact_rlp,
+        T4.emg_contact_mobile emg_contact_mobile
+        FROM
+            pc_employee_basic_info t1
+        LEFT JOIN pc_department_info t2 ON t1.dpment_code = t2.dpment_code
+        LEFT JOIN pc_department_job t3 ON t1.job_code = t3.job_code
+        LEFT JOIN pc_employee_detail_info t4 ON t1.emp_code = t4.emp_code
+        <where>
+            <if test="params.soaCode != null and params.soaCode != ''"> and t1.soa_code = #{params.soaCode} </if>
+            <if test="params.empCode != null and params.empCode != ''"> and t1.emp_code = #{params.empCode} </if>
+            <if test="params.idCode != null and params.idCode != ''"> and t1.id_code = #{params.idCode} </if>
+            <if test="params.dpmentCode != null and params.dpmentCode != ''"> and t1.dpment_code = #{params.dpmentCode} </if>
+            <if test="params.jobType != null and params.jobType != ''"> and t3.job_type = #{params.jobType} </if>
+            <if test="params.jobCode != null and params.jobCode != ''"> and t1.job_code = #{params.jobCode} </if>
+            <if test="params.phoneNo != null and params.phoneNo != ''"> and t1.phone_no = #{params.phoneNo} </if>
+            <if test="params.workingState != null and params.workingState != '' and params.workingState !=3"> and t1.working_state = #{params.workingState} </if>
+            <if test="params.workingState == 3"> and t1.working_state !=2 </if>
+            and t1.cp_code = #{params.cpCode}
+        </where>
+        ORDER BY create_time DESC
+        <if test="query.current != null and query.size != null and params.rowType !='all'">
+            limit #{query.current}, #{query.size}
+        </if>
+    </select>
+</mapper>

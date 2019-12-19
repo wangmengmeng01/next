@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.CommonToolMapper">
+
+    <select id="getProvinces" resultType="java.util.Map">
+        SELECT ProvinceID `value`,ProvinceName label FROM ydserver.province
+    </select>
+
+    <select id="getCitys" resultType="java.util.Map">
+        SELECT CityID `value`,CityName label FROM ydserver.city WHERE ProvinceID = #{ProvinceID}
+    </select>
+
+    <select id="getCountys" resultType="java.util.Map">
+        SELECT CountyID `value`,CountyName label FROM ydserver.county WHERE CityID = #{CityID}
+    </select>
+
+    <select id="getLowerOrgCode" resultType="java.util.Map">
+        SELECT bm,mc FROM ydserver.gs WHERE sjdw = #{deptId}
+    </select>
+</mapper>

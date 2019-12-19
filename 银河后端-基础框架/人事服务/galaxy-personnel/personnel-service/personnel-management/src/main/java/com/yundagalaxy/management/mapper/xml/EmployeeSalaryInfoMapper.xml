@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundagalaxy.management.mapper.EmployeeSalaryInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="employeeSalaryInfoResultMap" type="com.yundagalaxy.management.entity.EmployeeSalaryInfo">
+        <id column="emps_id" property="empsId"/>
+        <result column="emp_code" property="empCode"/>
+        <result column="bank_card_no" property="bankCardNo"/>
+        <result column="alipay_account" property="alipayAccount"/>
+        <result column="basic_salary" property="basicSalary"/>
+        <result column="post_salary" property="postSalary"/>
+        <result column="salary_type" property="salaryType"/>
+        <result column="basic_salary_dis" property="basicSalaryDis"/>
+        <result column="post_salary_dis" property="postSalaryDis"/>
+        <result column="piece_salary" property="pieceSalary"/>
+        <result column="other_salary" property="otherSalary"/>
+        <result column="merit_salary" property="meritSalary"/>
+        <result column="job_allowance" property="jobAllowance"/>
+        <result column="eff_bonus" property="effBonus"/>
+        <result column="att_bonus" property="attBonus"/>
+        <result column="exp_ccie_allo" property="expCcieAllo"/>
+        <result column="tph_bill_allo" property="tphBillAllo"/>
+        <result column="travel_allo" property="travelAllo"/>
+        <result column="high_templ_allo" property="highTemplAllo"/>
+        <result column="meal_subsidy" property="mealSubsidy"/>
+        <result column="housing_subsidy" property="housingSubsidy"/>
+        <result column="mileage_allo" property="mileageAllo"/>
+        <result column="payoff_model" property="payoffModel"/>
+        <result column="social_insur" property="socialInsur"/>
+        <result column="social_insur_ded" property="socialInsurDed"/>
+        <result column="accum_fund" property="accumFund"/>
+        <result column="accum_fund_ded" property="accumFundDed"/>
+        <result column="tax" property="tax"/>
+        <result column="tax_base" property="taxBase"/>
+    </resultMap>
+
+
+    <select id="selectEmployeeSalaryInfoPage" resultMap="employeeSalaryInfoResultMap">
+        select * from pc_employee_salary_info where is_deleted = 0
+    </select>
+
+</mapper>
